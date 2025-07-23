@@ -1,0 +1,39 @@
+server:
+  port: 8083
+logging:
+  file:
+    name: /Users/taiseikato/home/ibooks/log/admin.log
+  level:
+    root: INFO
+    org:
+      seasar:
+        doma: INFO
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/ibooks?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
+    username: ibooks
+    password: ibooks
+    driverClassName: com.mysql.cj.jdbc.Driver
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 0
+  config:
+    import: "optional:file:/home/ibooks/config/local-admin-config.yml"
+env: develop
+#管理サイト
+admin-config:
+  # 画像アップロード関連
+  img:
+    # ブック画像
+    book:
+      # 画像URL
+      base-url: https://ibooks.local/img/book
+      temp-base-url: https://ibooks.local/img/book/tmp
+      # 画像アップロード先
+      upload-dir: /upload/book
+      temp-upload-dir: /upload/book/tmp
+  # レビュワーサイトURL
+  reviewer-site:
+    url: https://ibooks.local/reviewer

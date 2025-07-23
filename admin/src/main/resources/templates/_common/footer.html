@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="footer" th:remove="tag">
+    <div id="loading">
+        <div class="loading-content">
+            <p>処理中</p>
+            <div class="spinner-area">
+                <div class="three-quarter-spinner"></div>
+            </div>
+            <div class="progress-area">
+                <span class="progress-bar"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+server:
+  servlet:
+    context-path: /ibooks
+  port: 8083
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/ibooks?useSSL=false&serverTimezone=Asia/Tokyo&characterEncoding=UTF-8
+    username: ibooks
+    password: ibooks
+    driverClassName: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    mode=HTML:

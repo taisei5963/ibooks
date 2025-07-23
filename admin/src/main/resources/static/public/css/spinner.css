@@ -1,0 +1,113 @@
+/* ローディング */
+#loading {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.7);
+    text-align: center;
+}
+
+#loading .loading-content {
+    background-color: #ddd;
+    padding: 10px 0 24px 0;
+    border-radius: 5px;
+    display: inline-block;
+    width: 200px;
+    height: 106px;
+    margin: -53px 0 0 -100px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#loading p {
+    color: #333;
+    font-size: 14px;
+    line-height: 42px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+#loading .spinner-area {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+#loading .three-quater-spinner {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #888;
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin .5s linear 0s infinite;
+}
+
+@keyframes spin {
+    from {
+        transform:  rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#loading .progress-area {
+    display: none;
+    box-sizing: border-box;
+    margin: 10px 10% 0 10%;
+    padding: 0;
+    height: 10px;
+    width: 80%;
+    border: 1px solid #ccc;
+    text-align: left;
+    font-size: 0;
+}
+
+#loading .progress-bar {
+    display: inline-block;
+    height: 8px;
+    width: 0;
+    background-color: #28ff28
+}
+
+/* ボタンのデフォルトボーダー打消 */
+.btn-white {
+    border: 0;
+}
+
+/* 入力フォームの調整 */
+label {
+    cursor: default;
+}
+
+.form-group input[readonly] {
+    background-color: #efefef;
+}
+
+.form-group .required {
+    color: #374246;
+}
+
+/* ファイルアップロード */
+.upload-area {
+    position: relative;
+}
+
+.upload-area input {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 0;
+    opacity: 0;
+}

@@ -1,0 +1,44 @@
+import org.yaml.snakeyaml.Yaml
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.yaml:snakeyaml:1.33'
+	}
+}
+
+domaCodeGen {
+	def parser = new Yaml()
+	ant.loadfile (
+			srcfile: '../config/application.yml',
+			property: 'yaml'
+	)
+	def yamlObj = parser.load("${ant.properties.yaml}")
+	def basePackage = 'com.ibooks.common.database'
+
+	dev {
+		url = yamlObj.spring.datasource.url
+		user = yamlObj.spring.datasource.username
+		password = yamlObj.spring.datasource.password
+		tableNamePattern = '.*'
+		ignoredTableNamePattern = '(sys_config|spring_.*)'
+		versionColumnNamePattern = 'ver'
+		templateDir = file('../template')
+		entity {
+			packageName = "${basePackage}.entity"
+			useAccessor = false
+			useListener = false
+			useMappedSuperclass = false
+			useMetamodel = false
+		}
+		dao {
+			packageName = "${basePackage}.dao"
+			overwrite = false
+		}
+		sql {
+			overwrite = false
+		}
+	}
+}

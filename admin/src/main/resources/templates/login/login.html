@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ログイン'">
+<head th:replace="~{_common/login::head}"></head>
+<body id="login">
+  <div class="login-contents">
+    <img class="app-icon" th:src="@{/public/img/icon/app-icon.png}" alt="ibooks">
+    <h1>管理者ログイン</h1>
+  </div>
+
+  <div th:replace="~{_common/login::footer}"></div>
+</body>
+</html>

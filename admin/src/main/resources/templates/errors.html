@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='システムエラー'">
+<head th:replace="~{_common/errorHead::head}"></head>
+<body class="error_body">
+  <h1>システムエラー</h1>
+  <p>予期しないエラーが発生しました。</p>
+  <a th:href="@{/}">トップ画面に戻る</a>
+</body>
+</html>

@@ -1,0 +1,86 @@
+server:
+  servlet:
+    context-path: /admin
+    session:
+      cookie:
+        same-site: Strict
+        name: A-SESSION
+        http-only: true
+        secure: true
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  logback:
+    rollingpolicy:
+      max-history: 30
+spring:
+  threads:
+    virtual:
+      enabled: true
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+    messages:
+      basename: messages
+    session:
+      store-type: jdbc
+      jdbc:
+        initialize-schema: embedded
+        table-name: SPRING_SESSION
+    servlet:
+      multipart:
+        max-file-size: 20MB
+        max-request-size: 20MB
+# 管理サイト設定
+admin-config:
+  # 管理者パスワードの最小文字列長
+  admin-password-min-length: 8
+  # 管理者パスワードの文字混在チェック
+  admin-password-check-mixed-chars: true
+  # レビュワーパスワードの最小文字列長
+  reviewer-password-min-length: 8
+  # レビュワーパスワードの文字混在チェック
+  reviewer-password-check-mixed-chars: true
+  # 文字を Windows-31J 互換にする場合は true を設定
+  compatible-sjis: true
+  # 評価値
+  rating:
+    rounding-mode: HALF_UP
+  # 画像アップロード関連
+  img:
+    # ブック画像
+    book:
+      # パス関連の階層
+      dir-hierarchy: 2
+  # ログイン
+  login:
+    # 最大試行回数
+    failure-limit: 5
+    # ログインロック時間（秒）
+    failure-loc-sec: 300
+  # CSVアップロード関連
+  csv-upload:
+    # 読み込みエンコード（utf-8, Windows-31J）
+    encode: utf8
+    # CSVファイルアップロードパス
+    temp-file-name: /tmp/upload/upload_{0}_{1}_{2}.csv
+    # ZIPアップロード使用定義
+    zip:
+      # 入出力エンコード（utf8, Windows-31J）
+      encode: Windows-31J
+    book:
+      # 入出力エンコード（utf8, Windows-31J）
+      encode: utf8
+      # ブックCSVアップロードパス
+      temp-file-name: /home/ibooks/upload/upload_book_{0}_{1}.csv
+  # CSVダウンロード関連
+  csv-download:
+    # 出力エンコード（utf8, Windows31J）
+    encode: utf8
+    # 出力先ディレクトリ
+    dir: /home/ibooks/download
+    book:
+      # ブック
+      identifier: book
