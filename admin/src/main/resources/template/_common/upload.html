@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <th:block th:fragment="messages">
+        <div class="alert alert-success u-d-none" id="message">
+            <button type="button" class="close">✕</button>
+            <ul></ul>
+        </div>
+        <div class="alert alert-danger u-d-none" id="errorMessage">
+            <button type="button" class="close">✕</button>
+            <ul></ul>
+        </div>
+    </th:block>
+    <th:block th:fragment="upload">
+        <input type="reset" name="reset" class="u-d-none">
+        <div class="upload-area u-mb32">
+            <p class="txt u-mb24">ファイルを選択するか、ここにドラック＆ドロップする</p>
+            <label class="is-max260">
+                ファイルを選択
+                <input type="file" name="csvFile" id="csvFile" class="u-d-none" th:accept="${accept}">
+            </label>
+            <p class="txt u-mt4 u-font12 u-color-green"></p>
+        </div>
+
+        <div class="u-d-flex is-wrap is-x-center u-w100 u-mb16">
+            <button type="button" id="upload" class="is-max260" aria-modal="upload">アップロード</button>
+        </div>
+    </th:block>
+
+    <div th:fragment="errors" class="u-mt32 u-d-none" id="errorMessages">
+        <table class="table table-error">
+            <thead>
+                <tr>
+                    <th>エラー内容</th>
+                </tr>
+            </thead>
+            <tbody class="messages">
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

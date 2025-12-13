@@ -1,0 +1,5 @@
+rootProject.name = 'ibooks'
+include 'admin'
+include 'common'
+include 'reviewer'
+include 'general'

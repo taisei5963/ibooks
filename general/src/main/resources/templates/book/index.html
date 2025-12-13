@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブック一覧'">
+    <head th:replace="~{_common/head::head}"></head>
+    <body>
+        <div th:replace="~{_common/header::menu}"></div>
+
+        <div class="generalContents">
+            <div class="container control-area">
+                <form th:action="@{/book/search}" method="post">
+                    <h1>ブック一覧</h1>
+
+                    <div class="search-cond">
+                        <div th:replace="~{_common/messages::messages}"></div>
+                        <div th:replace="~{_common/messages::errors}"></div>
+                    </div>
+
+                    <div class="indicate-area u-mb32">
+                        <div class="u-d-flex is-wrap u-gap-24">
+
+                            <div class="form-control">
+                                <div class="v-text-field outlined">
+                                    <input type="text" id="schTitle" name="schTitle" th:value="${searchForm?.schTitle}" maxlength="100" placeholder=" ">
+                                    <label for="schTitle">タイトル・部分一致</label>
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <div class="v-text-field outlined">
+                                    <input type="text" id="schAuthor" name="schAuthor" th:value="${searchForm?.schAuthor}" maxlength="60" placeholder=" ">
+                                    <label for="schAuthor">著者・部分一致</label>
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <div class="v-text-field outlined">
+                                    <input type="text" id="schPublisher" name="schPublisher" th:value="${searchForm?.schPublisher}" maxlength="60" placeholder=" ">
+                                    <label for="schPublisher">出版社・部分一致</label>
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <div class="v-select outlined">
+                                    <select id="schCategory" name="schCategory">
+                                        <option value="">すべて</option>
+                                        <th:block th:each="category : ${categories}">
+                                            <option th:value="${category.id}" th:selected="${searchForm?.schCategory == category.id}">[[${category.name}]]</option>
+                                        </th:block>
+                                    </select>
+                                    <label for="schCategory">カテゴリ</label>
+                                </div>
+                            </div>
+
+                            <div class="u-text-center u-d-flex is-wrap is-x-center u-w100 u-mt8">
+                                <button type="button" class="search-btn" id="search-btn">検索</button>
+                            </div>
+
+                            <input type="hidden" name="page" id="search-page" th:value="${page?.pageNum}">
+                            <input type="hidden" name="sortKey" th:value="${page?.sortKey}">
+                            <input type="hidden" name="sortValue" th:value="${page?.sortValue}">
+                        </div>
+                    </div>
+
+                    <!-- <div class="u-d-flex is-wrap is-x-end-pc u-mb16">
+                        <button type="button" class="async-csv-download" th:data-create-file-url="@{/book/createFile}" th:data-download-url="@{/book/download}">
+                            ダウンロード
+                        </button>
+                    </div> -->
+                </form>
+
+                <div th:unless="${#lists.isEmpty(books)}" class="container indicate-area">
+                    <div th:replace="~{_common/pager::pager}"></div>
+                    <div class="book-card-grid u-d-flex is-wrap u-gap-24">
+                        <div class="book-card" th:each="book : ${books}">
+                            <div class="d-flex justify-center">
+                                <img
+                                    th:src="${book.picFileName != null and book.picFileName != '' ? '/img/book/' + book.picFileName : '/img/book/no_image.jpg'}"
+                                    width="150"
+                                    height="190"
+                                    class="rounded"
+                                    alt="書籍画像"
+                                />
+                            </div>
+
+                            <div class="book-card-item">
+                                <h3 class="text-wrap text-body-1 mb-1">
+                                    <a
+                                        th:href="@{'/book/detail/' + ${book.bookId}}"
+                                        class="title-link"
+                                    >
+                                        [[${book.title}]]
+                                    </a>
+                                </h3>
+
+                                <p
+                                    th:if="${book.subTitle}"
+                                    class="text-wrap"
+                                >
+                                    [[${book.subTitle}]]
+                                </p>
+                            </div>
+
+                            <div class="book-card-text">
+                                <div class="mx-0 my-1">
+                                    <span class="me-1">
+                                        <th:block th:if="${book.author2}">
+                                            [[${book.author1}]] / [[${book.author2}]] 著
+                                        </th:block>
+                                        <th:block th:unless="${book.author2}">
+                                            [[${book.author1}]] 著
+                                        </th:block>
+                                    </span>
+                                </div>
+                                <div class="mx-0 my-1">
+                                    <div th:if="${book.translator}">
+                                        <span>[[${book.translator}]] 訳</span>
+                                    </div>
+                                </div>
+                                <div class="mx-0 my-2">
+                                    <span>[[${book.publisher}]] 出版</span>
+                                </div>
+                                <div class="mx-0 my-2 d-flex align-center">
+                                    <div class="book-rating-stars">
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}" th:classappend="${book.totalRating >= i} ? 'filled-star' : 'empty-star'">★</span>
+                                    </div>
+                                    <div class="text-grey ms-4 book-rating-value">
+                                        [[${book.totalRating}]]
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="px-2 mb-5 book-categories-wrapper">
+
+                                <!--/*
+                                <th:block th:if="${book.categoryId1 != null}">
+                                    <span class="book-category-badge">
+                                        [[${categories.stream().filter(c -> c.id == book.categoryId1).findFirst().orElse(null)?.name}]]
+                                    </span>
+                                </th:block>
+                                */-->
+                                <!--/*
+                                <th:block th:if="${book.categoryId2 != null}">
+                                    <span class="book-category-badge" th:style="'background-color:' + ${book.categoryId2 == 1 ? '#FFB74D' : (book.categoryId2 == 2 ? '#81C784' : (book.categoryId2 == 3 ? '#90CAF9' : '#B0BEC5'))}">
+                                        [[${categories.stream().filter(c -> c.id == book.categoryId2).findFirst().orElse(null)?.name}]]
+                                    </span>
+                                </th:block>
+                                <th:block th:if="${book.category_id_3 != null}">
+                                    <span class="book-category-badge" th:style="'background-color:' + ${book.categoryId3 == 1 ? '#FFB74D' : (book.categoryId3 == 2 ? '#81C784' : (book.categoryId3 == 3 ? '#90CAF9' : '#B0BEC5'))}">
+                                        [[${categories.stream().filter(c -> c.id == book.categoryId3).findFirst().orElse(null)?.name}]]
+                                    </span>
+                                </th:block>
+                                */-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="~{_common/script::csrfHeader}"></div>
+        <!-- <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div> -->
+
+        <script>
+            $(function() {
+                $('#search-btn').click(function() {
+                    var $form = $(this).closest('form');
+                    $('#search-page').val('0');
+                    $form.submit();
+                });
+            });
+        </script>
+
+        <div th:replace="~{_common/footer::footer}"></div>
+    </body>
+</html>

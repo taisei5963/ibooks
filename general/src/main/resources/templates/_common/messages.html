@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div th:fragment="messages" th:if="!${#lists.isEmpty(messages)}" class="alert alert-success alert-dismissible" role="alert" id="m_message_origin">
+        <ul th:each="message : ${messages}">
+            <li>[[${message}]]</li>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
+    </div>
+
+    <div th:fragment="errors" th:if="!${#lists.isEmpty(errors)}" class="alert alert-danger alert-dismissible" role="alert" id="m_message_origin_error">
+        <ul th:each="error : ${errors}" class="m-0">
+            <li>[[${error}]]</li>
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
+    </div>
+
+    <th:block th:fragment="validationErrors" th:if="${#fields.hasErrors()}">
+        <div class="alert alert-danger" id="m_message_origin_v_error">
+            <ul th:each="error : ${#fields.hasErrors()}">
+                <li>
+                    <label th:for="${error.fieldName}">[[${error.message}]]</label>
+                </li>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
+        </div>
+        <script th:inline="javascript">
+            $(function() {
+            });
+        </script>
+    </th:block>
+
+    <th:block th:fragment="extraValidationErrors" th:if="${#lists.isEmpty(extraValidationErrors)}">
+        <div class="alert alert-danger" id="m_message_origin_ev_error">
+            <ul th:each="error : ${extraValidationErrors}">
+                <li>
+                    <label th:for="${error.fieldName}">[[${error.message}]]</label>
+                </li>
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert">✕</button>
+        </div>
+        <script th:inline="javascript">
+            $(function() {
+            });
+        </script>
+    </th:block>
+</body>
+</html>

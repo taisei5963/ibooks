@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='メンテナンス中'">
+<head th:replace="~{_common/errorHead::head}"></head>
+<body class="error-ds">
+<div>
+    <h1>UNDER MAINTENANCE<span>メンテナンス中</span></h1>
+    <p th:unless="${#Strings.isEmpty(maintenanceMessage)}" th:utext="${maintenanceMessage}"></p>
+    <p th:if="$#Strings.isEmpty(maintenanceMessage)}">
+        ただいまメンテナンス中のためサービスを一時停止しております。
+        <br>大変ご不便をおかけしておりますが、今しばらくお待ちください。
+    </p>
+</div>
+</body>
+</html>

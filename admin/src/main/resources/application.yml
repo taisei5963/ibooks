@@ -1,0 +1,63 @@
+server:
+  servlet:
+    context-path: /admin
+    session:
+      cookie:
+        same-site: Strict
+        name: A_SESSION
+        http-only: true
+        secure: true
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  logback:
+    rollingpolicy:
+      max-history: 30
+doma:
+  jdbc-logger: JUL
+spring:
+  threads:
+    virtual:
+      enabled: true
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+  messages:
+    basename: messages
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: embedded
+      table-name: SPRING_SESSION
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+admin-config:
+  admin-password-min-length: 8
+  admin-password-check-mixed-chars: true
+  reviewer-password-min-length: 8
+  reviewer-password-check-mixed-chars: true
+  compatible-sjis: true
+  rating:
+    rounding-mode: HALF-UP
+  image:
+    books:
+      dir-hierarchy: 2
+  login:
+    failure-limit: 5
+    failure-lock-sec: 300
+  csv-upload:
+    encode: utf8
+    temp-file-name: /tmp/upload/upload_{0}_{1}_{2}.csv
+    book:
+      encode: utf8
+      temp-file-name: /home/ibooks/upload/upload_book_{0}_{1}.csv
+  csv-download:
+    encode: utf8
+    dir: /home/ibooks/download
+    book:
+      identifier: book

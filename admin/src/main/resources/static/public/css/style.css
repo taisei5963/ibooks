@@ -1,0 +1,40 @@
+/* ========================================
+  style
+======================================== */
+.app-bar {
+  display: flex;
+  align-items: center;
+  background-color: #62b5ce;
+  padding: 0 15px;
+  height: 64px;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.app-bar-title {
+  font-size: 3rem;
+  margin-left: 60px;
+  cursor: pointer;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.loginUserName {
+  margin-left: 20px;
+  font-size: medium;
+}
+
+.reviewer-login-btn {
+  margin-left: 20px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.reviewer-login-btn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}

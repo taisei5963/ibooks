@@ -1,0 +1,41 @@
+server:
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        same-site: Strict
+        name: A_SESSION
+        http-only: true
+        secure: true
+  error:
+    whitelabel:
+      enabled: false
+logging:
+  logback:
+    rollingpolicy:
+      max-history: 30
+doma:
+  jdbc-logger: JUL
+spring:
+  threads:
+    virtual:
+      enabled: true
+  data:
+    web:
+      pageable:
+        default-page-size: 50
+  messages:
+    basename: messages
+  web:
+    resources:
+      static-locations:
+        classpath: /static/
+        file: /Users/taiseikato/Projects/ibooks/
+
+general-config:
+  compatible-sjis: true
+  rating:
+    rounding-mode: HALF-UP
+  image:
+    books:
+      dir-hierarchy: 2

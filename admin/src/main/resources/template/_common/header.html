@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div th:fragment="menu" th:remove="tag">
+      <header class="app-bar">
+        <div class="app-bar-title" th:onclick="javascript:appBarBrand()">
+          ibooks
+        </div>
+
+        <div class="spacer"></div>
+        <div class="spacer"></div>
+
+        <p class="loginUserName">ゲスト 様</p>
+      </header>
+
+      <script th:inline="javascript">
+        function appVarBrand() {
+          window.location.href = "/ibooks/book_list";
+        }
+      </script>
+    </div>
+  </body>
+</html>
