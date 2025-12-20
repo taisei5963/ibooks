@@ -94,7 +94,7 @@ public interface ImageConfig {
             return "";
         }
         String baseUrl = isTemp ? getTempBaseUrl() : getBaseUrl();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(baseUrl);
         if (!baseUrl.endsWith("/")) {
             sb.append("/");
         }

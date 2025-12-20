@@ -459,13 +459,14 @@ input[type="email"].form_input:focus::placeholder {
 /* ========================================================
 *  評価 (Rating)
 ======================================================== */
-.book-rating-stars {
+.book-rating-stars .filled-star {
   color: #ffc107;
-  font-size: 1.6rem;
+  font-size: 2rem;
 }
 
 .book-rating-stars .empty-star {
   color: #e0e0e0;
+  font-size: 2rem;
 }
 
 .book-rating-value {

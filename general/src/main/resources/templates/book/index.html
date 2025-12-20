@@ -73,7 +73,7 @@
                         <div class="book-card" th:each="book : ${books}">
                             <div class="d-flex justify-center">
                                 <img
-                                    th:src="${book.picFileName != null and book.picFileName != '' ? '/img/book/' + book.picFileName : '/img/book/no_image.jpg'}"
+                                    th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
                                     width="150"
                                     height="190"
                                     class="rounded"
@@ -121,9 +121,9 @@
                                 <div class="mx-0 my-2 d-flex align-center">
                                     <div class="book-rating-stars">
                                         <span th:each="i : ${#numbers.sequence(1, 5)}" th:classappend="${book.totalRating >= i} ? 'filled-star' : 'empty-star'">★</span>
-                                    </div>
-                                    <div class="text-grey ms-4 book-rating-value">
-                                        [[${book.totalRating}]]
+                                        <span class="u-ms8 book-rating-value">
+                                            [[${book.totalRating}]]
+                                        </span>
                                     </div>
                                 </div>
                             </div>

@@ -22,6 +22,12 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
   web:
     resources:
+      static-locations:
+        - classpath:/META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        - file:/Users/taiseikato/Projects/ibooks/
       cache:
         cachecontrol:
           max-age: 0
