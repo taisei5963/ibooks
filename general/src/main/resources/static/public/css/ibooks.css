@@ -12,6 +12,7 @@ body {
   line-height: 1.6;
   width: 100%;
   font-family: 'Montserrat', 'Zen Kaku Gothic New', sans-serif;
+  padding-top: 60px;
 }
 
 body * {
@@ -490,5 +491,38 @@ input[type="email"].form_input:focus::placeholder {
   color: #ffffff;
   font-size: 1.2rem;
   font-weight: bold;
+  white-space: nowrap;
+}
+
+/* ========================================================
+*  ヘッダー (AppBar)
+======================================================== */
+.app-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background-color: #1976D2;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+}
+
+.app-bar-title {
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.loginUserName {
+  font-size: 1.4rem;
   white-space: nowrap;
 }
