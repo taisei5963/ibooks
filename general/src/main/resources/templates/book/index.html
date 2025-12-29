@@ -130,25 +130,21 @@
 
                             <div class="px-2 mb-5 book-categories-wrapper">
 
-                                <!--/*
                                 <th:block th:if="${book.categoryId1 != null}">
-                                    <span class="book-category-badge">
-                                        [[${categories.stream().filter(c -> c.id == book.categoryId1).findFirst().orElse(null)?.name}]]
+                                    <span class="book-category-badge" th:data-category-id="${book.categoryId1}">
+                                        [[${categoryMap.get(book.categoryId1)}]]
                                     </span>
                                 </th:block>
-                                */-->
-                                <!--/*
                                 <th:block th:if="${book.categoryId2 != null}">
-                                    <span class="book-category-badge" th:style="'background-color:' + ${book.categoryId2 == 1 ? '#FFB74D' : (book.categoryId2 == 2 ? '#81C784' : (book.categoryId2 == 3 ? '#90CAF9' : '#B0BEC5'))}">
-                                        [[${categories.stream().filter(c -> c.id == book.categoryId2).findFirst().orElse(null)?.name}]]
+                                    <span class="book-category-badge" th:data-category-id="${book.categoryId2}">
+                                        [[${categoryMap.get(book.categoryId2)}]]
                                     </span>
                                 </th:block>
-                                <th:block th:if="${book.category_id_3 != null}">
-                                    <span class="book-category-badge" th:style="'background-color:' + ${book.categoryId3 == 1 ? '#FFB74D' : (book.categoryId3 == 2 ? '#81C784' : (book.categoryId3 == 3 ? '#90CAF9' : '#B0BEC5'))}">
-                                        [[${categories.stream().filter(c -> c.id == book.categoryId3).findFirst().orElse(null)?.name}]]
+                                <th:block th:if="${book.categoryId3 != null}">
+                                    <span class="book-category-badge" th:data-category-id="${book.categoryId3}">
+                                        [[${categoryMap.get(book.categoryId3)}]]
                                     </span>
                                 </th:block>
-                                */-->
                             </div>
                         </div>
                     </div>
@@ -158,6 +154,26 @@
 
         <div th:replace="~{_common/script::csrfHeader}"></div>
         <!-- <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div> -->
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const colors = [
+                    '#FFCDD2', '#F8BBD0', '#E1BEE7', '#D1C4E9', '#C5CAE9',
+                    '#BBDEFB', '#B3E5FC', '#B2EBF2', '#B2DFDB', '#C8E6C9'
+                ];
+
+                document.querySelectorAll('.book-category-badge').forEach(badge => {
+                    const categoryId = badge.dataset.categoryId;
+                    if (categoryId) {
+                        const colorIndex = parseInt(categoryId) % 10;
+                        badge.style.backgroundColor = colors[colorIndex];
+                        badge.style.color = '#333';
+                        badge.style.padding = '4px 8px';
+                        badge.style.borderRadius = '50px';
+                    }
+                });
+            });
+        </script>
 
         <script>
             $(function() {

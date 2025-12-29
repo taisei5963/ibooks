@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ブックコントローラクラス
@@ -54,9 +55,11 @@ public class BookController {
         }
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
+        Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("searchForm", searchForm);
         model.addAttribute("books", result.getList());
         model.addAttribute("categories", categories);
+        model.addAttribute("categoryMap", categoryMap);
         return "book/index";
     }
 }
