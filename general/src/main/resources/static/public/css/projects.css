@@ -588,6 +588,8 @@ input[type="submit"]:disabled:hover {
 ======================================================== */
 h1 {
   font-size: 2.5rem;
+  margin-left: 16px;
+  margin-top: 16px;
 }
 
 h2 {
