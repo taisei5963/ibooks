@@ -80,7 +80,7 @@ public class BookController {
      */
     @RequestMapping("/detail/{bookId}")
     public String detail(@PathVariable Long bookId, Model model,
-                         RedirectAttributes redirectAttributes) {
+                            RedirectAttributes redirectAttributes) {
         Optional<BookModel> bookOpt = bookService.selectById(bookId);
         if (bookOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("errors", Collections.singletonList(
@@ -90,11 +90,10 @@ public class BookController {
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
-        List<ReviewModel> reviewModels = reviewService.selectByIdAndBookId(null, bookId);
+        List<ReviewModel> reviews = reviewService.selectByIdAndBookId(null, bookId);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
-        model.addAttribute("reviews", reviewModels);
-
+        model.addAttribute("reviews", reviews);
         return "book/detail";
     }
 }
