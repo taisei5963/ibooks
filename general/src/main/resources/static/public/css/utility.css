@@ -48,20 +48,20 @@
   font-weight: 700;
 }
 
-.u-fs-12 {
-  font-size: 1.2rem;
-}
-.u-fs-13 {
-  font-size: 1.3rem;
-}
-.u-fs-14 {
-  font-size: 1.4rem;
+.u-fs-1 {
+  font-size: 1rem;
 }
 .u-fs-15 {
   font-size: 1.5rem;
 }
-.u-fs-16 {
-  font-size: 1.6rem;
+.u-fs-2 {
+  font-size: 2rem;
+}
+.u-fs-25 {
+  font-size: 2.5rem;
+}
+.u-fs-3 {
+  font-size: 3rem;
 }
 
 .u-gap-4 {

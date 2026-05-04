@@ -22,13 +22,13 @@
             <li th:if="!${page.hasPrev}" class="disabled">
                 <span class="pager-before"></span>
             </li>
-            <li th:if="${page.beginPageNum != 0}">
+            <li th:if="${page.startPageNum != 0}">
                 <a th:href="@{${page.pagerQueryString}(page=0)}" class="pager-numbers">1</a>
             </li>
-            <li th:if="${page.beginPageNum} > 1" class="disabled">
+            <li th:if="${page.startPageNum} > 1" class="disabled">
                 <span>...</span>
             </li>
-            <th:block th:if="0 != ${page.totalPages}" th:each="i : ${#numbers.sequence(page.beginPageNum, page.endPageNum)}">
+            <th:block th:if="0 != ${page.totalPages}" th:each="i : ${#number.sequence(page.startPageNum, page.endPageNum)}">
                 <li th:if="${i} == ${page.pageNum}" class="active">
                     <a href="#" th:text="${i + 1}" class="ignoreLock pager-numbers"></a>
                 </li>
@@ -55,11 +55,10 @@
     <a th:href="@{${page.getSortQueryString}(sortKey=${colName})}" class="u-color-blue">
         [[${colLabel}]]
     </a>
-    <span th:if="${colName} == ${pager?.sortKey}"
-          th:text="${page?.sortValue.equals('ASC')} ? '▲' : '▼'"></span>
+    <span th:if="${colName} == ${pager?.sortKey}" th:text="${page?.sortValue.equals('ASC')} ? '▲' : '▼'"></span>
 </th:block>
 
-<th:block th:fragment="hiddenParams" th:with="hiddenParams=${page?.getHiddenParams()}">
+<th:block th:fragment="hiddenParams" th:widh="hiddenParams=${page?.getHiddenParams()}">
     <th:block th:if="!${#lists.isEmpty(hiddenParams)}" th:each="hiddenParam : ${hiddenParams}">
         <input type="hidden" th:name="${hiddenParam.name}" th:value="${hiddenParam.value}">
     </th:block>

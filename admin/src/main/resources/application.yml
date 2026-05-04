@@ -26,6 +26,11 @@ spring:
         default-page-size: 50
   messages:
     basename: messages
+  web:
+    resources:
+      static-locations:
+        classpath: /static/
+        file: /Users/taiseikato/Projects/ibooks/
   session:
     store-type: jdbc
     jdbc:

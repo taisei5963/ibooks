@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブック一覧'">
 <head th:replace="~{_common/head::head}"></head>
-<body>
+<body class="content-body">
     <div th:replace="~{_common/header::menu}"></div>
 
     <main class="container u-py24">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="search-action u-text-center u-mt24">
-                    <button type="button" id="search-btn" class="btn-primary">
+                    <button type="button" id="search-btn" class="btn-dark">
                         検索
                     </button>
                 </div>
@@ -54,18 +54,22 @@
             <div class="u-py24" th:replace="~{_common/pager::pager}"></div>
 
             <div class="book-grid">
-                <a th:each="book : ${books}" th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
-
-                    <div class="book-image-wrapper">
-                        <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
-                            alt="書籍画像" />
+                <div th:each="book : ${books}">
+                    <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
+                        <div class="book-image-wrapper">
+                            <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                alt="書籍画像" />
+                        </div>
+                        <div class="book-overlay">
+                            <h2 class="book-overlay-title" th:text="${book.title}"></h2>
+                            <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
+                        </div>
+                    </a>
+                    <div class="book-info-mobile">
+                        <div class="book-title-mobile" th:text="${book.title}"></div>
+                        <div class="book-subtitle-mobile" th:if="${book.subTitle}" th:text="${book.subTitle}"></div>
                     </div>
-
-                    <div class="book-overlay">
-                        <h2 class="book-overlay-title" th:text="${book.title}"></h2>
-                        <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
-                    </div>
-                </a>
+                </div>
             </div>
         </div>
     </main>

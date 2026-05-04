@@ -51,18 +51,27 @@ public class LoginController {
     @GetMapping(value = {"", "/"})
     public String index(Model model) {
         if (adminDto.isLogin()) {
-            return "redirect:book/index";
+            return "redirect:/book";
         }
         return "login/login";
     }
 
+    /**
+     * ログインする
+     *
+     * @param loginForm ログインフォーム
+     * @param model     モデル
+     * @param session   セッション
+     * @param req       リクエスト
+     * @return テンプレートパス
+     */
     @UnLogin
     @PostMapping("login")
     public String login(LoginForm loginForm, Model model, HttpSession session,
                         HttpServletRequest req)
             throws InterruptedException {
         if (adminDto.isLogin()) {
-            return "redirect:book/index";
+            return "redirect:/book";
         }
         Optional<AdminModel> opt;
         try {
@@ -86,6 +95,22 @@ public class LoginController {
             adminDto.setInaccessibleActionPaths(
                     actionRoleService.getInaccessibleActionPaths(adminDto.getPrivilegeId()));
         }
-        return "redirect:book/index";
+        return "redirect:/book";
+    }
+
+    /**
+     * ログアウトする
+     *
+     * @param session セッション
+     * @return テンプレートパス
+     */
+    @PostMapping("logout")
+    public String logout(HttpSession session) {
+        // セッション破棄
+        session.invalidate();
+        // DTOリセット
+        adminDto.reset();
+        // ログイン画面へリダイレクト
+        return "redirect:/login";
     }
 }
