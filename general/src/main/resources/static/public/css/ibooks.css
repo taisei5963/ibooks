@@ -99,8 +99,8 @@ body * {
   text-align: center;
 }
 .search-cond {
-  width: 90%;
-  margin: 8px auto;
+  width: 100%;
+  margin: 0.5rem auto 2rem auto;
 }
 
 /* =========================

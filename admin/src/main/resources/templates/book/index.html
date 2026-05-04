@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブック一覧'">
+<head th:replace="~{_common/head::head}"></head>
+<body class="content-body">
+    <div th:replace="~{_common/header::menu}"></div>
+
+    <main class="container u-py24">
+        <h1 class="u-mb24 u-ms24 u-fs-2">ブック一覧</h1>
+
+        <div class="search-cond u-mb16">
+            <div th:replace="~{_common/messages::messages}"></div>
+            <div th:replace="~{_common/messages::errors}"></div>
+        </div>
+
+        <section class="u-mb32">
+            <form th:action="@{/book/search}" method="post" class="search-card">
+                <div class="search-grid">
+                    <div class="search-field">
+                        <label for="schTitle" class="u-mb8 u-d-block">タイトル（部分一致）</label>
+                        <input type="text" id="schTitle" name="schTitle" th:value="${searchForm?.schTitle}" maxlength="100">
+                    </div>
+
+                    <div class="search-field">
+                        <label for="schAuthor" class="u-mb8 u-d-block">著者（部分一致）</label>
+                        <input type="text" id="schAuthor" name="schAuthor" th:value="${searchForm?.schAuthor}" maxlength="60">
+                    </div>
+
+                    <div class="search-field">
+                        <label for="schPublisher" class="u-mb8 u-d-block">出版社（部分一致）</label>
+                        <input type="text" id="schPublisher" name="schPublisher" th:value="${searchForm?.schPublisher}" maxlength="60">
+                    </div>
+
+                    <div class="search-field">
+                        <label for="schCategory" class="u-mb8 u-d-block">カテゴリ（完全一致）</label>
+                        <select id="schCategory" name="schCategory">
+                            <option value="">すべて</option>
+                            <th:block th:each="category : ${categories}">
+                                <option th:value="${category.id}"
+                                    th:selected="${searchForm?.schCategory == category.id}"
+                                >[[${category.name}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-action u-text-center u-mt24">
+                    <button type="button" id="search-btn" class="btn-dark">
+                        検索
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <div th:unless="${#lists.isEmpty(books)}" class="container u-pb32">
+            <div class="u-py24" th:replace="~{_common/pager::pager}"></div>
+
+            <div class="book-grid">
+                <div th:each="book : ${books}">
+                    <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
+                        <div class="book-image-wrapper">
+                            <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                alt="書籍画像" />
+                        </div>
+                        <div class="book-overlay">
+                            <h2 class="book-overlay-title" th:text="${book.title}"></h2>
+                            <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
+                        </div>
+                    </a>
+                    <div class="book-info-mobile">
+                        <div class="book-title-mobile" th:text="${book.title}"></div>
+                        <div class="book-subtitle-mobile" th:if="${book.subTitle}" th:text="${book.subTitle}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<div th:replace="~{_common/script::csrfHeader}"></div>
+<!-- <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div> -->
+<div th:replace="~{_common/footer::footer}"></div>
+
+<script>
+    $(function() {
+        $('#search-btn').click(function() {
+            var $form = $(this).closest('form');
+            $('#search-page').val('0');
+            ibooks.showLoading();
+            $form.submit();
+        });
+
+        $('.js-loading-link').click(function(e) {
+            ibooks.showLoading();
+            setTimeout(() => {
+                window.location.href = $(this).attr('href');
+            }, 50);
+            e.preventDefault();
+        });
+    });
+</script>
+</body>
+</html>

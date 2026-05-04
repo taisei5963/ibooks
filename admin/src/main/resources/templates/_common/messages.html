@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <div th:fragment="messages" th:if="!${lists.isEmpty(messages)}" class="alert alert-success" id="m_message_origin">
+    <div th:fragment="messages" th:if="!${#lists.isEmpty(messages)}" class="alert alert-success" id="m_message_origin">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         <ul th:each="message : ${messages}">
             <li>[[${message}]]</li>
         </ul>
     </div>
 
-    <div th:fragment="errors" th:if="!${lists.isEmpty(errors)}" class="alert alert-danger" id="m_message_origin_error">
+    <div th:fragment="errors" th:if="!${#lists.isEmpty(errors)}" class="alert alert-danger" id="m_message_origin_error">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         <ul th:each="error : ${errors}">
-            <li>[[${errors}]]</li>
+            <li>[[${error}]]</li>
         </ul>
     </div>
 
