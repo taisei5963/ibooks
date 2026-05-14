@@ -9,7 +9,7 @@ public class SystemRegex {
     /** JANコードに対する正規表現 */
     public static final String JAN_CODE_REGEX = "^(\\d{13})?$";
     /** ブック画像ファイル名に対する正規表現 */
-    public static final String BOOK_IMG_REGEX = "^(.*\\.(jpg|JPG|jpeg|JPEG|png|PNG|登録済)?$";
+    public static final String BOOK_IMG_REGEX = "^(.*\\.(jpg|JPG|jpeg|JPEG|png|PNG|登録済)?$)";
     /** カテゴリコードに対する正規表現 */
     public static final String CATEGORY_CODE_REGEX = "^[0-9A-Z]*$";
     /** コード値に対する正規表現 */

@@ -84,10 +84,17 @@ public class BookController {
         model.addAttribute("books", result.getList());
         model.addAttribute("categories", categories);
         model.addAttribute("categoryMap", categoryMap);
-        model.addAttribute("adminDto", adminDto);
         return "book/index";
     }
 
+    /**
+     * ブック詳細
+     *
+     * @param bookId             ブックID
+     * @param model              テンプレートモデル
+     * @param redirectAttributes リダイレクト
+     * @return テンプレートパス
+     */
     @RequestMapping("/detail/{bookId}")
     public String detail(@PathVariable Long bookId, Model model,
                          RedirectAttributes redirectAttributes) {
@@ -104,7 +111,6 @@ public class BookController {
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
         model.addAttribute("reviews", reviews);
-        model.addAttribute("adminDto", adminDto);
         return "book/detail";
     }
 

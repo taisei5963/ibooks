@@ -31,8 +31,7 @@ spring:
       cache:
         cachecontrol:
           max-age: 0
-  config:
-    import: "optional:file:/home/ibooks/config/local-admin-config.yml"
+
 env: develop
 # 管理サイト設定
 admin-config:
@@ -48,8 +47,8 @@ admin-config:
       base-url: http://ibooks.local/admin/img/book
       temp-base-url: http://ibooks.local/admin/img/book/tmp
       # 画像アップロード先ディレクトリ
-      upload-dir: /home/ibooks/img/book
-      temp-upload-dir: /home/ibooks/img/book/tmp
+      upload-dir: /Users/taiseikato/Projects/ibooks/img/book
+      temp-upload-dir: /Users/taiseikato/Projects/ibooks/img/book/tmp
   # レビュワーサイトURL
   reviewer-site:
     url: http://ibooks.local/reviewer/

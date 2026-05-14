@@ -6,11 +6,11 @@
 <body>
     <th:block th:fragment="messages">
         <div class="alert alert-success u-d-none" id="message">
-            <button type="button" class="close">✕</button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <ul></ul>
         </div>
         <div class="alert alert-danger u-d-none" id="errorMessage">
-            <button type="button" class="close">✕</button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <ul></ul>
         </div>
     </th:block>
@@ -25,8 +25,8 @@
             <p class="txt u-mt4 u-font12 u-color-green"></p>
         </div>
 
-        <div class="u-d-flex is-wrap is-x-center u-w100 u-mb16">
-            <button type="button" id="upload" class="is-max260" aria-modal="upload">アップロード</button>
+        <div class="u-d-flex is-wrap is-x-center u-w100">
+            <button type="button" id="upload" class="btn-dark" aria-modal="upload">アップロード</button>
         </div>
     </th:block>
 
@@ -37,7 +37,7 @@
                     <th>エラー内容</th>
                 </tr>
             </thead>
-            <tbody class="messages">
+            <tbody class="errors">
             </tbody>
         </table>
     </div>
