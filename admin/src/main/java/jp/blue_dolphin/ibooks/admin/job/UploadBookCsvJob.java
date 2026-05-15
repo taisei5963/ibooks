@@ -187,6 +187,8 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode1(), "1"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId1(categoryId);
                 }
             }
 
@@ -196,6 +198,8 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode2(), "2"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId2(categoryId);
                 }
             }
 
@@ -205,6 +209,8 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode3(), "3"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId3(categoryId);
                 }
             }
 
@@ -298,7 +304,7 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
             Files.createDirectories(parent);
             Path zipFile = parent.resolve(tmpFile.getFileName().toString().replace(".csv", ".zip"));
             Path zipDir =
-                    parent.resolve(tmpFile.getFileName().toString().toString().replace(".csv", ""));
+                    parent.resolve(tmpFile.getFileName().toString().replace(".csv", ""));
             Files.createDirectories(zipDir);
             Files.write(zipFile, file.getBytes());
             Pattern pattern =
