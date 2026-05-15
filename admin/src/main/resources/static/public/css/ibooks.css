@@ -466,9 +466,8 @@ input[type="submit"]:disabled:hover {
 }
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  padding-top: 20px;
 }
 
 /* ========================================
@@ -631,12 +630,5 @@ input[type="submit"]:disabled:hover {
   .book-subtitle-mobile {
     font-size: 1rem;
     color: #777;
-  }
-
-  @media (min-width: 1024px) {
-    .book-grid {
-      grid-template-columns: repeat(4, 1fr); 
-      gap: 30px;
-    }
   }
 }
