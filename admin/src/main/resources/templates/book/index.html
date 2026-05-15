@@ -50,14 +50,14 @@
             </form>
         </section>
 
-        <div th:unless="${#lists.isEmpty(books)}" class="container">
+        <div th:unless="${#lists.isEmpty(books)}" class="container u-pb32">
             <div class="u-py24" th:replace="~{_common/pager::pager}"></div>
 
             <div class="book-grid">
                 <div th:each="book : ${books}">
                     <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
                         <div class="book-image-wrapper">
-                            <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                            <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
                                 alt="書籍画像" />
                         </div>
                         <div class="book-overlay">

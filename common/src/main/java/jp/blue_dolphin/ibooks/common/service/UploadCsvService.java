@@ -80,7 +80,6 @@ public class UploadCsvService {
         try {
             executeUpdate(job, file, emitter, account);
         } catch (UploadException e) {
-            logger.error(e.getMessage());
             List<String> uploadErrors = new ArrayList<>();
             if (e.getDetailMessage() != null) {
                 uploadErrors.add(e.getDetailMessage());
@@ -94,7 +93,6 @@ public class UploadCsvService {
                 sendEmitterErrorResponse(emitter, e.getMessage());
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
             sendEmitterErrorResponse(emitter, messageService.getMessage("csv.error.exception"));
         } finally {
             emitter.complete();
@@ -148,10 +146,6 @@ public class UploadCsvService {
                 throw new UploadException(
                         messageService.getMessage("error.csv.zip.parse"),
                         messageService.getMessage("errors.csv.zip.read"));
-            }
-            if (tempFileDto.getError() != null) {
-                uploadStatus = UploadStatus.ERROR;
-                throw new UploadException(tempFileDto.getError());
             }
             try {
                 csvDto = readCsv(job, tempFileDto, account, emitter);
@@ -286,8 +280,6 @@ public class UploadCsvService {
                     if (Objects.isNull(csv)) {
                         break;
                     }
-                    csv.setRowNum(csvReader.getRowNumber());
-                    csvList.add(csv);
                 } catch (SuperCsvException e) {
                     // nop
                 } finally {

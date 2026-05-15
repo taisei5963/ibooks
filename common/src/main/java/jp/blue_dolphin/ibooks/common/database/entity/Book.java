@@ -93,4 +93,8 @@ public class Book {
     @Version
     @Column(name = "ver")
     public final Integer ver;
+
+    /** カテゴリ名（表示用） */
+    @Column(name = "category_name")
+    public final String categoryName;
 }

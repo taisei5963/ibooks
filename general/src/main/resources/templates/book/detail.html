@@ -13,7 +13,7 @@
             <div class="book-detail-image">
                 <img
                     th:src="${book.picFileName != null and book.picFileName != '' 
-                    ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) 
+                    ? @booksImageConfigImpl.getImgUrl(book.picFileName) 
                     : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
                     alt="書籍画像"
                 />

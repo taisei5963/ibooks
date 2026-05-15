@@ -1,47 +1,52 @@
 SELECT
-  book_id,
-  title,
-  sub_title,
-  author1,
-  author2,
-  translator,
-  publisher,
-  pic_file_name,
-  total_rating,
-  category_id_1,
-  category_id_2,
-  category_id_3,
-  created_at,
-  created_id
+  b.book_id,
+  b.title,
+  b.sub_title,
+  b.author1,
+  b.author2,
+  b.translator,
+  b.publisher,
+  b.pic_file_name,
+  b.total_rating,
+  b.category_id_1,
+  b.category_id_2,
+  b.category_id_3,
+  b.created_at,
+  b.created_id,
+  c.category_name
 FROM
-  book
+  book b
+  LEFT JOIN category c ON b.category_id_1 = c.category_id
+  LEFT JOIN category c2 ON b.category_id_2 = c2.category_id
+  LEFT JOIN category c3 ON b.category_id_3 = c3.category_id
 
 WHERE
-  deleted_at IS NULL
+  b.deleted_at IS NULL
+  AND c.deleted_at IS NULL
 
   /*%if title != null */
-  AND title LIKE /* title */'%title%'
+  AND b.title LIKE /* title */'%title%'
   /*%end*/
 
   /*%if author != null */
   AND (
-    author1 LIKE /* author */'%author%'
+    b.author1 LIKE /* author */'%author%'
     OR
-    author2 LIKE /* author */'%author%'
+    b.author2 LIKE /* author */'%author%'
   )
   /*%end*/
 
   /*%if publisher != null */
-  AND publisher LIKE /* publisher */'%publisher%'
+  AND b.publisher LIKE /* publisher */'%publisher%'
   /*%end*/
 
   /*%if categoryId != null */
   AND (
-    category_id_1 = /* categoryId */1
+    b.category_id_1 = /* categoryId */1
     OR
-    category_id_2 = /* categoryId */1
+    b.category_id_2 = /* categoryId */1
     OR
-    category_id_3 = /* categoryId */1
+    b.category_id_3 = /* categoryId */1
   )
   /*%end*/
 /*# orderBy */

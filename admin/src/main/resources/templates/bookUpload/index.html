@@ -1,50 +1,39 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブックCSVアップロード'">
 <head th:replace="~{_common/head::head}"></head>
-<body class="content-body ds-book-upload-index">
+<body class="ds-book-upload-index">
 <div th:replace="~{_common/header::menu}"></div>
 
-<main class="container u-py24">
+<div class="generalContents">
+    <div class="container control-area">
+        <h1>ブックCSVアップロード</h1>
+    </div>
 
-    <h1 class="u-mb24 u-ms24 u-fs-2">ブックCSVアップロード</h1>
-
-    <div class="search-cond u-mb16">
+    <div class="search-condition">
         <div th:replace="~{_common/upload::messages}"></div>
     </div>
 
-    <section class="upload-card">
-        <form id="mainForm"
-            th:action="@{/bookUpload/upload}"
-            enctype="multipart/form-data"
-            method="post">
-
-            <div class="upload-form-area">
-                <div th:replace="~{_common/upload::upload(accept='.csv,.zip')}"></div>
+    <div class="indicate-area">
+        <div class="indicate-block-area">
+            <div class="u-flex is-wrap is-x-spaceBetween-pc">
+                <div class="u-w50">
+                    <h2>ブックCSV/ZIPアップロード</h2>
+                </div>
             </div>
-        </form>
-    </section>
-    <div class="upload-guide-area">
-        <a th:href="@{/sample/book.csv}"
-            download="book.csv"
-            class="sample-download-link ignoreLock">
-            サンプルCSVをダウンロード
-        </a>
-        <a th:href="@{/sample/book.zip}"
-            download="book.zip"
-            class="sample-download-link ignoreLock">
-            サンプルZIPをダウンロード
-        </a>
-        <div class="upload-note">
-            ※画像ファイル（JPEG / PNG）を登録・更新する場合は、
-            対象画像をZIP形式にまとめてアップロードしてください。
+            <form id="mainForm" th:action="@{/bookUpload/upload}" enctype="multipart/form-data" method="post">
+                <div th:replace="~{_common/upload::upload(accept='.csv,.zip)}"></div>
+
+                <div>
+                    <p><a th:href="@{/sample/book.csv}" download="book.csv" class="u-color-green ignoreLock">サンプルCSVはこちら</a></p>
+                    <p><a th:href="@{/sample/book.zip}" download="book.zip" class="u-color-green ignoreLock">サンプルZIPはこちら</a></p>
+                    <p class="u-font12">※画像ファイル（JPEG,PNG）を登録・更新したい場合、更新する画像ファイルをZIP形式で固めてアップロードしてください。</p>
+                </div>
+
+                <div th:replace="~{_common/upload::errors}"></div>
+            </form>
         </div>
     </div>
-
-    <div class="upload-error-area">
-        <div th:replace="~{_common/upload::errors}"></div>
-    </div>
-
-</main>
+</div>
 <script th:replace="~{_common/script::csrfHeader}"></script>
 <script th:replace="~{_common/script::uploadCsvFile}"></script>
 <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div>

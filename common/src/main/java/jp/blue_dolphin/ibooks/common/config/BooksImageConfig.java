@@ -59,7 +59,7 @@ public interface BooksImageConfig extends ImageConfig {
         if (dirHierarchy == 1) {
             sj.add(base.substring(2));
         } else if (dirHierarchy == 2) {
-            sj.add(base.substring(0, 2));
+            sj.add(bookId.toString());
             sj.add(base.substring(2));
         }
         sj.add(bookId.toString());

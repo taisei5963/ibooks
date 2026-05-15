@@ -57,7 +57,7 @@
                 <a th:each="book : ${books}" th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
 
                     <div class="book-image-wrapper">
-                        <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                        <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getImgUrl(book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
                             alt="書籍画像" />
                     </div>
 

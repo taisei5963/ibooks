@@ -60,12 +60,9 @@ public class UploadFileCommonService {
      * @return 一時ファイル
      */
     public static Path getTmpFilePath(String templateFileName, Long uploadId) {
-        String formatted = MessageFormat.format(
-                templateFileName,
-                uploadId,
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))
-        );
-        return Paths.get(formatted);
+        return Paths.get(
+                MessageFormat.format(templateFileName, uploadId, LocalDateTime.now().format(
+                        DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS"))));
     }
 
     /**

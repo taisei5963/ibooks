@@ -150,22 +150,8 @@ input[type="submit"]:disabled:hover {
 /* ========================================================
 *  ファイルアップロード
 ======================================================== */
-.upload-form-area {
-  position: relative;
-  margin-bottom: 32px;
-}
 .upload-area {
   position: relative;
-  border: 2px dashed #c4cacb;
-  border-radius: 12px;
-  background: #fafafa;
-  padding: 48px 24px;
-  text-align: center;
-  transition: all 0.2s ease;
-}
-.upload-area:hover {
-  background: #f2f5f6;
-  border-color: #374246;
 }
 .upload-area input {
   display: block;
@@ -176,7 +162,6 @@ input[type="submit"]:disabled:hover {
   height: 100%;
   font-size: 0;
   opacity: 0;
-  cursor: pointer;
 }
 .upload-area .txt {
   font-size: 1.5rem;
@@ -191,46 +176,6 @@ input[type="submit"]:disabled:hover {
 .upload-textarea textarea::placeholder {
   color: #c4cacb;
   font-size: 1.3rem;
-}
-.upload-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px 20px 0 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-  border: 1px solid #eee;
-}
-.upload-card-header h2 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #333;
-}
-.upload-guide-area {
-  display: flex;
-  flex-direction: column;
-}
-.sample-download-link {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-  padding: 10px;
-  color: #374246;
-  text-decoration: none !important;
-  font-size: 1.4rem;
-  font-weight: 700;
-  transition: all 0.2s ease;
-}
-.sample-download-link:hover {
-  text-decoration: underline !important;
-}
-.upload-note {
-  margin-top: 8px;
-  padding: 0 0 0 16px;
-  color: #666;
-  font-size: 1.3rem;
-  line-height: 1.8;
-}
-.upload-error-area {
-  margin-top: 24px;
 }
 
 /* ========================================================
@@ -544,65 +489,82 @@ input[type="submit"]:disabled:hover {
   caption-side: bottom;
   border-collapse: collapse;
 }
+
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
   background-color: transparent;
   box-shadow: none; 
   border-bottom-width: 1px;
 }
+
 .table > :not(:last-child) > :last-child > * {
   border-bottom-color: #dee2e6;
 }
+
 .table > thead {
   vertical-align: bottom;
 }
+
 .table th {
   text-align: inherit;
   font-weight: 700;
 }
+
 .table > :not(caption) > * {
   border-color: #dee2e6;
 }
+
 .table-striped > tbody > tr:nth-of-type(odd) > * {
   background-color: #f2f2f2;
   color: #212529;
 }
+
 .table-hover > tbody > tr:hover > * {
   background-color: #e6e6e6;
   color: #212529;
 }
+
 .table-bordered {
   border: 1px solid #dee2e6;
 }
+
 .table-bordered > :not(caption) > * {
   border-width: 1px 0;
 }
+
 .table-bordered > :not(caption) > * > * {
   border-width: 0 1px;
   border-color: #dee2e6;
 }
+
 .table-sm > :not(caption) > * > * {
   padding: 0.25rem 0.25rem;
 }
+
 .table-error thead tr {
   background: #dc3545;
   color: #fff;
 }
+
 .table-error tbody tr {
   border-bottom: solid 1px #ffdcdc;
   border-left: solid 1px #ffdcdc;
   border-right: solid 1px #ffdcdc;
 }
+
 .table-error tbody tr:nth-child(even) {
   background: #dc3545;
 }
+
 .table-error tbody tr:hover td {
   background-color: #ffecc5;
 }
+
 .table-responsive {
   overflow-x: auto;
   min-height: 0.01%;
 }
+
 /* ========================================================
 *  その他
 ======================================================== */
@@ -709,6 +671,8 @@ a:hover {
   transition: all 0.3s ease;
   z-index: 998;
 }
+
+/* 表示状態 */
 .overlay.open {
   opacity: 1;
   visibility: visible;

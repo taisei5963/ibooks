@@ -380,12 +380,7 @@
 .u-min-h100 {
   min-height: 100%;
 }
+
 .u-bg-error {
   background-color: #ffe8e8 !important;
-}
-.u-d-flex.is-wrap {
-  flex-wrap: wrap;
-}
-.u-d-flex.is-x-center {
-  justify-content: center;
 }

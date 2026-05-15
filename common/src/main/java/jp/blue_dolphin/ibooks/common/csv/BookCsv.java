@@ -139,9 +139,9 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .author2(getAuthor2())
                     .translator(getTranslator())
                     .publisher(getPublisher())
-                    .categoryId1(getCategoryId1())
-                    .categoryId2(getCategoryId2())
-                    .categoryId3(getCategoryId3())
+                    .categoryCode1(getCategoryCode1())
+                    .categoryCode2(getCategoryCode2())
+                    .categoryCode3(getCategoryCode3())
                     .build();
         } else if (dataType == CsvDataType.UPDATE && bookModel != null) {
             return bookModel.toBuilder()
@@ -151,9 +151,9 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .author2(getAuthor2())
                     .translator(getTranslator())
                     .publisher(getPublisher())
-                    .categoryId1(getCategoryId1())
-                    .categoryId2(getCategoryId2())
-                    .categoryId3(getCategoryId3())
+                    .categoryCode1(getCategoryCode1())
+                    .categoryCode2(getCategoryCode2())
+                    .categoryCode3(getCategoryCode3())
                     .build();
         }
         return null;
