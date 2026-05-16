@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * レビューリポジトリ
@@ -24,12 +27,16 @@ public class ReviewRepositoryImpl implements ReviewRepository {
      * {@inheritDoc}
      */
     @Override
-    public ReviewModel selectByIdAndBookId(Long reviewId, Long bookId) {
-        if (Objects.isNull(reviewId) || Objects.isNull(bookId)) {
-            return null;
+    public List<ReviewModel> selectByIdAndBookId(Long reviewId, Long bookId) {
+        List<Review> entities = reviewDao.selectByIdAndBookId(reviewId, bookId);
+        if (Objects.isNull(entities) || entities.isEmpty()) {
+            return List.of();
         }
-        Review entity = reviewDao.selectByIdAndBookId(reviewId, bookId);
-        return convertModel(entity);
+        List<ReviewModel> models = new ArrayList<>();
+        for (Review entity : entities) {
+            models.add(convertModel(entity));
+        }
+        return models;
     }
 
     /**

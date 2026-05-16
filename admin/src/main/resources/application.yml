@@ -26,6 +26,11 @@ spring:
         default-page-size: 50
   messages:
     basename: messages
+  web:
+    resources:
+      static-locations:
+        classpath: /static/
+        file: /Users/taiseikato/Projects/ibooks/
   session:
     store-type: jdbc
     jdbc:
@@ -52,12 +57,12 @@ admin-config:
     failure-lock-sec: 300
   csv-upload:
     encode: utf8
-    temp-file-name: /tmp/upload/upload_{0}_{1}_{2}.csv
+    temp-file-name: /Users/taiseikato/Projects/ibooks/tmp/upload/upload_{0}_{1}_{2}.csv
     book:
       encode: utf8
-      temp-file-name: /home/ibooks/upload/upload_book_{0}_{1}.csv
+      temp-file-name: /Users/taiseikato/Projects/ibooks/csv/upload/upload_book_{0}_{1}.csv
   csv-download:
     encode: utf8
-    dir: /home/ibooks/download
+    dir: /Users/taiseikato/Projects/ibooks/csv/download
     book:
       identifier: book

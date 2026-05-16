@@ -14,7 +14,7 @@
         });
       });
 
-      function setRequestHeader(headers) {
+      function setCsrfHeaders(headers) {
         if (headers == null) {
           return;
         }
@@ -65,7 +65,7 @@
           if (confirm("アップロードします。よろしいでしょうか？")) {
             ibooks.showProgress();
             hideMessages();
-            let $form = $("$mainForm");
+            let $form = $("#mainForm");
             let formData = new FormData($form[0]);
             const headers = {};
             setCsrfHeaders(headers);
@@ -106,9 +106,10 @@
                 let arr = value.split("\n");
                 for (let res of arr) {
                   res = res.trim();
-                  if (res.match(/^data:.*/)) {
-                    res = res.trim();
-                  }
+                  // if (res.match(/^data:.*/)) {
+                  //   res = res.trim();
+                  // }
+                  res = res.replace(/^data:\s*/, "");
                   if (res === "") {
                     continue;
                   }
@@ -131,6 +132,7 @@
                   data = "";
                 }
               } catch (error) {
+                console.error(error);
                 result = "ERROR";
                 message = "アップロードに失敗しました。";
               }
@@ -144,49 +146,48 @@
               return;
             }
             showSuccessMessage(message);
-						if (errorMessages) {
-							showErrorMessages(errorMessages);
-						}
+                if (errorMessages) {
+                    showErrorMessages(errorMessages);
+                }
           }
         }
+        function resetForm() {
+            $('#mainForm').find('input[name="reset"]').click();
+            $('#csvFile').parent().next('p').text('');
+        }
 
-				function resetForm() {
-					$('#mainForm').find('input[name="reset"]').click();
-					$('#csvFile').parent.next('p').text('');
-				}
+        function hideMessages() {
+            $('#message').hide();
+            $('#errorMessage').hide();
+            $('#errorMessages').hide();
+        }
 
-				function hideMessages() {
-					$('#message').hide();
-					$('#errorMessage').hide();
-					$('#errorMessages').hide();
-				}
+        function showErrorMessages(errorMessages) {
+            $('#errorMessages').find('.messages > tr').remove();
+            for (var error of errorMessages) {
+                var tr = $('<tr>');
+                var td = $('<td>');
+                    tr.append(td);
+                    $('#errorMessages').find('.message').append(tr);
+            }
+            $('#errorMessages').show();
+        }
 
-				function showErrorMessages(errorMessages) {
-					$('#errorMessages').find('.messages > tr').remove();
-					for (var error of errorMessages) {
-						var tr = $('<tr>');
-						var td = $('<td>');
-							tr.append(td);
-							$('#errorMessages').find('.message').append(tr);
-					}
-					$('#errorMessages').show();
-				}
+        function showErrorMessage(message) {
+            resetForm();
+            $('#errorMessage').find('li').remove();
+            var li = $('<li>').text(message);
+                $('#errorMessage').find('ul').append(li);
+                $('#errorMessage').show();
+        }
 
-				function showErrorMessage(message) {
-					resetForm();
-					$('#errorMessage').find('li').remove();
-					var li = $('<li>').text(message);
-						$('#errorMessage').find('ul').append(li);
-						$('#errorMessage').show();
-				}
-
-				function showSuccessMessage(message) {
-					resetForm();
-					$('#message').find('li').remove();
-					var li = $('<li>').text(message);
-						$('#message').find('ul').append(li);
-						$('#message').show();
-				}
+        function showSuccessMessage(message) {
+            resetForm();
+            $('#message').find('li').remove();
+            var li = $('<li>').text(message);
+                $('#message').find('ul').append(li);
+                $('#message').show();
+        }
       });
     </script>
 

@@ -9,9 +9,9 @@
         全
         [[${page.totalCount}]]
         件中
-        [[${page.begin}]]
+        [[${page.from}]]
         -
-        [[${page.end}]]
+        [[${page.to}]]
         件目
     </div>
     <nav th:if="${page.totalPages} != 0">
@@ -28,7 +28,7 @@
             <li th:if="${page.startPageNum} > 1" class="disabled">
                 <span>...</span>
             </li>
-            <th:block th:if="0 != ${page.totalPages}" th:each="i : ${number.sequence(page.startPageNum, page.endPageNum)}">
+            <th:block th:if="0 != ${page.totalPages}" th:each="i : ${#number.sequence(page.startPageNum, page.endPageNum)}">
                 <li th:if="${i} == ${page.pageNum}" class="active">
                     <a href="#" th:text="${i + 1}" class="ignoreLock pager-numbers"></a>
                 </li>

@@ -31,8 +31,7 @@ spring:
       cache:
         cachecontrol:
           max-age: 0
-  config:
-    import: "optional:file:/home/ibooks/config/local-general-config.yml"
+
 env: develop
 # 一般サイト設定
 general-config:

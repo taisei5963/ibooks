@@ -80,7 +80,6 @@ public interface ImageConfig {
         return getImgUrl(fileName, dir, true);
     }
 
-
     /**
      * 画像のURLを取得する
      *
@@ -107,5 +106,4 @@ public interface ImageConfig {
         sb.append(fileName);
         return sb.toString();
     }
-
 }

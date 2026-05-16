@@ -10,6 +10,7 @@ import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.Result;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * レビューDAO
@@ -25,7 +26,7 @@ public interface ReviewDao {
      * @return レビューエンティティ
      */
     @Select
-    Review selectByIdAndBookId(Long reviewId, Long bookId);
+    List<Review> selectByIdAndBookId(Long reviewId, Long bookId);
 
     /**
      * 引数のブックIDと種別に応じたレビュー評価値をカウントする

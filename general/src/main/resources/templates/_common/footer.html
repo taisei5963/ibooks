@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<div th:fragment="footer" th:remove="tag">
-    <div id="loading">
-        <div class="loading-area">
-            <p>処理中</p>
-            <div class="spinner-area">
-                <div class="three-quarter-spinner">
+    <div th:fragment="footer" th:remove="tag">
+        <div id="loading">
+            <div class="loading-area">
+                <p>処理中</p>
+                <div class="spinner-area">
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none"></circle>
+                    </svg>
                 </div>
+                <div class="progress-area"><span class="progress-bar"></span></div>
             </div>
-            <div class="progress-area"><span class="progress-bar"></span></div>
         </div>
     </div>
-</div>
 </body>
 </html>

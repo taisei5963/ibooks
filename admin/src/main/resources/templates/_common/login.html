@@ -16,7 +16,7 @@
     <link th:href="@{/public/css/reset.css}" rel="stylesheet">
     <link th:href="@{/public/css/ibooks.css}" rel="stylesheet">
     <link th:href="@{/public/css/utility.css}" rel="stylesheet">
-    <link th:href="@{/public/css/style.css}" rel="stylesheet">
+    <link th:href="@{/public/css/projects.css}" rel="stylesheet">
 
     <link th:href="@{/public/img/favicon.ico}" rel="icon" type="image/x-icon">
 
@@ -37,7 +37,9 @@
             <div class="loading-area">
                 <p>処理中</p>
                 <div class="spinner-area">
-                    <div class="three-quarter-spinner"></div>
+                    <svg class="spinner" viewBox="0 0 50 50">
+                        <circle class="path" cx="25" cy="25" r="20" fill="none"></circle>
+                    </svg>
                 </div>
             </div>
         </div>
