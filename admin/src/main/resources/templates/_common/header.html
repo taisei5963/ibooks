@@ -11,7 +11,14 @@
         </div>
 
         <nav class="header-menu">
-          <a th:href="@{/bookUpload}">ブックCSVアップロード</a>
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle">CSVアップロード</a>
+            <div class="dropdown-menu">
+              <a th:href="@{/bookUpload}" class="dropdown-item">ブックCSVアップロード</a>
+              <a th:href="@{/categoryUpload}" class="dropdown-item">カテゴリCSVアップロード</a>
+              <a th:href="@{/bookChapterUpload}" class="dropdown-item">ブックチャプターCSVアップロード</a>
+            </div>
+          </div>
           <a th:href="@{/password}">パスワード変更</a>
         </nav>
 
