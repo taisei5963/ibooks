@@ -116,7 +116,6 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                 .collect(Collectors.toMap(p -> p.getFileName().toString(), p -> p));
 
         Set<String> checkCodes = new HashSet<>();
-        Set<String> checkTitleAndPublishers = new HashSet<>();
 
         Iterator<BookCsv> ite = csvList.iterator();
         int count = 0;
@@ -158,28 +157,6 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     checkCodes.add(csv.getJanCode());
                 }
             }
-
-//            if (!hasError) {
-//                if (!Strings.isEmpty(csv.getTitle()) && !Strings.isEmpty(csv.getPublisher())) {
-//                    String duplicateKey = csv.getTitle() + "::" + csv.getPublisher();
-//                    if (checkTitleAndPublishers.contains(duplicateKey)) {
-//                        errors.add(messageService.getMessage(
-//                                "csv.error.duplicateTitleAndPublisher",
-//                                csv.getRowNum().toString(), csv.getTitle(), csv.getPublisher()));
-//                        hasError = true;
-//                    } else {
-//                        checkTitleAndPublishers.add(duplicateKey);
-//                    }
-//                    BookModel model = bookRepository.selectByTitleAndPublisher(csv.getTitle(),
-//                            csv.getPublisher()).orElse(null);
-//                    if (Objects.nonNull(model)) {
-//                        errors.add(messageService.getMessage("csv.error.title.publisher.exists",
-//                                csv.getRowNum().toString(), csv.getTitle(),
-//                                csv.getPublisher()));
-//                        hasError = true;
-//                    }
-//                }
-//            }
 
             {
                 Long categoryId = categoryIdMap.get(csv.getCategoryCode1());

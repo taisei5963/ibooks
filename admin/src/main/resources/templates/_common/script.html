@@ -137,18 +137,22 @@
                 message = "アップロードに失敗しました。";
               }
             }
-						ibooks.hideProgress();
-            if (result === "ERROR") {
-              showErrorMessage(message);
-              if (errorMessages) {
-                showErrorMessages(errorMessages);
-              }
-              return;
-            }
-            showSuccessMessage(message);
+            ibooks.updateProgress(1, 1);
+            setTimeout(function() {
+              ibooks.hideProgress();
+              if (result === "ERROR") {
+                showErrorMessage(message);
                 if (errorMessages) {
-                    showErrorMessages(errorMessages);
+                  showErrorMessages(errorMessages);
                 }
+                return;
+              }
+              showSuccessMessage(message);
+                  if (errorMessages) {
+                      showErrorMessages(errorMessages);
+                  }
+            }, 1200); // Increased delay to allow progress bar animation to complete
+
           }
         }
         function resetForm() {
@@ -263,15 +267,19 @@
 								result = 'ERROR';
 							}
 						}
-						ibooks.hideProgress();
-						if (result === 'ERROR') {
-							alert('ダウンロードに失敗しました。');
-							return;
-						}
-						const $dlForm = $('#async-download-form');
-						$dlForm.attr('action', downloadUrl);
-						$dlForm.find('input[name="key"]'.val(key));
-						$dlForm.submit();
+						ibooks.updateProgress(1, 1);
+						setTimeout(function() {
+							ibooks.hideProgress();
+							if (result === 'ERROR') {
+								alert('ダウンロードに失敗しました。');
+								return;
+							}
+							const $dlForm = $('#async-download-form');
+							$dlForm.attr('action', downloadUrl);
+							$dlForm.find('input[name="key"]'.val(key));
+							$dlForm.submit();
+						}, 1200); // Increased delay to allow progress bar animation to complete
+
 					}
 				});
 			</script>

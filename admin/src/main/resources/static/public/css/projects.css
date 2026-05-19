@@ -101,6 +101,7 @@
   height: 10px;
   width: 0px;
   background-color: #28b0ff;
+  transition: width 1s ease-in-out; /* Add transition for smooth animation */
 }
 
 /* ========================================================
