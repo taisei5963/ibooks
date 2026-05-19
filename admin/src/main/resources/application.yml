@@ -61,8 +61,13 @@ admin-config:
     book:
       encode: utf8
       temp-file-name: /Users/taiseikato/Projects/ibooks/csv/upload/upload_book_{0}_{1}.csv
+    bookChapter:
+      encode: utf8
+      temp-file-name: /Users/taiseikato/Projects/ibooks/csv/upload/upload_bookChpater_{0}_{1}.csv
   csv-download:
     encode: utf8
     dir: /Users/taiseikato/Projects/ibooks/csv/download
     book:
       identifier: book
+    bookChapter:
+      identifier: bookChapter

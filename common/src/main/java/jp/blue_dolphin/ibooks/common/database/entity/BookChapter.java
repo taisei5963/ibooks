@@ -28,9 +28,13 @@ public class BookChapter {
     @Column(name = "book_id")
     public final Long bookId;
 
-    /** 章番号 */
-    @Column(name = "chapter_no")
-    public final Integer chapterNo;
+    /** 章 */
+    @Column(name = "chapter")
+    public final String chapter;
+
+    /** ソート順 */
+    @Column(name = "sort_order")
+    public final Integer sortOrder;
 
     /** タイトル */
     @Column(name = "title")
