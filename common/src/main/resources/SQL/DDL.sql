@@ -1,19 +1,19 @@
 -- テーブルが存在する場合のみテーブル削除
 SET FOREIGN_KEY_CHECKS = 0;
-IF EXISTS DROP TABLE `action_role`;
-IF EXISTS DROP TABLE `admin`;
-IF EXISTS DROP TABLE `book`;
-IF EXISTS DROP TABLE `book_chapter`;
-IF EXISTS DROP TABLE `category`;
-IF EXISTS DROP TABLE `maintenance`;
-IF EXISTS DROP TABLE `privilege`;
-IF EXISTS DROP TABLE `review`;
-IF EXISTS DROP TABLE `reviewer`;
-IF EXISTS DROP TABLE `sequence_manager`;
-IF EXISTS DROP TABLE `SPRING_SESSION`;
-IF EXISTS DROP TABLE `SPRING_SESSION_ATTRIBUTES`;
-IF EXISTS DROP TABLE `upload_hist`;
-IF EXISTS DROP TABLE `upload_hist_detail`;
+DROP TABLE IF EXISTS `action_role`;
+DROP TABLE IF EXISTS `admin`;
+DROP TABLE IF EXISTS `book`;
+DROP TABLE IF EXISTS `book_chapter`;
+DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `maintenance`;
+DROP TABLE IF EXISTS `privilege`;
+DROP TABLE IF EXISTS `review`;
+DROP TABLE IF EXISTS `reviewer`;
+DROP TABLE IF EXISTS `sequence_manager`;
+DROP TABLE IF EXISTS `SPRING_SESSION`;
+DROP TABLE IF EXISTS `SPRING_SESSION_ATTRIBUTES`;
+DROP TABLE IF EXISTS `upload_hist`;
+DROP TABLE IF EXISTS `upload_hist_detail`;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- テーブル作成
@@ -228,8 +228,9 @@ CREATE TABLE `maintenance` (
 
 CREATE TABLE `book_chapter` (
     `book_chapter_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'ブックチャプターID',
-    `book_id` BIGINT DEFAULT NULL COMMENT 'ブックID',
-    `chapter_no` INT NOT NULL COMMENT '章番号',
+    `book_id` BIGINT NOT NULL COMMENT 'ブックID',
+    `chapter` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '章',
+    `sort_order` INT NOT NULL DEFAULT '0' COMMENT 'ソート順',
     `title` VARCHAR(256) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'タイトル',
     `created_at` DATETIME NOT NULL COMMENT '作成日時',
     `updated_at` DATETIME DEFAULT NULL COMMENT '更新日時',

@@ -18,8 +18,11 @@ public class BookChapterModel {
     /** ブックID */
     private Long bookId;
 
-    /** 章番号 */
-    private Integer chapterNo;
+    /** 章 */
+    private String chapter;
+
+    /** ソート順 */
+    private Integer sortOrder;
 
     /** タイトル */
     private String title;

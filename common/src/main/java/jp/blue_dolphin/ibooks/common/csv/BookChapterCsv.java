@@ -8,85 +8,47 @@ import com.github.mygreen.supercsv.annotation.constraint.CsvRequire;
 import com.github.mygreen.supercsv.builder.BuildCase;
 import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
-import jp.blue_dolphin.ibooks.common.model.BookModel;
-import jp.blue_dolphin.ibooks.common.util.Strings;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 /**
- * ブックCSV
+ * ブックチャプターCSV
  */
 @CsvBean(header = true)
 @Getter
 @Setter
-public class BookCsv implements CsvRow, BookForeignKeyCsv {
-    /** 登録済みの画像ファイルのカラム出力値 */
-    public static final String IMAGE_REGISTERED = "登録済";
-
+public class BookChapterCsv implements CsvRow {
     @CsvColumn(label = "データ区分", number = 1)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
     @CsvPattern(regex = SystemRegex.ADD_UPDATE_REGEX, message = "{csv.datatype.addUpdate.pattern}", cases = BuildCase.Read)
     private String csvDataType;
 
     @CsvColumn(label = "JANコード", number = 2)
+    @CsvRequire(considerBlank = true, cases = BuildCase.Read)
     @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.patter}", cases = BuildCase.Read)
     private String janCode;
 
-    @CsvColumn(label = "タイトル", number = 3)
+    @CsvColumn(label = "章", number = 3)
+    @CsvLengthMax(value = 100, cases = BuildCase.Read)
+    private String chapter;
+
+    @CsvColumn(label = "タイトル", number = 4)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvLengthMax(value = 80, cases = BuildCase.Read)
+    @CsvLengthMax(value = 255, cases = BuildCase.Read)
     private String title;
 
-    @CsvColumn(label = "サブタイトル", number = 4)
-    @CsvLengthMax(value = 80, cases = BuildCase.Read)
-    private String subTitle;
-
-    @CsvColumn(label = "著者1", number = 5)
+    @CsvColumn(label = "ソート順", number = 5)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvLengthMax(value = 20, cases = BuildCase.Read)
-    private String author1;
+    private String sortOrder;
 
-    @CsvColumn(label = "著者2", number = 6)
-    @CsvLengthMax(value = 20, cases = BuildCase.Read)
-    private String author2;
-
-    @CsvColumn(label = "翻訳者", number = 7)
-    @CsvLengthMax(value = 20, cases = BuildCase.Read)
-    private String translator;
-
-    @CsvColumn(label = "出版社", number = 8)
-    @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvLengthMax(value = 50, cases = BuildCase.Read)
-    private String publisher;
-
-    @CsvColumn(label = "画像ファイル名", number = 9)
-    @CsvPattern(regex = SystemRegex.BOOK_IMG_REGEX, message = "{csv.bookImg.pattern}", cases = BuildCase.Read)
-    private String picFileName;
-
-    @CsvColumn(label = "カテゴリコード1", number = 10)
-    @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvPattern(regex = SystemRegex.CATEGORY_CODE_REGEX, message = "{csv.categoryCode.pattern}", cases = BuildCase.Read)
-    private String categoryCode1;
-
-    @CsvColumn(label = "カテゴリコード2", number = 11)
-    @CsvPattern(regex = SystemRegex.CATEGORY_CODE_REGEX, message = "{csv.categoryCode.pattern}", cases = BuildCase.Read)
-    private String categoryCode2;
-
-    @CsvColumn(label = "カテゴリコード3", number = 12)
-    @CsvPattern(regex = SystemRegex.CATEGORY_CODE_REGEX, message = "{csv.categoryCode.pattern}", cases = BuildCase.Read)
-    private String categoryCode3;
-
-    @CsvColumn(label = "登録日時", number = 13)
+    @CsvColumn(label = "登録日時", number = 6)
     private String createdAt;
 
-    @CsvColumn(label = "更新日時", number = 14)
+    @CsvColumn(label = "更新日時", number = 7)
     private String updatedAt;
 
-    @CsvColumn(label = "登録者ID", number = 15)
+    @CsvColumn(label = "登録者ID", number = 8)
     private String createdId;
 
     /** 行数 */
@@ -94,66 +56,28 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
 
     /** ブックID（キャッシュ用） */
     private Long bookId;
-    /** カテゴリID1（キャッシュ用） */
-    private Long categoryId1;
-    /** カテゴリID2（キャッシュ用） */
-    private Long categoryId2;
-    /** カテゴリID3（キャッシュ用） */
-    private Long categoryId3;
     /** ブックモデル（キャッシュ用） */
-    private BookModel bookModel;
+    private BookChapterModel bookChapterModel;
 
     /**
-     * カテゴリIDリストを取得する
+     * ブックチャプターCSVをブックチャプターモデルに変換する
      *
-     * @return カテゴリIDリスト
+     * @return ブックチャプターモデル
      */
-    public List<Long> getCategoryIds() {
-        List<Long> categoryIds = new ArrayList<>();
-        if (!Objects.isNull(categoryId1)) {
-            categoryIds.add(categoryId1);
-        }
-        if (!Objects.isNull(categoryId2) && !categoryIds.contains(categoryId2)) {
-            categoryIds.add(categoryId2);
-        }
-        if (!Objects.isNull(categoryId3) && !categoryIds.contains(categoryId3)) {
-            categoryIds.add(categoryId3);
-        }
-        return categoryIds;
-    }
-
-    /**
-     * このブックCSVをブックモデルに変換する<br>
-     * ※画像ファイルはコピー処理時にリネームするため、モデルにはCSVの値を設定しない
-     *
-     * @return ブックモデル
-     */
-    public BookModel toModel() {
+    public BookChapterModel toModel() {
         CsvDataType dataType = CsvDataType.getEnum(csvDataType);
         if (dataType == CsvDataType.ADD) {
-            return BookModel.builder()
-                    .janCode(getJanCode())
+            return BookChapterModel.builder()
+                    .bookId(getBookId())
+                    .chapter(getChapter())
+                    .sortOrder(Integer.parseInt(getSortOrder()))
                     .title(getTitle())
-                    .subTitle(getSubTitle())
-                    .author1(getAuthor1())
-                    .author2(getAuthor2())
-                    .translator(getTranslator())
-                    .publisher(getPublisher())
-                    .categoryId1(getCategoryId1())
-                    .categoryId2(getCategoryId2())
-                    .categoryId3(getCategoryId3())
                     .build();
-        } else if (dataType == CsvDataType.UPDATE && bookModel != null) {
-            return bookModel.toBuilder()
+        } else if (dataType == CsvDataType.UPDATE && bookChapterModel != null) {
+            return bookChapterModel.toBuilder()
+                    .chapter(getChapter())
+                    .sortOrder(Integer.parseInt(getSortOrder()))
                     .title(getTitle())
-                    .subTitle(getSubTitle())
-                    .author1(getAuthor1())
-                    .author2(getAuthor2())
-                    .translator(getTranslator())
-                    .publisher(getPublisher())
-                    .categoryId1(getCategoryId1())
-                    .categoryId2(getCategoryId2())
-                    .categoryId3(getCategoryId3())
                     .build();
         }
         return null;
@@ -164,9 +88,6 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
      */
     @Override
     public String getSortValue() {
-        if (Strings.isEmpty(janCode)) {
-            return "0000000000001";
-        }
-        return janCode;
+        return sortOrder;
     }
 }

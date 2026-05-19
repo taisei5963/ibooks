@@ -9,7 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum UploadType {
-    BOOK("01", "ブックCSVアップロード", false, false);
+    BOOK("01", "ブックCSVアップロード", false, false),
+    BOOK_CHAPTER("02", "ブックチャプターCSVアップロード", false, false);
 
     /** 値 */
     private final String value;
