@@ -33,7 +33,7 @@ public class BookUploadController {
      *
      * @return テンプレートパス
      */
-    @GetMapping({"", "/", "index"})
+    @RequestMapping({"", "/", "index"})
     public String index() {
         return getTemplatePath();
     }

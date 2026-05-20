@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * カテゴリリポジトリ
@@ -22,6 +23,30 @@ import java.util.Objects;
 public class CategoryRepositoryImpl implements CategoryRepository {
     /** カテゴリDAO */
     private CategoryDao categoryDao;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<CategoryModel> selectById(Long categoryId) {
+        if (Objects.isNull(categoryId)) {
+            return Optional.empty();
+        }
+        Category entity = categoryDao.selectById(categoryId);
+        return Optional.ofNullable(convertModel(entity));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<CategoryModel> selectByCode(String categoryCode) {
+        if (Objects.isNull(categoryCode)) {
+            return Optional.empty();
+        }
+        Category entity = categoryDao.selectByCode(categoryCode);
+        return Optional.ofNullable(convertModel(entity));
+    }
 
     /**
      * {@inheritDoc}

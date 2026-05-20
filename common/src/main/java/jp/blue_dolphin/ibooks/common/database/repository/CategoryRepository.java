@@ -1,16 +1,34 @@
 package jp.blue_dolphin.ibooks.common.database.repository;
 
+import jp.blue_dolphin.ibooks.common.database.entity.Category;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.model.CategoryModel;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * カテゴリリポジトリ
  */
 @Repository
 public interface CategoryRepository {
+    /**
+     * 引数のカテゴリIDを条件に取得する
+     *
+     * @param categoryId カテゴリID
+     * @return カテゴリモデル
+     */
+    Optional<CategoryModel> selectById(Long categoryId);
+
+    /**
+     * 引数のカテゴリコードを条件に取得する
+     *
+     * @param categoryCode カテゴリコード
+     * @return カテゴリモデル
+     */
+    Optional<CategoryModel> selectByCode(String categoryCode);
+
     /**
      * カテゴリIDとカテゴリ名のリストを取得する
      *

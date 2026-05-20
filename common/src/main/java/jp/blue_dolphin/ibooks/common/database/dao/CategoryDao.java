@@ -18,6 +18,24 @@ import java.util.List;
 @ConfigAutowireable
 @Dao
 public interface CategoryDao {
+
+    /**
+     * 引数のカテゴリIDを条件に取得する
+     *
+     * @param categoryId カテゴリID
+     * @return カテゴリエンティティ
+     */
+    @Select
+    Category selectById(Long categoryId);
+
+    /**
+     * 引数のカテゴリコードを条件に取得する
+     * @param categoryCode カテゴリコード
+     * @return カテゴリエンティティ
+     */
+    @Select
+    Category selectByCode(String categoryCode);
+
     /**
      * カテゴリを全件取得する
      *
