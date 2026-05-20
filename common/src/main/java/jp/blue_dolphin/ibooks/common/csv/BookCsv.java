@@ -33,7 +33,7 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
     private String csvDataType;
 
     @CsvColumn(label = "JANコード", number = 2)
-    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.patter}", cases = BuildCase.Read)
+    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.pattern}", cases = BuildCase.Read)
     private String janCode;
 
     @CsvColumn(label = "タイトル", number = 3)
