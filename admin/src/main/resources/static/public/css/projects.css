@@ -596,9 +596,10 @@ input[type="submit"]:disabled:hover {
 }
 .table-error tbody tr:nth-child(even) {
   background: #dc3545;
+  color: #fff;
 }
-.table-error tbody tr:hover td {
-  background-color: #ffecc5;
+.table-error tbody tr:nth-child(odd) {
+  background: #fff;
 }
 .table-responsive {
   overflow-x: auto;

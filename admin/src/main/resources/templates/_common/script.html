@@ -167,12 +167,12 @@
         }
 
         function showErrorMessages(errorMessages) {
-            $('#errorMessages').find('.messages > tr').remove();
+            $('#errorMessages').find('tbody.errors').empty();
             for (var error of errorMessages) {
                 var tr = $('<tr>');
-                var td = $('<td>');
-                    tr.append(td);
-                    $('#errorMessages').find('.message').append(tr);
+                var td = $('<td>').text(error);
+                tr.append(td);
+                $('#errorMessages').find('tbody.errors').append(tr);
             }
             $('#errorMessages').show();
         }

@@ -2,6 +2,7 @@ package jp.blue_dolphin.ibooks.common.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mygreen.supercsv.io.CsvAnnotationBeanReader;
+import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.constant.UploadStatus;
 import jp.blue_dolphin.ibooks.common.csv.CsvRow;
 import jp.blue_dolphin.ibooks.common.dto.Account;
@@ -239,85 +240,6 @@ public class UploadCsvService {
     }
 
     /**
-     * アップロードファイルのチェック（ファイル形式に関するチェック）を行う
-     *
-     * @param file アップロードファイル
-     * @return チェック結果エラーコード（発生時のみ返却する）
-     */
-    private String defaultValidateUploadFile(MultipartFile file) {
-        if (file.isEmpty() || file.getOriginalFilename() == null) {
-            return messageService.getMessage("errors.upload.notFound");
-        }
-        Pattern pattern = Pattern.compile("^.*\\.(csv)$", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(file.getOriginalFilename());
-        if (!matcher.matches()) {
-            return messageService.getMessage("errors.extension.type", "csv");
-        }
-        return null;
-    }
-
-    /**
-     * 引数のパスのCSVファイルを読み込む
-     *
-     * @param job     CSVファイルインポートジョブ
-     * @param fileDto ファイルDTO
-     * @param account アカウント
-     * @param emitter SSEエミッター
-     * @return CSV読込結果
-     */
-    private <C extends CsvRow> CsvDto<C> readCsv(UploadCsvJob<C> job, TempFileDto fileDto,
-                                                 Account account, SseEmitter emitter)
-            throws IOException {
-        Path filePath = fileDto.getTmpFile();
-        CsvDto<C> csvDto;
-        List<C> csvList = new ArrayList<>();
-        int rowCount = 0;
-        sendEmitterProgressResponse(emitter, "validation");
-        try (CsvAnnotationBeanReader<C> csvReader = new CsvAnnotationBeanReader<>(
-                csvCommonService.getBeanMapping(job.getCsvClass()),
-                FileUtil.newBufferedReader(filePath, Charset.forName(job.getEncode())),
-                CsvPreference.STANDARD_PREFERENCE)) {
-            if (job.hasHeader()) {
-                csvReader.getHeader(true);
-            }
-            while (true) {
-                try {
-                    C csv = csvReader.read();
-                    if (Objects.isNull(csv)) {
-                        break;
-                    }
-                    csv.setRowNum(csvReader.getRowNumber());
-                    csvList.add(csv);
-                } catch (SuperCsvException e) {
-                    // nop
-                } finally {
-                    rowCount++;
-                }
-            }
-            sendEmitterProgressResponse(emitter, "extraValidationWithImage");
-            List<String> errors = new ArrayList<>();
-            List<String> extraValidationErrors = job.extraValidation(csvList, emitter, account);
-            if (extraValidationErrors != null) {
-                errors.addAll(extraValidationErrors);
-            }
-            extraValidationErrors =
-                    job.extraValidation(csvList, fileDto.getTmpImages(), emitter, account);
-            if (extraValidationErrors != null) {
-                errors.addAll(extraValidationErrors);
-            }
-            if (csvReader.getErrorMessages() != null) {
-                errors.addAll(csvReader.getErrorMessages());
-            }
-            if (errors.size() > 100) {
-                errors = errors.subList(0, 100);
-                errors.add(messageService.getMessage("csv.errors.over100Errors"));
-            }
-            csvDto = new CsvDto<>(filePath, csvList, errors, rowCount - 1);
-            return csvDto;
-        }
-    }
-
-    /**
      * SSEエミッターに処理成功のレスポンスを返却する
      *
      * @param emitter SSEエミッター
@@ -464,5 +386,106 @@ public class UploadCsvService {
         } catch (IOException e) {
             throw new SystemException(e);
         }
+    }
+
+    /**
+     * アップロードファイルのチェック（ファイル形式に関するチェック）を行う
+     *
+     * @param file アップロードファイル
+     * @return チェック結果エラーコード（発生時のみ返却する）
+     */
+    private String defaultValidateUploadFile(MultipartFile file) {
+        if (file.isEmpty() || file.getOriginalFilename() == null) {
+            return messageService.getMessage("errors.upload.notFound");
+        }
+        Pattern pattern = Pattern.compile("^.*\\.(csv)$", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(file.getOriginalFilename());
+        if (!matcher.matches()) {
+            return messageService.getMessage("errors.extension.type", "csv");
+        }
+        return null;
+    }
+
+    /**
+     * 引数のパスのCSVファイルを読み込む
+     *
+     * @param job     CSVファイルインポートジョブ
+     * @param fileDto ファイルDTO
+     * @param account アカウント
+     * @param emitter SSEエミッター
+     * @return CSV読込結果
+     */
+    private <C extends CsvRow> CsvDto<C> readCsv(UploadCsvJob<C> job, TempFileDto fileDto,
+                                                 Account account, SseEmitter emitter)
+            throws IOException {
+        Path filePath = fileDto.getTmpFile();
+        CsvDto<C> csvDto;
+        List<C> csvList = new ArrayList<>();
+        int rowCount = 0;
+        sendEmitterProgressResponse(emitter, "validation");
+        try (CsvAnnotationBeanReader<C> csvReader = new CsvAnnotationBeanReader<>(
+                csvCommonService.getBeanMapping(job.getCsvClass()),
+                FileUtil.newBufferedReader(filePath, Charset.forName(job.getEncode())),
+                CsvPreference.STANDARD_PREFERENCE)) {
+            if (job.hasHeader()) {
+                csvReader.getHeader(true);
+            }
+            while (true) {
+                try {
+                    C csv = csvReader.read();
+                    if (Objects.isNull(csv)) {
+                        break;
+                    }
+                    csv.setRowNum(csvReader.getRowNumber());
+                    csvList.add(csv);
+                } catch (SuperCsvException e) {
+                    // nop
+                } finally {
+                    rowCount++;
+                }
+            }
+            sendEmitterProgressResponse(emitter, "extraValidationWithImage");
+            List<String> errors = new ArrayList<>();
+            List<String> extraValidationErrors = job.extraValidation(csvList, emitter, account);
+            if (extraValidationErrors != null) {
+                errors.addAll(extraValidationErrors);
+            }
+            extraValidationErrors =
+                    job.extraValidation(csvList, fileDto.getTmpImages(), emitter, account);
+            if (extraValidationErrors != null) {
+                errors.addAll(extraValidationErrors);
+            }
+            if (csvReader.getErrorMessages() != null) {
+                List<String> formatedErrors = csvReader.getErrorMessages()
+                        .stream().map(this::formatCsvErrorMessage).toList();
+                errors.addAll(formatedErrors);
+            }
+            if (errors.size() > 100) {
+                errors = errors.subList(0, 100);
+                errors.add(messageService.getMessage("csv.errors.over100Errors"));
+            }
+            csvDto = new CsvDto<>(filePath, csvList, errors, rowCount - 1);
+            return csvDto;
+        }
+    }
+
+    /**
+     * 引数のメッセージを所定のフォーマットで返却する
+     *
+     * @param message フォーマット前メッセージ
+     * @return フォーマット後メッセージ
+     */
+    private String formatCsvErrorMessage(String message) {
+        Pattern pattern = Pattern.compile(SystemRegex.SUPER_CSV_ERROR_EXTENSION);
+        Matcher matcher = pattern.matcher(message);
+
+        if (matcher.find()) {
+            String rowNum = matcher.group(1);
+            String errorMessage = matcher.group(2);
+
+            return rowNum + "行目：" + errorMessage;
+        }
+
+        return message;
     }
 }

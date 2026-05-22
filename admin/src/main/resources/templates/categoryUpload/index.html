@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブックチャプターCSVアップロード'">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='カテゴリCSVアップロード'">
 <head th:replace="~{_common/head::head}"></head>
 <body class="content-body ds-book-upload-index">
 <div th:replace="~{_common/header::menu}"></div>
 
 <main class="container u-py24">
 
-    <h1 class="u-mb24 u-ms24 u-fs-2">ブックチャプターCSVアップロード</h1>
+    <h1 class="u-mb24 u-ms24 u-fs-2">カテゴリCSVアップロード</h1>
 
     <div class="search-cond u-mb16">
         <div th:replace="~{_common/upload::messages}"></div>
@@ -14,7 +14,7 @@
 
     <section class="upload-card">
         <form id="mainForm"
-            th:action="@{/bookChapterUpload/upload}"
+            th:action="@{/categoryUpload/upload}"
             enctype="multipart/form-data"
             method="post">
 
@@ -24,8 +24,8 @@
         </form>
     </section>
     <div class="upload-guide-area">
-        <a th:href="@{/sample/bookChapter.csv}"
-            download="bookChapter.csv"
+        <a th:href="@{/sample/category.csv}"
+            download="category.csv"
             class="sample-download-link ignoreLock">
             サンプルCSVをダウンロード
         </a>

@@ -26,7 +26,7 @@ public class BookChapterCsv implements CsvRow {
 
     @CsvColumn(label = "JANコード", number = 2)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.patter}", cases = BuildCase.Read)
+    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.pattern}", cases = BuildCase.Read)
     private String janCode;
 
     @CsvColumn(label = "章", number = 3)

@@ -1,22 +1,20 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jp.blue_dolphin.ibooks.admin.config.BookChapterUploadConfig;
-import jp.blue_dolphin.ibooks.admin.service.BookChapterService;
+import jp.blue_dolphin.ibooks.admin.config.CategoryUploadConfig;
+import jp.blue_dolphin.ibooks.admin.service.CategoryService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
 import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
 import jp.blue_dolphin.ibooks.common.constant.SiteType;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.constant.UploadType;
-import jp.blue_dolphin.ibooks.common.csv.BookChapterCsv;
-import jp.blue_dolphin.ibooks.common.database.repository.BookChapterRepository;
-import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
+import jp.blue_dolphin.ibooks.common.csv.CategoryCsv;
+import jp.blue_dolphin.ibooks.common.database.repository.CategoryRepository;
 import jp.blue_dolphin.ibooks.common.dto.Account;
 import jp.blue_dolphin.ibooks.common.dto.CsvDto;
 import jp.blue_dolphin.ibooks.common.dto.TempFileDto;
 import jp.blue_dolphin.ibooks.common.job.UploadCsvJob;
-import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
-import jp.blue_dolphin.ibooks.common.model.BookModel;
+import jp.blue_dolphin.ibooks.common.model.CategoryModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
 import lombok.AllArgsConstructor;
@@ -26,29 +24,29 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * ブックチャプターCSVアップロードジョブ
+ * カテゴリCSVアップロードジョブ
  */
 @AllArgsConstructor
 @Component
-public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
-    /** ブックリポジトリ */
-    private BookRepository bookRepository;
-    /** ブックチャプターリポジトリ */
-    private BookChapterRepository bookChapterRepository;
-    /** ブックチャプターサービス */
-    private BookChapterService bookChapterService;
-    /** ブックチャプターアップロード設定 */
-    private BookChapterUploadConfig bookChapterUploadConfig;
+public class UploadCategoryCsvJob implements UploadCsvJob<CategoryCsv> {
+    /** カテゴリリポジトリ */
+    private CategoryRepository categoryRepository;
+    /** カテゴリサービス */
+    private CategoryService categoryService;
+    /** カテゴリアップロード設定 */
+    private CategoryUploadConfig categoryUploadConfig;
     /** メッセージサービス */
     private MessageService messageService;
 
@@ -74,7 +72,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
     @Override
     public TempFileDto saveTempFile(MultipartFile file, Account account) {
         Path tmpFile =
-                UploadFileService.getTmpFilePath(bookChapterUploadConfig.getTempFileName(),
+                UploadFileService.getTmpFilePath(categoryUploadConfig.getTempFileName(),
                         account.id);
         UploadFileService.saveTmpCsvFile(file, tmpFile);
         return new TempFileDto(tmpFile);
@@ -84,38 +82,53 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      * {@inheritDoc}
      */
     @Override
-    public void execImport(CsvDto<BookChapterCsv> csvDto, TempFileDto tempFileDto,
+    public void execImport(CsvDto<CategoryCsv> csvDto, TempFileDto tempFileDto,
                            SseEmitter emitter,
                            Account account) {
         Map<String, Path> fileMap = tempFileDto.getTmpImages().stream()
                 .collect(Collectors.toMap(p -> p.getFileName().toString(), p -> p));
-        bookChapterService.saveCsv(csvDto, fileMap, emitter, account.code);
+        categoryService.saveCsv(csvDto, fileMap, emitter, account.code);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<String> extraValidation(List<BookChapterCsv> csvList, List<Path> imgFiles,
+    public List<String> extraValidation(List<CategoryCsv> csvList, List<Path> imgFiles,
                                         SseEmitter emitter, Account account) {
         List<String> errors = new ArrayList<>();
 
-        Iterator<BookChapterCsv> ite = csvList.iterator();
+        Set<String> checkCodes = new HashSet<>();
+
+        Iterator<CategoryCsv> ite = csvList.iterator();
         int count = 0;
         while (ite.hasNext()) {
-            BookChapterCsv csv = ite.next();
+            CategoryCsv csv = ite.next();
             count++;
             boolean hasError = false;
             CsvDataType dataType = CsvDataType.getEnum(csv.getCsvDataType());
-            BookModel bookModel =
-                    bookRepository.selectByJanCode(csv.getJanCode()).orElse(null);
-            // INFO: 新規登録時にすでに登録済みのブック情報を登録しようとした場合にエラーにしたい
-            if (Objects.isNull(bookModel)) {
-                errors.add(messageService.getMessage("csv.error.book.notExists",
-                        csv.getRowNum().toString(), csv.getJanCode()));
+
+            CategoryModel categoryModel =
+                    categoryRepository.selectByCode(csv.getCategoryCode()).orElse(null);
+            if (dataType == CsvDataType.ADD) {
+                if (Objects.nonNull(categoryModel)) {
+                    errors.add(messageService.getMessage("csv.error.category.exists",
+                            csv.getRowNum().toString(), csv.getCategoryCode()));
+                    hasError = true;
+                }
+            } else {
+                if (Objects.isNull(categoryModel)) {
+                    errors.add(messageService.getMessage("csv.error.category.notExists",
+                            csv.getRowNum().toString(), csv.getCategoryCode()));
+                    hasError = true;
+                }
+            }
+            if (checkCodes.contains(csv.getCategoryCode())) {
+                errors.add(messageService.getMessage("csv.error.category.duplicate",
+                        csv.getRowNum().toString(), csv.getCategoryCode()));
                 hasError = true;
             } else {
-                csv.setBookId(bookModel.getBookId());
+                checkCodes.add(csv.getCategoryCode());
             }
 
             if (hasError) {
@@ -147,8 +160,8 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      * {@inheritDoc}
      */
     @Override
-    public Class<BookChapterCsv> getCsvClass() {
-        return BookChapterCsv.class;
+    public Class<CategoryCsv> getCsvClass() {
+        return CategoryCsv.class;
     }
 
     /**
@@ -156,7 +169,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public String getEncode() {
-        return bookChapterUploadConfig.getEncode();
+        return categoryUploadConfig.getEncode();
     }
 
     /**
@@ -164,7 +177,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public UploadType getUploadType() {
-        return UploadType.BOOK_CHAPTER;
+        return UploadType.CATEGORY;
     }
 
     /**
@@ -172,7 +185,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public String getUploadProcessName() {
-        return UploadType.BOOK_CHAPTER.getDescription();
+        return UploadType.CATEGORY.getDescription();
     }
 
     /**

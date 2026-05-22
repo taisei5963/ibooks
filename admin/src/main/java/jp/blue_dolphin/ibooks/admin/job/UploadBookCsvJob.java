@@ -1,5 +1,6 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.blue_dolphin.ibooks.admin.config.BookUploadConfig;
 import jp.blue_dolphin.ibooks.admin.service.BookService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -221,6 +223,19 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
             if (count % 1000 == 0) {
                 UploadCsvService.sendEmitterProgressResponse(emitter,
                         "extraValidation loop. count: " + count);
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> errorPayload = new HashMap<>();
+                errorPayload.put("result", "ERROR");
+                errorPayload.put("message", "CSV validation errors occurred.");
+                errorPayload.put("errorMessages", errors);
+                UploadCsvService.sendEmitterProgressResponse(emitter, mapper.writeValueAsString(errorPayload));
+            } catch (Exception e) {
+                System.err.println("Error sending validation errors via SSE: " + e.getMessage());
             }
         }
         return errors;
