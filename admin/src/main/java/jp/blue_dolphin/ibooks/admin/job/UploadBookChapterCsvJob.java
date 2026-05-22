@@ -1,17 +1,21 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.blue_dolphin.ibooks.admin.config.BookChapterUploadConfig;
 import jp.blue_dolphin.ibooks.admin.service.BookChapterService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
+import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
 import jp.blue_dolphin.ibooks.common.constant.SiteType;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.constant.UploadType;
 import jp.blue_dolphin.ibooks.common.csv.BookChapterCsv;
+import jp.blue_dolphin.ibooks.common.database.repository.BookChapterRepository;
 import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
 import jp.blue_dolphin.ibooks.common.dto.Account;
 import jp.blue_dolphin.ibooks.common.dto.CsvDto;
 import jp.blue_dolphin.ibooks.common.dto.TempFileDto;
 import jp.blue_dolphin.ibooks.common.job.UploadCsvJob;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +43,8 @@ import java.util.stream.Collectors;
 public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
     /** ブックリポジトリ */
     private BookRepository bookRepository;
+    /** ブックチャプターリポジトリ */
+    private BookChapterRepository bookChapterRepository;
     /** ブックチャプターサービス */
     private BookChapterService bookChapterService;
     /** ブックチャプターアップロード設定 */
@@ -99,9 +106,10 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
             BookChapterCsv csv = ite.next();
             count++;
             boolean hasError = false;
-
+            CsvDataType dataType = CsvDataType.getEnum(csv.getCsvDataType());
             BookModel bookModel =
                     bookRepository.selectByJanCode(csv.getJanCode()).orElse(null);
+            // INFO: 新規登録時にすでに登録済みのブック情報を登録しようとした場合にエラーにしたい
             if (Objects.isNull(bookModel)) {
                 errors.add(messageService.getMessage("csv.error.book.notExists",
                         csv.getRowNum().toString(), csv.getJanCode()));
@@ -117,6 +125,19 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
             if (count % 1000 == 0) {
                 UploadCsvService.sendEmitterProgressResponse(emitter,
                         "extraValidation loop. count: " + count);
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> errorPayload = new HashMap<>();
+                errorPayload.put("result", "ERROR");
+                errorPayload.put("message", "CSV validation errors occurred.");
+                errorPayload.put("errorMessages", errors);
+                UploadCsvService.sendEmitterProgressResponse(emitter, mapper.writeValueAsString(errorPayload));
+            } catch (Exception e) {
+                System.err.println("Error sending validation errors via SSE: " + e.getMessage());
             }
         }
         return errors;

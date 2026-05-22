@@ -20,4 +20,6 @@ public class SystemRegex {
     public static final String TEMP_IMG_FILE_EXTENSION = "^.*\\.(jpg|jpeg|png|csv)$";
     /** ファイル種別に対する正規表現 */
     public static final String FILE_EXTENSION = "^.*\\.(zip|csv)$";
+    /** CSVライブラリエラーメッセージに対する正規表現 */
+    public static final String SUPER_CSV_ERROR_EXTENSION = "^\\[(\\d+)行(?:, \\d+列)?]\\s*[:：]\\s*(.+)$";
 }

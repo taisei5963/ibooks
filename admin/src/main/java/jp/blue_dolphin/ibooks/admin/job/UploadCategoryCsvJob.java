@@ -1,5 +1,6 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.blue_dolphin.ibooks.admin.config.CategoryUploadConfig;
 import jp.blue_dolphin.ibooks.admin.service.CategoryService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
@@ -24,9 +25,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -108,21 +111,21 @@ public class UploadCategoryCsvJob implements UploadCsvJob<CategoryCsv> {
             CategoryModel categoryModel =
                     categoryRepository.selectByCode(csv.getCategoryCode()).orElse(null);
             if (dataType == CsvDataType.ADD) {
-                if (categoryModel != null) {
+                if (Objects.nonNull(categoryModel)) {
                     errors.add(messageService.getMessage("csv.error.category.exists",
-                            csv.getCategoryCode()));
+                            csv.getRowNum().toString(), csv.getCategoryCode()));
                     hasError = true;
                 }
             } else {
-                if (categoryModel == null) {
+                if (Objects.isNull(categoryModel)) {
                     errors.add(messageService.getMessage("csv.error.category.notExists",
-                            csv.getCategoryCode()));
+                            csv.getRowNum().toString(), csv.getCategoryCode()));
                     hasError = true;
                 }
             }
             if (checkCodes.contains(csv.getCategoryCode())) {
                 errors.add(messageService.getMessage("csv.error.category.duplicate",
-                        csv.getCategoryCode()));
+                        csv.getRowNum().toString(), csv.getCategoryCode()));
                 hasError = true;
             } else {
                 checkCodes.add(csv.getCategoryCode());
@@ -135,6 +138,19 @@ public class UploadCategoryCsvJob implements UploadCsvJob<CategoryCsv> {
             if (count % 1000 == 0) {
                 UploadCsvService.sendEmitterProgressResponse(emitter,
                         "extraValidation loop. count: " + count);
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> errorPayload = new HashMap<>();
+                errorPayload.put("result", "ERROR");
+                errorPayload.put("message", "CSV validation errors occurred.");
+                errorPayload.put("errorMessages", errors);
+                UploadCsvService.sendEmitterProgressResponse(emitter, mapper.writeValueAsString(errorPayload));
+            } catch (Exception e) {
+                System.err.println("Error sending validation errors via SSE: " + e.getMessage());
             }
         }
         return errors;
