@@ -107,10 +107,8 @@ public class BookController {
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
-        List<ReviewModel> reviews = reviewService.selectByIdAndBookId(null, bookId);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
-        model.addAttribute("reviews", reviews);
         return "book/detail";
     }
 
