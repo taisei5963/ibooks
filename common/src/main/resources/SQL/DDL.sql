@@ -155,7 +155,7 @@ CREATE TABLE `book` (
     `translator` VARCHAR(30) DEFAULT NULL COMMENT '翻訳者',
     `publisher` VARCHAR(60) NOT NULL COMMENT '出版社',
     `pic_file_name` VARCHAR(128) DEFAULT NULL COMMENT 'ブック画像',
-    `total_rating` DECIMAL(2,1) DEFAULT '0.0' COMMENT '全体評価',
+    `difficulty` VARCHAR(15) NOT NULL DEFAULT 'NONE' COMMENT '難易度',
     `category_id_1` BIGINT DEFAULT NULL COMMENT 'カテゴリID1',
     `category_id_2` BIGINT DEFAULT NULL COMMENT 'カテゴリID2',
     `category_id_3` BIGINT DEFAULT NULL COMMENT 'カテゴリID3',

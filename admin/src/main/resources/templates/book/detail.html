@@ -64,9 +64,11 @@
                             </h4>
                             <h4 class="book-translator" th:if="${book.translator}">[[${book.translator}]] 訳</h4>
                             <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
-                            <h5 class="book-rating">
-                                <span th:each="i : ${#numbers.sequence(1, 5)}" th:classappend="${book.totalRating >= i} ? 'filled-star' : 'empty-star'">★</span>
-                                <span class="u-ms8">[[${book.totalRating}]]</span>
+                            <h5 class="book-difficulty">
+                                <span th:class="|book-difficulty-badge difficulty-${book.difficulty}|">
+                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Difficulty).getDescription(book.difficulty)}]]
+                                </span>
+                                </th:block>
                             </h5>
                             <h5 class="book-categories">
                                 <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">

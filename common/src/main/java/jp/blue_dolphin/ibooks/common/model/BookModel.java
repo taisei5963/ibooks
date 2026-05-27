@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,8 @@ public class BookModel {
     /** 画像ファイル名 */
     private String picFileName;
 
-    /** 全体評価 */
-    private BigDecimal totalRating;
+    /** 難易度 */
+    private String difficulty;
 
     /** カテゴリID1 */
     private Long categoryId1;

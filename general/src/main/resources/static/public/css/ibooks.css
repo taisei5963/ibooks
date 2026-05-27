@@ -660,3 +660,27 @@ body * {
 .tab-content > .active {
   display: block;
 }
+.book-detail-page .book-difficulty-badge {
+  font-size: 1.5rem;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 1rem;
+  border: 1px solid;
+}
+.book-detail-page .difficulty-BEGINNER {
+  background-color: #e6ffe6;
+  border-color: #66cc66;
+  color: #006600;
+}
+.book-detail-page .difficulty-INTERMEDIATE {
+  background-color: #e6f7ff;
+  border-color: #66b3ff;
+  color: #0066cc;
+}
+.book-detail-page .difficulty-ADVANCED {
+  background-color: #fff8e6;
+  border-color: #ffcc66;
+  color: #cc9900;
+}
