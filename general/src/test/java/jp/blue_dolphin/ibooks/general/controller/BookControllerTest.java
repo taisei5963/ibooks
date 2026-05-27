@@ -107,7 +107,7 @@ class BookControllerTest {
 				.author2("テスト作者２")
 				.translator("テスト翻訳者")
 				.publisher("株式会社テスト")
-				.totalRating(BigDecimal.valueOf(1))
+				.difficulty("BEGINNER")
 				.categoryId1(12L)
 				.createdAt(LocalDateTime.now())
 				.updatedAt(LocalDateTime.now())

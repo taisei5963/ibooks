@@ -7,7 +7,7 @@ SELECT
     translator,
     publisher,
     pic_file_name,
-    total_rating,
+    difficulty,
     category_id_1,
     category_id_2,
     category_id_3

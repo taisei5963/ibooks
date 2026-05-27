@@ -22,4 +22,6 @@ public class SystemRegex {
     public static final String FILE_EXTENSION = "^.*\\.(zip|csv)$";
     /** CSVライブラリエラーメッセージに対する正規表現 */
     public static final String SUPER_CSV_ERROR_EXTENSION = "^\\[(\\d+)行(?:, \\d+列)?]\\s*[:：]\\s*(.+)$";
+    /** 難易度に対する正規表現 */
+    public static final String DIFFICULTY_EXTENSION = "^[0-3]$";
 }

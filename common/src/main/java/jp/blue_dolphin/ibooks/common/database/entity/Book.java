@@ -9,7 +9,6 @@ import org.seasar.doma.Id;
 import org.seasar.doma.Table;
 import org.seasar.doma.Version;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -57,9 +56,9 @@ public class Book {
     @Column(name = "pic_file_name")
     public final String picFileName;
 
-    /** 全体評価 */
-    @Column(name = "total_rating")
-    public final BigDecimal totalRating;
+    /** 難易度 */
+    @Column(name = "difficulty")
+    public final String difficulty;
 
     /** カテゴリID1 */
     @Column(name = "category_id_1")
