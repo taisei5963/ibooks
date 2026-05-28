@@ -226,6 +226,7 @@ CREATE TABLE `maintenance` (
     PRIMARY KEY (`maintenance_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='メンテナンス';
 
+-- 2026/05/20 add
 CREATE TABLE `book_chapter` (
     `book_chapter_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'ブックチャプターID',
     `book_id` BIGINT NOT NULL COMMENT 'ブックID',
@@ -241,3 +242,21 @@ CREATE TABLE `book_chapter` (
     KEY `BOOK_CHAPTER_IDX_1` (`book_id`),
     CONSTRAINT `BOOK_CHAPTER_FK_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='ブックチャプター';
+
+-- 2026/05/27 add
+CREATE TABLE `book_guide` (
+    `book_guide_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT 'ブックガイドID',
+    `book_id` BIGINT NOT NULL COMMENT 'ブックID',
+    `recommend_for` TEXT COLLATE utf8mb4_general_ci NOT NULL COMMENT 'おすすめ対象者',
+    `recommended_timing` TEXT COLLATE utf8mb4_general_ci NOT NULL COMMENT 'おすすめタイミング',
+    `recommended_points` TEXT COLLATE utf8mb4_general_ci NOT NULL COMMENT 'おすすめポイント',
+    `next_recommended` TEXT COLLATE utf8mb4_general_ci NOT NULL COMMENT '次のおすすめ',
+    `created_at` DATETIME NOT NULL COMMENT '作成日時',
+    `updated_at` DATETIME DEFAULT NULL COMMENT '更新日時',
+    `deleted_at` DATETIME DEFAULT NULL COMMENT '削除日時',
+    `created_id` VARCHAR(30) DEFAULT NULL COMMENT '作成者ID',
+    `ver` INT NOT NULL DEFAULT '0' COMMENT 'バージョン',
+    PRIMARY KEY (`book_guide_id`),
+    KEY `BOOK_GUIDE_IDX_1` (`book_id`),
+CONSTRAINT `BOOK_GUIDE_FK_1` FOREIGN KEY (`book_id`) REFERENCES `book` (`book_id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='ブックガイド';

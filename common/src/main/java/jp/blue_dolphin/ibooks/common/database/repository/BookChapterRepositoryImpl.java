@@ -3,7 +3,6 @@ package jp.blue_dolphin.ibooks.common.database.repository;
 import jp.blue_dolphin.ibooks.common.database.dao.BookChapterDao;
 import jp.blue_dolphin.ibooks.common.database.entity.BookChapter;
 import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
-import jp.blue_dolphin.ibooks.common.model.BookModel;
 import lombok.AllArgsConstructor;
 import org.seasar.doma.jdbc.Result;
 import org.springframework.stereotype.Repository;

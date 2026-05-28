@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum UploadType {
     BOOK("01", "ブックCSVアップロード", false, false),
     BOOK_CHAPTER("02", "ブックチャプターCSVアップロード", false, false),
-    CATEGORY("03", "カテゴリCSVアップロード", false, false);
+    CATEGORY("03", "カテゴリCSVアップロード", false, false),
+    BOOK_GUIDE("04", "ブックガイドCSVアップロード", false, false);
 
     /** 値 */
     private final String value;
