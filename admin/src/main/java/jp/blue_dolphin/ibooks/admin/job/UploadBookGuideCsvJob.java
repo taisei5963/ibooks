@@ -1,21 +1,21 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jp.blue_dolphin.ibooks.admin.config.BookChapterUploadConfig;
-import jp.blue_dolphin.ibooks.admin.service.BookChapterService;
+import jp.blue_dolphin.ibooks.admin.config.BookGuideUploadConfig;
+import jp.blue_dolphin.ibooks.admin.service.BookGuideService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
 import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
 import jp.blue_dolphin.ibooks.common.constant.SiteType;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.constant.UploadType;
-import jp.blue_dolphin.ibooks.common.csv.BookChapterCsv;
-import jp.blue_dolphin.ibooks.common.database.repository.BookChapterRepository;
+import jp.blue_dolphin.ibooks.common.csv.BookGuideCsv;
+import jp.blue_dolphin.ibooks.common.database.repository.BookGuideRepository;
 import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
 import jp.blue_dolphin.ibooks.common.dto.Account;
 import jp.blue_dolphin.ibooks.common.dto.CsvDto;
 import jp.blue_dolphin.ibooks.common.dto.TempFileDto;
 import jp.blue_dolphin.ibooks.common.job.UploadCsvJob;
-import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
+import jp.blue_dolphin.ibooks.common.model.BookGuideModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
@@ -33,22 +33,18 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-/**
- * ブックチャプターCSVアップロードジョブ
- */
 @AllArgsConstructor
 @Component
-public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
+public class UploadBookGuideCsvJob implements UploadCsvJob<BookGuideCsv> {
+    /** ブックガイドリポジトリ */
+    private BookGuideRepository bookGuideRepository;
     /** ブックリポジトリ */
     private BookRepository bookRepository;
-    /** ブックチャプターリポジトリ */
-    private BookChapterRepository bookChapterRepository;
-    /** ブックチャプターサービス */
-    private BookChapterService bookChapterService;
-    /** ブックチャプターアップロード設定 */
-    private BookChapterUploadConfig bookChapterUploadConfig;
+    /** ブックガイドサービス */
+    private BookGuideService bookGuideService;
+    /** ブックアップロード設定 */
+    private BookGuideUploadConfig bookGuideUploadConfig;
     /** メッセージサービス */
     private MessageService messageService;
 
@@ -74,7 +70,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
     @Override
     public TempFileDto saveTempFile(MultipartFile file, Account account) {
         Path tmpFile =
-                UploadFileService.getTmpFilePath(bookChapterUploadConfig.getTempFileName(),
+                UploadFileService.getTmpFilePath(bookGuideUploadConfig.getTempFileName(),
                         account.id);
         UploadFileService.saveTmpCsvFile(file, tmpFile);
         return new TempFileDto(tmpFile);
@@ -84,36 +80,52 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      * {@inheritDoc}
      */
     @Override
-    public void execImport(CsvDto<BookChapterCsv> csvDto, TempFileDto tempFileDto,
+    public void execImport(CsvDto<BookGuideCsv> csvDto, TempFileDto tempFileDto,
                            SseEmitter emitter,
                            Account account) {
-        bookChapterService.saveCsv(csvDto, emitter, account.code);
+        bookGuideService.saveCsv(csvDto, emitter, account.code);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<String> extraValidation(List<BookChapterCsv> csvList, List<Path> imgFiles,
+    public List<String> extraValidation(List<BookGuideCsv> csvList, List<Path> imgFiles,
                                         SseEmitter emitter, Account account) {
         List<String> errors = new ArrayList<>();
 
-        Iterator<BookChapterCsv> ite = csvList.iterator();
+        Iterator<BookGuideCsv> ite = csvList.iterator();
         int count = 0;
         while (ite.hasNext()) {
-            BookChapterCsv csv = ite.next();
+            BookGuideCsv csv = ite.next();
             count++;
             boolean hasError = false;
             CsvDataType dataType = CsvDataType.getEnum(csv.getCsvDataType());
             BookModel bookModel =
                     bookRepository.selectByJanCode(csv.getJanCode()).orElse(null);
-            // INFO: 新規登録時にすでに登録済みのブック情報を登録しようとした場合にエラーにしたい
+            BookGuideModel bookGuideModel = null;
             if (Objects.isNull(bookModel)) {
                 errors.add(messageService.getMessage("csv.error.book.notExists",
                         csv.getRowNum().toString(), csv.getJanCode()));
                 hasError = true;
             } else {
                 csv.setBookId(bookModel.getBookId());
+                bookGuideModel =
+                        bookGuideRepository.selectByBookId(bookModel.getBookId()).orElse(null);
+            }
+
+            if (dataType == CsvDataType.ADD) {
+                if (Objects.nonNull(bookGuideModel)) {
+                    errors.add(messageService.getMessage("csv.error.bookGuide.exists",
+                            csv.getRowNum().toString(), csv.getJanCode()));
+                    hasError = true;
+                }
+            } else if (dataType == CsvDataType.UPDATE) {
+                if (Objects.isNull(bookGuideModel)) {
+                    errors.add(messageService.getMessage("csv.error.bookGuide.notExists",
+                            csv.getRowNum().toString(), csv.getJanCode()));
+                    hasError = true;
+                }
             }
 
             if (hasError) {
@@ -133,7 +145,8 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
                 errorPayload.put("result", "ERROR");
                 errorPayload.put("message", "CSV validation errors occurred.");
                 errorPayload.put("errorMessages", errors);
-                UploadCsvService.sendEmitterProgressResponse(emitter, mapper.writeValueAsString(errorPayload));
+                UploadCsvService.sendEmitterProgressResponse(emitter,
+                        mapper.writeValueAsString(errorPayload));
             } catch (Exception e) {
                 System.err.println("Error sending validation errors via SSE: " + e.getMessage());
             }
@@ -145,8 +158,8 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      * {@inheritDoc}
      */
     @Override
-    public Class<BookChapterCsv> getCsvClass() {
-        return BookChapterCsv.class;
+    public Class<BookGuideCsv> getCsvClass() {
+        return BookGuideCsv.class;
     }
 
     /**
@@ -154,7 +167,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public String getEncode() {
-        return bookChapterUploadConfig.getEncode();
+        return bookGuideUploadConfig.getEncode();
     }
 
     /**
@@ -162,7 +175,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public UploadType getUploadType() {
-        return UploadType.BOOK_CHAPTER;
+        return UploadType.BOOK_GUIDE;
     }
 
     /**
@@ -170,7 +183,7 @@ public class UploadBookChapterCsvJob implements UploadCsvJob<BookChapterCsv> {
      */
     @Override
     public String getUploadProcessName() {
-        return UploadType.BOOK_CHAPTER.getDescription();
+        return UploadType.BOOK_GUIDE.getDescription();
     }
 
     /**

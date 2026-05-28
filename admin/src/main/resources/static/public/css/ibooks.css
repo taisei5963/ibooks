@@ -536,7 +536,7 @@ input[type="submit"]:disabled:hover {
   animation: spin 1.2s linear infinite;
 }
 #loading .path {
-  stroke: #aaa;
+  stroke: var(--color-primary);
   stroke-width: 4;
   stroke-linecap: round;
   animation: dash 1.5s ease-in-out infinite;
@@ -1170,7 +1170,6 @@ a:hover {
   background-color: var(--color-base);
   border-radius: 0 0 16px 16px;
   padding: 24px;
-  /* box-shadow: 0 4px 12px rgba(0,0,0,0.04); */
 }
 .tab-card {
   min-height: 200px;
