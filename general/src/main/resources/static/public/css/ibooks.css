@@ -646,7 +646,6 @@ body * {
   background-color: var(--color-base);
   border-radius: 0 0 16px 16px;
   padding: 24px;
-  /* box-shadow: 0 4px 12px rgba(0,0,0,0.04); */
 }
 .tab-card {
   min-height: 200px;
