@@ -4,34 +4,34 @@
 <body>
     <div th:replace="~{_common/header::menu}"></div>
 
-    <main class="container u-py24">
-        <h1 class="u-mb24 u-ms24 u-fs-2">ブック一覧</h1>
+    <main class="container">
+        <h1 class="main-heading">ブック一覧</h1>
 
-        <div class="search-cond u-mb16">
+        <div class="message-area">
             <div th:replace="~{_common/messages::messages}"></div>
             <div th:replace="~{_common/messages::errors}"></div>
         </div>
 
-        <section class="u-mb32">
+        <section class="search-section">
             <form th:action="@{/book/search}" method="post" class="search-card">
                 <div class="search-grid">
                     <div class="search-field">
-                        <label for="schTitle" class="u-mb8 u-d-block">タイトル（部分一致）</label>
+                        <label for="schTitle" class="u-d-block">タイトル（部分一致）</label>
                         <input type="text" id="schTitle" name="schTitle" th:value="${searchForm?.schTitle}" maxlength="100">
                     </div>
 
                     <div class="search-field">
-                        <label for="schAuthor" class="u-mb8 u-d-block">著者（部分一致）</label>
+                        <label for="schAuthor" class="u-d-block">著者（部分一致）</label>
                         <input type="text" id="schAuthor" name="schAuthor" th:value="${searchForm?.schAuthor}" maxlength="60">
                     </div>
 
                     <div class="search-field">
-                        <label for="schPublisher" class="u-mb8 u-d-block">出版社（部分一致）</label>
+                        <label for="schPublisher" class="u-d-block">出版社（部分一致）</label>
                         <input type="text" id="schPublisher" name="schPublisher" th:value="${searchForm?.schPublisher}" maxlength="60">
                     </div>
 
                     <div class="search-field">
-                        <label for="schCategory" class="u-mb8 u-d-block">カテゴリ（完全一致）</label>
+                        <label for="schCategory" class="u-d-block">カテゴリ（完全一致）</label>
                         <select id="schCategory" name="schCategory">
                             <option value="">すべて</option>
                             <th:block th:each="category : ${categories}">
@@ -42,7 +42,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="search-action u-text-center u-mt24">
+                <div class="search-button-area">
                     <button type="button" id="search-btn" class="btn-primary">
                         検索
                     </button>
@@ -50,8 +50,8 @@
             </form>
         </section>
 
-        <div th:unless="${#lists.isEmpty(books)}" class="container u-pb32">
-            <div class="u-py24" th:replace="~{_common/pager::pager}"></div>
+        <div th:unless="${#lists.isEmpty(books)}" class="book-list-section">
+            <div class="pager-area" th:replace="~{_common/pager::pager}"></div>
 
             <div class="book-grid">
                 <a th:each="book : ${books}" th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
