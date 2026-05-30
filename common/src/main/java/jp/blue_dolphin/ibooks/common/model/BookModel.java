@@ -48,7 +48,7 @@ public class BookModel {
     private String picFileName;
 
     /** 難易度 */
-    private String difficulty;
+    private String level;
 
     /** カテゴリID1 */
     private Long categoryId1;

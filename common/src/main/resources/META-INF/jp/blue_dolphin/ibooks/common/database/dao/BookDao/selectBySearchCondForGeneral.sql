@@ -19,22 +19,6 @@ FROM
 WHERE
   deleted_at IS NULL
 
-  /*%if title != null */
-  AND title LIKE /* title */'%title%'
-  /*%end*/
-
-  /*%if author != null */
-  AND (
-    author1 LIKE /* author */'%author%'
-    OR
-    author2 LIKE /* author */'%author%'
-  )
-  /*%end*/
-
-  /*%if publisher != null */
-  AND publisher LIKE /* publisher */'%publisher%'
-  /*%end*/
-
   /*%if categoryId != null */
   AND (
     category_id_1 = /* categoryId */1
@@ -43,5 +27,9 @@ WHERE
     OR
     category_id_3 = /* categoryId */1
   )
+  /*%end*/
+
+  /*%if level != null */
+    AND level LIKE /* level */'%level%'
   /*%end*/
 /*# orderBy */

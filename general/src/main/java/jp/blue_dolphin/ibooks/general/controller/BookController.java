@@ -1,5 +1,6 @@
 package jp.blue_dolphin.ibooks.general.controller;
 
+import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
 import jp.blue_dolphin.ibooks.common.dto.SearchResult;
@@ -62,11 +63,11 @@ public class BookController {
         }
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
-        Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
+        List<Level> levels = Level.getAll();
         model.addAttribute("searchForm", searchForm);
         model.addAttribute("books", result.getList());
         model.addAttribute("categories", categories);
-        model.addAttribute("categoryMap", categoryMap);
+        model.addAttribute("levels", levels);
         return "book/index";
     }
 

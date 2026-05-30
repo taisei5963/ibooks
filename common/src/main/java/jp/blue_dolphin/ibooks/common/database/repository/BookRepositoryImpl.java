@@ -95,6 +95,24 @@ public class BookRepositoryImpl implements BookRepository {
     /**
      * {@inheritDoc}
      */
+    public SearchResult<BookModel> selectBySearchCondForGeneral(Long categoryId, String level,
+                                                                String orderBy, SelectOptions options) {
+        List<Book> entities =
+                bookDao.selectBySearchCondForGeneral(categoryId, level, orderBy, options);
+        long count = options.getCount();
+        if (count == 0) {
+            return new SearchResult<>(Collections.emptyList(), count);
+        }
+        List<BookModel> models = new ArrayList<>();
+        for (Book entity : entities) {
+            models.add(convertModel(entity));
+        }
+        return new SearchResult<>(models, count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SearchResult<BookCsv> selectBySearchCondForCsv(String title, String author,
                                                           String publisher,
@@ -164,7 +182,7 @@ public class BookRepositoryImpl implements BookRepository {
                 .translator(entity.translator)
                 .publisher(entity.publisher)
                 .picFileName(entity.picFileName)
-                .difficulty(entity.difficulty)
+                .level(entity.level)
                 .categoryId1(entity.categoryId1)
                 .categoryId2(entity.categoryId2)
                 .categoryId3(entity.categoryId3)
@@ -195,7 +213,7 @@ public class BookRepositoryImpl implements BookRepository {
                 .translator(model.getTranslator())
                 .publisher(model.getPublisher())
                 .picFileName(model.getPicFileName())
-                .difficulty(model.getDifficulty())
+                .level(model.getLevel())
                 .categoryId1(model.getCategoryId1())
                 .categoryId2(model.getCategoryId2())
                 .categoryId3(model.getCategoryId3())

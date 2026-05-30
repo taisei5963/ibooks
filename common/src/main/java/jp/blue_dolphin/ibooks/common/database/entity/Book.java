@@ -57,8 +57,8 @@ public class Book {
     public final String picFileName;
 
     /** 難易度 */
-    @Column(name = "difficulty")
-    public final String difficulty;
+    @Column(name = "level")
+    public final String level;
 
     /** カテゴリID1 */
     @Column(name = "category_id_1")

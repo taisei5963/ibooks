@@ -17,14 +17,10 @@ import java.util.Objects;
 @Setter
 @Getter
 public class BookSearchForm implements SearchForm {
-    /** タイトル */
-    private String schTitle;
-    /** 著者 */
-    private String schAuthor;
-    /** 出版社 */
-    private String schPublisher;
     /** カテゴリ */
     private Long schCategory;
+    /** レベル */
+    private String schLevel;
 
     /** ソートキー */
     private BookSortKey sortKey;
@@ -37,10 +33,8 @@ public class BookSearchForm implements SearchForm {
     @Override
     public @NotNull List<String> getSearchParamNames() {
         List<String> params = new ArrayList<>();
-        params.add("schTitle");
-        params.add("schAuthor");
-        params.add("schPublisher");
         params.add("schCategory");
+        params.add("schLevel");
         return params;
     }
 
@@ -53,10 +47,8 @@ public class BookSearchForm implements SearchForm {
             return null;
         }
         return switch (paramName) {
-            case "schTitle" -> getSchTitle();
-            case "schAuthor" -> getSchAuthor();
-            case "schPublisher" -> getSchPublisher();
             case "schCategory" -> Objects.toString(getSchCategory(), null);
+            case "schLevel" -> getSchLevel();
             default -> null;
         };
     }

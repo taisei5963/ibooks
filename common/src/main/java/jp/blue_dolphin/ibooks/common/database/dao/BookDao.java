@@ -54,11 +54,24 @@ public interface BookDao {
      * @param categoryId カテゴリID
      * @param orderBy    ソート順
      * @param options    検索オプション
-     * @return ブックエンティティ
+     * @return ブックエンティティリスト
      */
     @Select
     List<Book> selectBySearchCond(String title, String author, String publisher, Long categoryId,
                                   String orderBy, SelectOptions options);
+
+    /**
+     * 引数の検索条件で検索する
+     *
+     * @param categoryId カテゴリID
+     * @param level レベル
+     * @param orderBy    ソート順
+     * @param options    検索オプション
+     * @return ブックエンティティリスト
+     */
+    @Select
+    List<Book> selectBySearchCondForGeneral(Long categoryId, String level, String orderBy,
+                                            SelectOptions options);
 
     /**
      * 引数のタイトルと出版社で取得する
