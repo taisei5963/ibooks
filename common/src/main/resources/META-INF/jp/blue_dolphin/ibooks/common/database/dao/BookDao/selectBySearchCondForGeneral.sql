@@ -28,8 +28,4 @@ WHERE
     category_id_3 = /* categoryId */1
   )
   /*%end*/
-
-  /*%if level != null */
-    AND level LIKE /* level */'%level%'
-  /*%end*/
 /*# orderBy */

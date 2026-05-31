@@ -3,9 +3,6 @@ package jp.blue_dolphin.ibooks.common.constant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * レベル
  */
@@ -49,14 +46,5 @@ public enum Level {
         } catch (IllegalArgumentException | NullPointerException e) {
             return Level.NONE.getDescription();
         }
-    }
-
-    /**
-     * レベルの列挙型リストを返却する
-     *
-     * @return レベルの列挙型リスト
-     */
-    public static List<Level> getAll() {
-        return Arrays.stream(values()).filter(level -> level != NONE).toList();
     }
 }

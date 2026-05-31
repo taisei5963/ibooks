@@ -44,7 +44,6 @@ public class BookService {
     public SearchResult<BookModel> search(BookSearchForm searchForm, Pageable pageable) {
         return bookRepository.selectBySearchCondForGeneral(
                 searchForm.getLongParam("schCategory"),
-                searchForm.getParam("schLevel"),
                 searchForm.getOrderBy(), searchForm.getSelectOptions(pageable));
     }
 }

@@ -46,11 +46,7 @@ public class BookSearchForm implements SearchForm {
         if (Objects.isNull(paramName)) {
             return null;
         }
-        return switch (paramName) {
-            case "schCategory" -> Objects.toString(getSchCategory(), null);
-            case "schLevel" -> getSchLevel();
-            default -> null;
-        };
+        return Objects.toString(getSchCategory(), null);
     }
 
     /**

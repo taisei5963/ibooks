@@ -68,9 +68,9 @@
                             </h4>
                             <h4 class="book-translator" th:if="${book.translator}">[[${book.translator}]] 訳</h4>
                             <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
-                            <h5 class="book-difficulty">
-                                <span th:class="|book-difficulty-badge difficulty-${book.difficulty}|">
-                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Difficulty).getDescription(book.difficulty)}]]
+                            <h5 class="book-level">
+                                <span th:class="|book-level-badge level-${book.level}|">
+                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]
                                 </span>
                                 </th:block>
                             </h5>

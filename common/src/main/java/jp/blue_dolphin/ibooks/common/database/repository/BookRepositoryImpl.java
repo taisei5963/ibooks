@@ -76,9 +76,9 @@ public class BookRepositoryImpl implements BookRepository {
      */
     @Override
     public SearchResult<BookModel> selectBySearchCond(String title, String author,
-                                                            String publisher,
-                                                            Long categoryId, String orderBy,
-                                                            SelectOptions options) {
+                                                      String publisher,
+                                                      Long categoryId, String orderBy,
+                                                      SelectOptions options) {
         List<Book> entities =
                 bookDao.selectBySearchCond(title, author, publisher, categoryId, orderBy, options);
         long count = options.getCount();
@@ -95,10 +95,10 @@ public class BookRepositoryImpl implements BookRepository {
     /**
      * {@inheritDoc}
      */
-    public SearchResult<BookModel> selectBySearchCondForGeneral(Long categoryId, String level,
-                                                                String orderBy, SelectOptions options) {
+    public SearchResult<BookModel> selectBySearchCondForGeneral(Long categoryId, String orderBy,
+                                                                SelectOptions options) {
         List<Book> entities =
-                bookDao.selectBySearchCondForGeneral(categoryId, level, orderBy, options);
+                bookDao.selectBySearchCondForGeneral(categoryId, orderBy, options);
         long count = options.getCount();
         if (count == 0) {
             return new SearchResult<>(Collections.emptyList(), count);

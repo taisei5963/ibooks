@@ -21,18 +21,6 @@
                             </th:block>
                         </ul>
                     </div>
-                    <button class="level-accordion-header" id="levelAccordionHeaderBtn">
-                        レベル
-                    </button>
-                    <div class="level-accordion-content">
-                        <ul class="level-list">
-                            <th:block th:each="level : ${levels}">
-                                <li>
-                                    <a href="#" class="level-item" th:data-level="${level.name()}" th:text="${level.description}"></a>
-                                </li>
-                            </th:block>
-                        </ul>
-                    </div>
                 </div>
             </nav>
         </aside>
@@ -65,14 +53,8 @@
         </div>
     </div>
 
-    <!-- Hidden Form for Category Search -->
     <form id="categorySearchForm" th:action="@{/book/search}" method="post" style="display:none;">
         <input type="hidden" name="schCategory" id="schCategoryInput" value="" />
-    </form>
-
-    <!-- Hidden Form for Difficulty Search -->
-    <form id="levelSearchForm" th:action="@{/book/search}" method="post" style="display:none;">
-        <input type="hidden" name="schLevel" id="schLevelInput" value="" />
     </form>
 
 <div th:replace="~{_common/script::csrfHeader}"></div>
@@ -86,18 +68,10 @@
         const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
         const categoryAccordionContent = document.querySelector('.category-accordion-content');
 
-        const levelAccordionHeader = document.getElementById('levelAccordionHeaderBtn');
-        const levelAccordionContent = document.querySelector('.level-accordion-content');
-
         // ページロード時にアコーディオンを自動で開く
         if (categoryAccordionContent && categoryAccordionHeader) {
             categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
             categoryAccordionHeader.classList.add('is-open');
-        }
-
-        if (levelAccordionContent && levelAccordionHeader) {
-            levelAccordionContent.style.maxHeight = levelAccordionContent.scrollHeight + 'px';
-            levelAccordionHeader.classList.add('is-open');
         }
 
         categoryAccordionHeader.addEventListener('click', () => {
@@ -110,16 +84,6 @@
             }
         });
 
-        levelAccordionHeader.addEventListener('click', () => {
-            if (levelAccordionContent.style.maxHeight === '0px' || levelAccordionContent.style.maxHeight === '') {
-                levelAccordionContent.style.maxHeight = levelAccordionContent.scrollHeight + 'px';
-                levelAccordionHeader.classList.add('is-open');
-            } else {
-                levelAccordionContent.style.maxHeight = '0px';
-                levelAccordionHeader.classList.remove('is-open');
-            }
-        });
-
         $('.category-item').on('click', function(e) {
             e.preventDefault();
             const categoryId = $(this).data('categoryId');
@@ -129,7 +93,6 @@
                 ibooks.showLoading();
                 $('#categorySearchForm').submit();
             } else {
-                ibooks.showLoading();
                 window.location.href = '/book';
             }
         });
@@ -140,20 +103,6 @@
                 window.location.href = $(this).attr('href');
             }, 50);
             e.preventDefault();
-        });
-
-        $('.level-item').on('click', function(e) {
-            e.preventDefault();
-            const level = $(this).data('level');
-
-            if (level) {
-                $('#schLevelInput').val(level);
-                ibooks.showLoading();
-                $('#levelSearchForm').submit();
-            } else {
-                ibooks.showLoading();
-                window.location.href = '/book';
-            }
         });
     });
 </script>
