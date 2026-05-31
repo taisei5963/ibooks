@@ -21,6 +21,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import jp.blue_dolphin.ibooks.common.constant.Level;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.stream.IntStream;
 
 /**
  * ブックコントローラクラス
@@ -61,8 +67,36 @@ public class BookController {
         }
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
+
+        // Define the desired order of levels
+        List<Level> orderedLevels = Arrays.asList(Level.BEGINNER, Level.INTERMEDIATE, Level.ADVANCED, Level.NONE);
+        Map<String, Integer> levelOrderMap = IntStream.range(0, orderedLevels.size())
+                .boxed()
+                .collect(Collectors.toMap(
+                        i -> orderedLevels.get(i).name(),
+                        i -> i,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
+                ));
+
+        // Group books by level
+        Map<String, List<BookModel>> booksGroupedByLevel = result.getList().stream()
+                .collect(Collectors.groupingBy(
+                        book -> book.getLevel() != null ? book.getLevel() : Level.NONE.name()
+                ));
+
+        // Sort the grouped books by the defined level order
+        Map<String, List<BookModel>> orderedBooksGroupedByLevel = booksGroupedByLevel.entrySet().stream()
+                .sorted(Comparator.comparing(entry -> levelOrderMap.getOrDefault(entry.getKey(), Integer.MAX_VALUE)))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
+                ));
+
         model.addAttribute("searchForm", searchForm);
-        model.addAttribute("books", result.getList());
+        model.addAttribute("booksGroupedByLevel", orderedBooksGroupedByLevel);
         model.addAttribute("categories", categories);
         return "book/index";
     }

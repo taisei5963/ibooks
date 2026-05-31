@@ -669,6 +669,39 @@ body * {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* ========================================================
+  レベル別セクションヘッダーのスタイル
+======================================================== */
+.level-section-header {
+  font-size: 2.2rem;
+  font-weight: 700;
+  padding: 10px 15px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-top: none;
+  border-bottom: none;
+  border-left: 2px solid;
+  border-right: none;
+}
+
+.level-section-header.level-BEGINNER {
+  background-color: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #2e7d32;
+}
+
+.level-section-header.level-INTERMEDIATE {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
+  color: #1976d2;
+}
+
+.level-section-header.level-ADVANCED {
+  background-color: #fff3e0;
+  border-color: #ffcc80;
+  color: #e65100;
+}
+
 /* ========================================
   ブック詳細 Tabs (Redesigned)
 ======================================== */

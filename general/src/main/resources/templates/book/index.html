@@ -32,21 +32,26 @@
                     <div th:replace="~{_common/messages::errors}"></div>
                 </div>
 
-                <div th:unless="${#lists.isEmpty(books)}" class="book-list-section">
-                    <div class="book-grid">
-                        <a th:each="book : ${books}" th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
-
-                            <div class="book-image-wrapper">
-                                <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                <div th:unless="${#lists.isEmpty(booksGroupedByLevel)}" class="book-list-section">
+                    <th:block th:each="level : ${booksGroupedByLevel}">
+                        <h3 th:text="${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(level.key)}" 
+                            th:classappend="|level-section-header level-${level.key}|"></h3>
+                        <div class="book-grid">
+                            <a th:each="book : ${level.value}" th:href="@{/book/detail/{id}(id=${book.bookId})}"
+                            class="book-gallery-card js-loading-link">
+                                <div class="book-image-wrapper">
+                                    <img th:src="${book.picFileName != null and book.picFileName != '' ?
+                                    @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
+                                    @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
                                     alt="書籍画像" />
-                            </div>
-
-                            <div class="book-overlay">
-                                <h2 class="book-overlay-title" th:text="${book.title}"></h2>
-                                <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
-                            </div>
-                        </a>
-                    </div>
+                                </div>
+                                <div class="book-overlay">
+                                    <h2 class="book-overlay-title" th:text="${book.title}"></h2>
+                                    <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
+                                </div>
+                            </a>
+                        </div>
+                    </th:block>
                 </div>
             </main>
             <div th:replace="~{_common/footer::footer}"></div>
