@@ -6,111 +6,119 @@
 >
 <head th:replace="~{_common/head::head}"></head>
 <body>
-    <div th:replace="~{_common/header::menu}"></div>
-
-    <main class="container book-detail-page u-py24">
-        <div class="book-detail-tabs">
-            <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
-            <!-- ブック詳細 -->
-                <li class="nav-item" role="presentation">
-                    <button
-                        class="nav-link active"
-                        id="detail-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#detail-pane"
-                        type="button"
-                        role="tab">
-                        ブック詳細
-                    </button>
-                </li>
-
-                <!-- ロードマップ -->
-                <li class="nav-item" role="presentation">
-                    <button
-                        class="nav-link"
-                        id="roadmap-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#roadmap-pane"
-                        type="button"
-                        role="tab">
-                        ロードマップ
-                    </button>
-                </li>
-            </ul>
-
-            <div class="tab-content book-tab-content">
-                <!-- ブック詳細 -->
-                <div
-                    class="tab-pane fade show active"
-                    id="detail-pane"
-                    role="tabpanel">
-
-                    <div class="tab-card">
-                        <div class="book-detail-image">
-                            <img
-                                th:src="${book.picFileName != null and book.picFileName != '' 
-                                ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) 
-                                : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
-                                alt="書籍画像"
-                            />
-                        </div>
-                        <div class="book-content">
-                            <h1 class="book-title">[[${book.title}]]</h1>
-                            <h3 class="book-subtitle" th:if="${book.subTitle}">[[${book.subTitle}]]</h3>
-                            <br>
-                            <h4 class="book-author">
-                                <th:block th:if="${book.author2}">
-                                    [[${book.author1}]] / [[${book.author2}]] 共著
-                                </th:block>
-                                <th:block th:unless="${book.author2}">
-                                    [[${book.author1}]] 著
-                                </th:block>
-                            </h4>
-                            <h4 class="book-translator" th:if="${book.translator}">[[${book.translator}]] 訳</h4>
-                            <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
-                            <h5 class="book-level">
-                                <span th:class="|book-level-badge level-${book.level}|">
-                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]
-                                </span>
-                                </th:block>
-                            </h5>
-                            <h5 class="book-categories">
-                                <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
-                                    <span th:if="${id != null}" th:class="|book-category badge-it category-color-${id % 10}|">
-                                        [[${categoryMap.get(id)}]]
-                                    </span>
-                                </th:block>
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ロードマップ -->
-                <div
-                    class="tab-pane fade"
-                    id="roadmap-pane"
-                    role="tabpanel">
-
-                    <div class="tab-card">
-                        ロードマップ情報
-                    </div>
-                </div>
+    <div class="wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header" id="sidebarBrand">
+                <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
-        </div>
-    </main>
+        </aside>
 
+        <div class="main-content">
+            <main class="container book-detail-page u-py24">
+                <div class="book-detail-tabs">
+                    <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
+                    <!-- ブック詳細 -->
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link active"
+                                id="detail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#detail-pane"
+                                type="button"
+                                role="tab">
+                                ブック詳細
+                            </button>
+                        </li>
+
+                        <!-- ロードマップ -->
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link"
+                                id="roadmap-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#roadmap-pane"
+                                type="button"
+                                role="tab">
+                                ロードマップ
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content book-tab-content">
+                        <!-- ブック詳細 -->
+                        <div
+                            class="tab-pane fade show active"
+                            id="detail-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card book-detail-wrapper">
+                                <div class="book-detail-image">
+                                    <img
+                                        th:src="${book.picFileName != null and book.picFileName != '' 
+                                        ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) 
+                                        : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                        alt="書籍画像"
+                                    />
+                                </div>
+                                <div class="book-content">
+                                    <h1 class="book-title">[[${book.title}]]</h1>
+                                    <h3 class="book-subtitle" th:if="${book.subTitle}">[[${book.subTitle}]]</h3>
+                                    <br>
+                                    <h4 class="book-author">
+                                        <th:block th:if="${book.author2}">
+                                            [[${book.author1}]] / [[${book.author2}]] 共著
+                                        </th:block>
+                                        <th:block th:unless="${book.author2}">
+                                            [[${book.author1}]] 著
+                                        </th:block>
+                                    </h4>
+                                    <h4 class="book-translator" th:if="${book.translator}">[[${book.translator}]] 訳</h4>
+                                    <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
+                                    <h5 class="book-level">
+                                        <span th:class="|book-level-badge level-${book.level}|">
+                                            [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]
+                                        </span>
+                                        </th:block>
+                                    </h5>
+                                    <h5 class="book-categories">
+                                        <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
+                                            <span th:if="${id != null}" th:class="|book-category badge-it category-color-${id % 10}|">
+                                                [[${categoryMap.get(id)}]]
+                                            </span>
+                                        </th:block>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ロードマップ -->
+                        <div
+                            class="tab-pane fade"
+                            id="roadmap-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card">
+                                ロードマップ情報
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <div class="fixed-bottom-button-area">
+                <button
+                    type="button"
+                    th:onclick="|location.href='@{/book/search}'|"
+                    class="back-btn"
+                >
+                    戻る
+                </button>
+            </div>
+
+            <div th:replace="~{_common/footer::footer}"></div>
+        </div> <!-- Close main-content -->
+    </div> 
+    
     <div th:replace="~{_common/script::csrfHeader}"></div>
-
-    <div class="fixed-bottom-button-area">
-        <button
-            type="button"
-            th:onclick="|location.href='@{/book/search}'|"
-            class="back-btn"
-        >
-            戻る
-        </button>
-    </div>
-
-    <div th:replace="~{_common/footer::footer}"></div>
 </body>
 </html>
