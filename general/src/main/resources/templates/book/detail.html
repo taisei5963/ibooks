@@ -17,7 +17,7 @@
             <main class="container book-detail-page u-py24">
                 <div class="book-detail-tabs">
                     <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
-                    <!-- ブック詳細 -->
+                        <!-- ブック詳細 -->
                         <li class="nav-item" role="presentation">
                             <button
                                 class="nav-link active"
@@ -29,17 +29,28 @@
                                 ブック詳細
                             </button>
                         </li>
-
-                        <!-- ロードマップ -->
+                        <!-- ブックチャプター -->
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link"
+                                id="detail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#chapter-pane"
+                                type="button"
+                                role="tab">
+                                ブックチャプター
+                            </button>
+                        </li>
+                        <!-- ブックガイド -->
                         <li class="nav-item" role="presentation">
                             <button
                                 class="nav-link"
                                 id="roadmap-tab"
                                 data-bs-toggle="tab"
-                                data-bs-target="#roadmap-pane"
+                                data-bs-target="#guide-pane"
                                 type="button"
                                 role="tab">
-                                ロードマップ
+                                ブックガイド
                             </button>
                         </li>
                     </ul>
@@ -90,15 +101,24 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- ロードマップ -->
+                        <!-- ブックチャプター -->
                         <div
                             class="tab-pane fade"
-                            id="roadmap-pane"
+                            id="chapter-pane"
                             role="tabpanel">
 
                             <div class="tab-card">
-                                ロードマップ情報
+                                ブックチャプター
+                            </div>
+                        </div>
+                        <!-- ブックガイド -->
+                        <div
+                            class="tab-pane fade"
+                            id="guide-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card">
+                                ブックガイド
                             </div>
                         </div>
                     </div>
