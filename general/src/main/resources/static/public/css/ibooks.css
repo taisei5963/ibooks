@@ -670,6 +670,33 @@ body * {
 }
 
 /* ========================================================
+  テキストベースの戻るボタン
+======================================================== */
+.btn-back-text {
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.6rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-back-text:hover {
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
+}
+
+.btn-back-text .bi {
+  margin-right: 5px;
+  font-size: 1.8rem;
+}
+
+/* ========================================================
   レベル別セクションヘッダーのスタイル
 ======================================================== */
 .level-section-header {
@@ -775,4 +802,29 @@ body * {
   background-color: #fff3e0;
   border-color: #ffcc80;
   color: #e65100;
+}
+
+/* ========================================================
+  ブックチャプターテーブル
+======================================================== */
+.table-book-chapter {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.table-book-chapter td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 600;
+}
+.table-book-chapter tr:last-child td {
+  border-bottom: none;
+}
+.table-book-chapter tbody tr:hover {
+  background-color: #f8f9fa;
+}
+.table-book-chapter td.chapter-no {
+  color: var(--color-sidebar-bg);
 }

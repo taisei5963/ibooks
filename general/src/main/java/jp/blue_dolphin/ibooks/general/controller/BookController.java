@@ -4,9 +4,11 @@ import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
 import jp.blue_dolphin.ibooks.common.dto.SearchResult;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.general.request.BookSearchForm;
+import jp.blue_dolphin.ibooks.general.service.BookChapterService;
 import jp.blue_dolphin.ibooks.general.service.BookService;
 import jp.blue_dolphin.ibooks.general.service.CategoryService;
 import jp.blue_dolphin.ibooks.general.service.ReviewService;
@@ -39,8 +41,8 @@ public class BookController {
     private BookService bookService;
     /** カテゴリサービス */
     private CategoryService categoryService;
-    /** レビューサービス */
-    private ReviewService reviewService;
+    /** ブックチャプターサービス */
+    private BookChapterService bookChapterService;
     /** メッセージサービス */
     private MessageService messageService;
 
@@ -113,6 +115,7 @@ public class BookController {
     @RequestMapping("/detail/{bookId}")
     public String detail(@PathVariable Long bookId, Model model,
                          RedirectAttributes redirectAttributes) {
+        // INFO: ブック情報取得
         Optional<BookModel> bookOpt = bookService.selectById(bookId);
         if (bookOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("errors", Collections.singletonList(
@@ -120,10 +123,14 @@ public class BookController {
             return "redirect:/book/search";
         }
 
+        // INFO: ブックチャプター情報取得
+        List<BookChapterModel> bookChapters = bookChapterService.selectByBookId(bookId);
+
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
+        model.addAttribute("bookChapters", bookChapters);
         return "book/detail";
     }
 }

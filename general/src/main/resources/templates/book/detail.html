@@ -14,7 +14,12 @@
         </aside>
 
         <div class="main-content">
-            <main class="container book-detail-page u-py24">
+            <main class="container book-detail-page">
+                <div class="u-mb16">
+                    <button type="button" class="btn-back-text" th:onclick="|location.href='@{/book/search}'|">
+                        <i class="bi bi-arrow-left"></i> 戻る
+                    </button>
+                </div>
                 <div class="book-detail-tabs">
                     <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
                         <!-- ブック詳細 -->
@@ -26,7 +31,7 @@
                                 data-bs-target="#detail-pane"
                                 type="button"
                                 role="tab">
-                                ブック詳細
+                                詳細
                             </button>
                         </li>
                         <!-- ブックチャプター -->
@@ -38,7 +43,7 @@
                                 data-bs-target="#chapter-pane"
                                 type="button"
                                 role="tab">
-                                ブックチャプター
+                                チャプター
                             </button>
                         </li>
                         <!-- ブックガイド -->
@@ -50,7 +55,7 @@
                                 data-bs-target="#guide-pane"
                                 type="button"
                                 role="tab">
-                                ブックガイド
+                                ガイド
                             </button>
                         </li>
                     </ul>
@@ -107,8 +112,20 @@
                             id="chapter-pane"
                             role="tabpanel">
 
-                            <div class="tab-card">
-                                ブックチャプター
+                            <div class="tab-card book-chapter-wrapper">
+                                <div th:unless="${#lists.isEmpty(bookChapters)}">
+                                    <table class="table-book-chapter">
+                                        <tbody>
+                                            <tr th:each="chapter : ${bookChapters}">
+                                                <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                <td class="u-text-start">[[${chapter.title}]]</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
+                                    チャプター情報がありません。
+                                </div>
                             </div>
                         </div>
                         <!-- ブックガイド -->
@@ -124,15 +141,7 @@
                     </div>
                 </div>
             </main>
-            <div class="fixed-bottom-button-area">
-                <button
-                    type="button"
-                    th:onclick="|location.href='@{/book/search}'|"
-                    class="back-btn"
-                >
-                    戻る
-                </button>
-            </div>
+
             <div th:replace="~{_common/footer::footer}"></div>
         </div>
     </div> 
