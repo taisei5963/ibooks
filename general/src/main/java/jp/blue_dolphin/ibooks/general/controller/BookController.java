@@ -5,13 +5,14 @@ import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
 import jp.blue_dolphin.ibooks.common.dto.SearchResult;
 import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
+import jp.blue_dolphin.ibooks.common.model.BookGuideModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.general.request.BookSearchForm;
 import jp.blue_dolphin.ibooks.general.service.BookChapterService;
+import jp.blue_dolphin.ibooks.general.service.BookGuideService;
 import jp.blue_dolphin.ibooks.general.service.BookService;
 import jp.blue_dolphin.ibooks.general.service.CategoryService;
-import jp.blue_dolphin.ibooks.general.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,8 @@ public class BookController {
     private CategoryService categoryService;
     /** ブックチャプターサービス */
     private BookChapterService bookChapterService;
+    /** ブックガイドサービス */
+    private BookGuideService bookGuideService;
     /** メッセージサービス */
     private MessageService messageService;
 
@@ -126,11 +129,15 @@ public class BookController {
         // INFO: ブックチャプター情報取得
         List<BookChapterModel> bookChapters = bookChapterService.selectByBookId(bookId);
 
+        // INFO: ブックガイド情報取得
+        Optional<BookGuideModel> bookGuide = bookGuideService.selectByBookId(bookId);
+
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
         model.addAttribute("bookChapters", bookChapters);
+        model.addAttribute("bookGuide", bookGuide);
         return "book/detail";
     }
 }

@@ -34,7 +34,7 @@
 
                 <div th:unless="${#lists.isEmpty(booksGroupedByLevel)}" class="book-list-section">
                     <th:block th:each="level : ${booksGroupedByLevel}">
-                        <h3 th:text="${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(level.key)}" 
+                        <h3 th:text="|${level.key} / ${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(level.key)}|" 
                             th:classappend="|level-section-header level-${level.key}|"></h3>
                         <div class="book-grid">
                             <a th:each="book : ${level.value}" th:href="@{/book/detail/{id}(id=${book.bookId})}"

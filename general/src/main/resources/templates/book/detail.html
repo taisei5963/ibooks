@@ -15,7 +15,7 @@
 
         <div class="main-content">
             <main class="container book-detail-page">
-                <div class="u-mb16">
+                <div>
                     <button type="button" class="btn-back-text" th:onclick="|location.href='@{/book/search}'|">
                         <i class="bi bi-arrow-left"></i> 戻る
                     </button>
@@ -114,14 +114,26 @@
 
                             <div class="tab-card book-chapter-wrapper">
                                 <div th:unless="${#lists.isEmpty(bookChapters)}">
-                                    <table class="table-book-chapter">
-                                        <tbody>
-                                            <tr th:each="chapter : ${bookChapters}">
-                                                <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
-                                                <td class="u-text-start">[[${chapter.title}]]</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="chapter-columns-container">
+                                        <th:block th:with="chaptersPerColumn=10, 
+                                                            numOfColumns=${(bookChapters.size() + 9) / 10}">
+                                            <div th:each="i : ${#numbers.sequence(0, numOfColumns - 1)}" class="chapter-column">
+                                                <table class="table-book-chapter">
+                                                    <tbody>
+                                                        <th:block th:with="startIndex=${i * chaptersPerColumn}, 
+                                                                            endIndex=${((i + 1) * chaptersPerColumn) > bookChapters.size()
+                                                                                ? bookChapters.size()
+                                                                                : ((i + 1) * chaptersPerColumn)}">
+                                                            <tr th:each="chapter : ${bookChapters.subList(startIndex, endIndex)}">
+                                                                <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                                <td class="u-text-start chapter-title">[[${chapter.title}]]</td>
+                                                            </tr>
+                                                        </th:block>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </th:block>
+                                    </div>
                                 </div>
                                 <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
                                     チャプター情報がありません。
@@ -147,5 +159,13 @@
     </div> 
     
     <div th:replace="~{_common/script::csrfHeader}"></div>
+    <script>
+        $(function() {
+            $('#sidebarBrand').on('click', function() {
+                ibooks.showLoading();
+                window.location.href = '/book';
+            });
+        });
+    </script>
 </body>
 </html>
