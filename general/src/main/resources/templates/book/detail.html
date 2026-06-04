@@ -136,7 +136,7 @@
                                     </div>
                                 </div>
                                 <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
-                                    チャプター情報がありません。
+                                    チャプターがありません。
                                 </div>
                             </div>
                         </div>
@@ -146,8 +146,28 @@
                             id="guide-pane"
                             role="tabpanel">
 
-                            <div class="tab-card">
-                                ブックガイド
+                            <div class="tab-card book-guide-wrapper">
+                                <div th:if="${bookGuide.isPresent()}" class="book-guide-grid">
+                                    <div class="book-guide-item guide-item-1">
+                                        <h4 class="book-guide-item-title">こんな方におすすめ</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendFor}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-2">
+                                        <h4 class="book-guide-item-title">本書を読むタイミング</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendedTiming}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-3">
+                                        <h4 class="book-guide-item-title">おすすめポイント</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendedPoints}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-4">
+                                        <h4 class="book-guide-item-title">次に読むべき書籍</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().nextRecommended}"></div>
+                                    </div>
+                                </div>
+                                <div th:unless="${bookGuide.isPresent()}" class="alert alert-info">
+                                    ガイドがありません。
+                                </div>
                             </div>
                         </div>
                     </div>

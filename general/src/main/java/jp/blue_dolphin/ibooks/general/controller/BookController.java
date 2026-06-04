@@ -130,14 +130,14 @@ public class BookController {
         List<BookChapterModel> bookChapters = bookChapterService.selectByBookId(bookId);
 
         // INFO: ブックガイド情報取得
-        Optional<BookGuideModel> bookGuide = bookGuideService.selectByBookId(bookId);
+        Optional<BookGuideModel> bookGuideOpt = bookGuideService.selectByBookId(bookId);
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
         model.addAttribute("bookChapters", bookChapters);
-        model.addAttribute("bookGuide", bookGuide);
+        model.addAttribute("bookGuide", bookGuideOpt);
         return "book/detail";
     }
 }

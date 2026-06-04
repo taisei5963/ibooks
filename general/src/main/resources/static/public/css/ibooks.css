@@ -19,7 +19,6 @@
 
 body {
   font-family: "Rounded Mplus 1c", system-ui, sans-serif;
-  /* background-color: var(--color-base); */
   background: linear-gradient(135deg, var(--color-base) 0%, #e2e8f0 100%);
   color: var(--color-text);
   font-weight: 400;
@@ -44,7 +43,6 @@ body * {
   display: flex;
   min-height: 100vh;
 }
-
 .main-content {
   flex-grow: 1;
   padding-left: 280px;
@@ -792,6 +790,67 @@ body * {
   background-color: #fff3e0;
   border-color: #ffcc80;
   color: #e65100;
+}
+
+/* ========================================
+  ブックガイド
+======================================== */
+.book-guide-wrapper {
+  padding: 20px;
+}
+.book-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.book-guide-item {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+.book-guide-item-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 10px;
+  border-bottom: 2px solid;
+  padding-bottom: 8px;
+}
+.book-guide-item-content {
+  font-size: 1.5rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+.guide-item-1 .book-guide-item-title {
+  border-color: #a5d6a7;
+  color: #2e7d32;
+}
+.guide-item-1 {
+  background-color: #e8f5e9;
+}
+.guide-item-2 .book-guide-item-title {
+  border-color: #90caf9;
+  color: #1976d2;
+}
+.guide-item-2 {
+  background-color: #e3f2fd;
+}
+.guide-item-3 .book-guide-item-title {
+  border-color: #ffcc80;
+  color: #e65100;
+}
+.guide-item-3 {
+  background-color: #fff3e0;
+}
+.guide-item-4 .book-guide-item-title {
+  border-color: #ef9a9a;
+  color: #b71c1c;
+}
+.guide-item-4 {
+  background-color: #ffebee;
 }
 
 /* ========================================================
