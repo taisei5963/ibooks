@@ -6,6 +6,7 @@
 >
 <head th:replace="~{_common/head::head}"></head>
 <body>
+    <div th:replace="~{_common/topHeader::topHeader('detail', null)}"></div> 
     <div class="wrapper">
         <aside class="sidebar">
             <div class="sidebar-header" id="sidebarBrand">
@@ -15,14 +16,8 @@
 
         <div class="main-content">
             <main class="container book-detail-page">
-                <div>
-                    <button type="button" class="btn-back-text" th:onclick="|location.href='@{/book/search}'|">
-                        <i class="bi bi-arrow-left"></i> 戻る
-                    </button>
-                </div>
                 <div class="book-detail-tabs">
                     <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
-                        <!-- ブック詳細 -->
                         <li class="nav-item" role="presentation">
                             <button
                                 class="nav-link active"
@@ -34,7 +29,6 @@
                                 詳細
                             </button>
                         </li>
-                        <!-- ブックチャプター -->
                         <li class="nav-item" role="presentation">
                             <button
                                 class="nav-link"
@@ -46,7 +40,6 @@
                                 チャプター
                             </button>
                         </li>
-                        <!-- ブックガイド -->
                         <li class="nav-item" role="presentation">
                             <button
                                 class="nav-link"
@@ -61,7 +54,6 @@
                     </ul>
 
                     <div class="tab-content book-tab-content">
-                        <!-- ブック詳細 -->
                         <div
                             class="tab-pane fade show active"
                             id="detail-pane"
@@ -106,7 +98,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ブックチャプター -->
                         <div
                             class="tab-pane fade"
                             id="chapter-pane"
@@ -140,7 +131,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- ブックガイド -->
                         <div
                             class="tab-pane fade"
                             id="guide-pane"

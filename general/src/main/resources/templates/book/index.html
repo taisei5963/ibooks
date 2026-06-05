@@ -2,6 +2,7 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{_common/head::head}"></head>
 <body>
+    <div th:replace="~{_common/topHeader::topHeader('index', ${categories})}"></div>
     <div class="wrapper">
         <aside class="sidebar">
             <div class="sidebar-header" id="sidebarBrand">
