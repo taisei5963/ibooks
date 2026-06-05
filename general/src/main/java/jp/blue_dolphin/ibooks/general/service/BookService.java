@@ -42,10 +42,7 @@ public class BookService {
      */
     @Transactional
     public SearchResult<BookModel> search(BookSearchForm searchForm, Pageable pageable) {
-        return bookRepository.selectBySearchCond(
-                searchForm.getLikeParam("schTitle"),
-                searchForm.getLikeParam("schAuthor"),
-                searchForm.getLikeParam("schPublisher"),
+        return bookRepository.selectBySearchCondForGeneral(
                 searchForm.getLongParam("schCategory"),
                 searchForm.getOrderBy(), searchForm.getSelectOptions(pageable));
     }

@@ -54,6 +54,18 @@ public interface BookRepository {
                                                SelectOptions options);
 
     /**
+     * 引数の検索条件にブック情報を取得する<br>
+     * 一般サイト向け
+     *
+     * @param categoryId カテゴリID
+     * @param orderBy    ソート順
+     * @param options    検索オプション
+     * @return 検索結果
+     */
+    SearchResult<BookModel> selectBySearchCondForGeneral(Long categoryId, String orderBy,
+                                                         SelectOptions options);
+
+    /**
      * 引数の条件でブックCSVを取得する
      *
      * @param title      タイトル

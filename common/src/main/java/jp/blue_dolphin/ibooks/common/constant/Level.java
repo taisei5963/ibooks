@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 難易度
+ * レベル
  */
 @Getter
 @AllArgsConstructor
-public enum Difficulty {
+public enum Level {
     NONE("0", "なし"),
     BEGINNER("1", "初級"),
     INTERMEDIATE("2", "中級"),
@@ -25,13 +25,13 @@ public enum Difficulty {
      * @param value 値
      * @return 難易度
      */
-    public static Difficulty getEnum(String value) {
-        for (Difficulty e : values()) {
+    public static Level getEnum(String value) {
+        for (Level e : values()) {
             if (e.value.equals(value)) {
                 return e;
             }
         }
-        return Difficulty.NONE;
+        return Level.NONE;
     }
 
     /**
@@ -42,9 +42,9 @@ public enum Difficulty {
      */
     public static String getDescription(String name) {
         try {
-            return Difficulty.valueOf(name).getDescription();
+            return Level.valueOf(name).getDescription();
         } catch (IllegalArgumentException | NullPointerException e) {
-            return Difficulty.NONE.getDescription();
+            return Level.NONE.getDescription();
         }
     }
 }

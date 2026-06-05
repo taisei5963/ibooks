@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+    <header th:fragment="topHeader(currentPage, categories)" class="top-header">
+        <div class="header-left">
+            <div th:if="${currentPage == 'detail'}" class="header-back-button">
+                <button type="button" class="btn-back-text" th:onclick="|location.href='@{/book}'|">
+                    <i class="bi bi-arrow-return-left"></i>
+                </button>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="app-bar-title" id="app-bar-brand-responsive">
+                <img th:src="@{/public/img/app_title_dark.png}" alt="ITive">
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="hamburger-menu-button" id="hamburgerMenuButton">
+                <span class="hamburger-icon"></span>
+                <span class="hamburger-icon"></span>
+                <span class="hamburger-icon"></span>
+            </button>
+        </div>
+        <nav class="hamburger-menu-content" id="hamburgerMenuContent">
+            <ul class="hamburger-nav-list">
+                <li><a th:href="@{/book}" class="hamburger-category-header hamburger-nav-item">ホーム</a></li>
+                <li class="hamburger-category-header">カテゴリ</li>
+                <li th:each="category : ${categories}">
+                    <a href="#" class="hamburger-nav-item hamburger-category-item" th:data-category-id="${category.id}" th:text="${'　' + category.name}"></a>
+                </li>
+            </ul>
+        </nav>
+        <div class="overlay" id="menuOverlay"></div>
+
+        <script th:inline="javascript">
+            $(function() {
+                $('#app-bar-brand-responsive').on("click", function() {
+                    ibooks.showLoading();
+                    window.location.href = "/book";
+                });
+
+                const hamburgerButton = $('#hamburgerMenuButton');
+                const hamburgerMenuContent = $('#hamburgerMenuContent');
+                const menuOverlay = $('#menuOverlay');
+
+                function toggleHamburgerMenu() {
+                    hamburgerButton.toggleClass('is-active');
+                    hamburgerMenuContent.toggleClass('is-open');
+                    menuOverlay.toggleClass('is-active');
+                    if (hamburgerMenuContent.hasClass('is-open')) {
+                        $('body').css('overflow', 'hidden');
+                    } else {
+                        $('body').css('overflow', 'auto');
+                    }
+                }
+
+                hamburgerButton.on('click', toggleHamburgerMenu);
+                menuOverlay.on('click', toggleHamburgerMenu);
+
+                $('.hamburger-nav-item').on('click', function(e) {
+                    const $this = $(this);
+                    if ($this.hasClass('hamburger-category-item')) {
+                        e.preventDefault();
+                        const categoryId = $this.data('categoryId');
+                        if (categoryId) {
+                            $('#schCategoryInput').val(categoryId);
+                            ibooks.showLoading();
+                            $('#categorySearchForm').submit();
+                        } else {
+                            window.location.href = '/book';
+                        }
+                    } else {
+                        toggleHamburgerMenu();
+                    }
+                });
+            });
+        </script>
+    </header>
+</body>
+</html>

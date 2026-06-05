@@ -19,9 +19,7 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -107,7 +105,7 @@ class BookControllerTest {
 				.author2("テスト作者２")
 				.translator("テスト翻訳者")
 				.publisher("株式会社テスト")
-				.difficulty("BEGINNER")
+				.level("BEGINNER")
 				.categoryId1(12L)
 				.createdAt(LocalDateTime.now())
 				.updatedAt(LocalDateTime.now())

@@ -7,7 +7,7 @@ import com.github.mygreen.supercsv.annotation.constraint.CsvPattern;
 import com.github.mygreen.supercsv.annotation.constraint.CsvRequire;
 import com.github.mygreen.supercsv.builder.BuildCase;
 import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
-import jp.blue_dolphin.ibooks.common.constant.Difficulty;
+import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.util.Strings;
@@ -81,10 +81,10 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
     @CsvPattern(regex = SystemRegex.CATEGORY_CODE_REGEX, message = "{csv.categoryCode.pattern}", cases = BuildCase.Read)
     private String categoryCode3;
 
-    @CsvColumn(label = "難易度", number = 13)
+    @CsvColumn(label = "レベル", number = 13)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvPattern(regex = SystemRegex.DIFFICULTY_EXTENSION, message = "{csv.error.book.difficulty.regex}", cases = BuildCase.Read)
-    private String difficulty;
+    @CsvPattern(regex = SystemRegex.LEVEL_EXTENSION, message = "{csv.error.book.level.regex}", cases = BuildCase.Read)
+    private String level;
 
     @CsvColumn(label = "登録日時", number = 14)
     private String createdAt;
@@ -148,7 +148,7 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .categoryId1(getCategoryId1())
                     .categoryId2(getCategoryId2())
                     .categoryId3(getCategoryId3())
-                    .difficulty(Difficulty.getEnum(difficulty).toString())
+                    .level(Level.getEnum(level).toString())
                     .build();
         } else if (dataType == CsvDataType.UPDATE && bookModel != null) {
             return bookModel.toBuilder()
@@ -161,7 +161,7 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .categoryId1(getCategoryId1())
                     .categoryId2(getCategoryId2())
                     .categoryId3(getCategoryId3())
-                    .difficulty(Difficulty.getEnum(difficulty).toString())
+                    .level(Level.getEnum(level).toString())
                     .build();
         }
         return null;

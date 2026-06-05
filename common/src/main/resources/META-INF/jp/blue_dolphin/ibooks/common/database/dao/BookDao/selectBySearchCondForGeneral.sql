@@ -19,22 +19,6 @@ FROM
 WHERE
   deleted_at IS NULL
 
-  /*%if title != null */
-  AND title LIKE /* title */'%title%'
-  /*%end*/
-
-  /*%if author != null */
-  AND (
-    author1 LIKE /* author */'%author%'
-    OR
-    author2 LIKE /* author */'%author%'
-  )
-  /*%end*/
-
-  /*%if publisher != null */
-  AND publisher LIKE /* publisher */'%publisher%'
-  /*%end*/
-
   /*%if categoryId != null */
   AND (
     category_id_1 = /* categoryId */1

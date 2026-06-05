@@ -1,15 +1,18 @@
 package jp.blue_dolphin.ibooks.general.controller;
 
+import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
 import jp.blue_dolphin.ibooks.common.dto.SearchResult;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
+import jp.blue_dolphin.ibooks.common.model.BookGuideModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
-import jp.blue_dolphin.ibooks.common.model.ReviewModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.general.request.BookSearchForm;
+import jp.blue_dolphin.ibooks.general.service.BookChapterService;
+import jp.blue_dolphin.ibooks.general.service.BookGuideService;
 import jp.blue_dolphin.ibooks.general.service.BookService;
 import jp.blue_dolphin.ibooks.general.service.CategoryService;
-import jp.blue_dolphin.ibooks.general.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -18,10 +21,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * ブックコントローラクラス
@@ -34,8 +42,10 @@ public class BookController {
     private BookService bookService;
     /** カテゴリサービス */
     private CategoryService categoryService;
-    /** レビューサービス */
-    private ReviewService reviewService;
+    /** ブックチャプターサービス */
+    private BookChapterService bookChapterService;
+    /** ブックガイドサービス */
+    private BookGuideService bookGuideService;
     /** メッセージサービス */
     private MessageService messageService;
 
@@ -62,11 +72,38 @@ public class BookController {
         }
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
-        Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
+
+        List<Level> orderedLevels =
+                Arrays.asList(Level.BEGINNER, Level.INTERMEDIATE, Level.ADVANCED, Level.NONE);
+        Map<String, Integer> levelOrderMap = IntStream.range(0, orderedLevels.size())
+                .boxed()
+                .collect(Collectors.toMap(
+                        i -> orderedLevels.get(i).name(),
+                        i -> i,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
+                ));
+
+        Map<String, List<BookModel>> booksGroupedByLevel = result.getList().stream()
+                .collect(Collectors.groupingBy(
+                        book -> book.getLevel() != null ? book.getLevel() : Level.NONE.name()
+                ));
+
+        Map<String, List<BookModel>> orderedBooksGroupedByLevel =
+                booksGroupedByLevel.entrySet().stream()
+                        .sorted(Comparator.comparing(
+                                entry -> levelOrderMap.getOrDefault(entry.getKey(),
+                                        Integer.MAX_VALUE)))
+                        .collect(Collectors.toMap(
+                                Map.Entry::getKey,
+                                Map.Entry::getValue,
+                                (oldValue, newValue) -> oldValue,
+                                LinkedHashMap::new
+                        ));
+
         model.addAttribute("searchForm", searchForm);
-        model.addAttribute("books", result.getList());
+        model.addAttribute("booksGroupedByLevel", orderedBooksGroupedByLevel);
         model.addAttribute("categories", categories);
-        model.addAttribute("categoryMap", categoryMap);
         return "book/index";
     }
 
@@ -80,7 +117,8 @@ public class BookController {
      */
     @RequestMapping("/detail/{bookId}")
     public String detail(@PathVariable Long bookId, Model model,
-                            RedirectAttributes redirectAttributes) {
+                         RedirectAttributes redirectAttributes) {
+        // INFO: ブック情報取得
         Optional<BookModel> bookOpt = bookService.selectById(bookId);
         if (bookOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("errors", Collections.singletonList(
@@ -88,10 +126,18 @@ public class BookController {
             return "redirect:/book/search";
         }
 
+        // INFO: ブックチャプター情報取得
+        List<BookChapterModel> bookChapters = bookChapterService.selectByBookId(bookId);
+
+        // INFO: ブックガイド情報取得
+        Optional<BookGuideModel> bookGuideOpt = bookGuideService.selectByBookId(bookId);
+
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
+        model.addAttribute("bookChapters", bookChapters);
+        model.addAttribute("bookGuide", bookGuideOpt);
         return "book/detail";
     }
 }
