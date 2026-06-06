@@ -105,7 +105,8 @@
 
                             <div class="tab-card book-chapter-wrapper">
                                 <div th:unless="${#lists.isEmpty(bookChapters)}">
-                                    <div class="chapter-columns-container">
+                                    <!-- PC用: 10章ごとの分割表示 -->
+                                    <div class="chapter-columns-container u-d-none-sp">
                                         <th:block th:with="chaptersPerColumn=10, 
                                                             numOfColumns=${(bookChapters.size() + 9) / 10}">
                                             <div th:each="i : ${#numbers.sequence(0, numOfColumns - 1)}" class="chapter-column">
@@ -124,6 +125,17 @@
                                                 </table>
                                             </div>
                                         </th:block>
+                                    </div>
+                                    <!-- SP用: 分割なしの全件表示 -->
+                                    <div class="u-d-none-pc">
+                                        <table class="table-book-chapter">
+                                            <tbody>
+                                                <tr th:each="chapter : ${bookChapters}">
+                                                    <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                    <td class="u-text-start chapter-title">[[${chapter.title}]]</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
