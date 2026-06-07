@@ -131,6 +131,7 @@ public class BookController {
 
         // INFO: ブックガイド情報取得
         Optional<BookGuideModel> bookGuideOpt = bookGuideService.selectByBookId(bookId);
+        List<String> titleAndPublishers = bookGuideService.getNextRecommendedTitleAndPublisher(bookId);
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
@@ -138,6 +139,7 @@ public class BookController {
         model.addAttribute("categoryMap", categoryMap);
         model.addAttribute("bookChapters", bookChapters);
         model.addAttribute("bookGuide", bookGuideOpt);
+        model.addAttribute("titleAndPublishers", titleAndPublishers);
         return "book/detail";
     }
 }

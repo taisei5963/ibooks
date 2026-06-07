@@ -83,7 +83,7 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
 
     @CsvColumn(label = "レベル", number = 13)
     @CsvRequire(considerBlank = true, cases = BuildCase.Read)
-    @CsvPattern(regex = SystemRegex.LEVEL_EXTENSION, message = "{csv.error.book.level.regex}", cases = BuildCase.Read)
+    @CsvPattern(regex = SystemRegex.LEVEL_REGEX, message = "{csv.error.book.level.regex}", cases = BuildCase.Read)
     private String level;
 
     @CsvColumn(label = "登録日時", number = 14)

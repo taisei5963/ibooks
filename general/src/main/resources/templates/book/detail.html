@@ -12,10 +12,18 @@
             <div class="sidebar-header" id="sidebarBrand">
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
+            <nav class="sidebar-nav">
+                <a th:href="@{/book}" class="home-header">ホーム</a>
+            </nav>
         </aside>
 
         <div class="main-content">
-            <main class="container book-detail-page">
+            <div class="u-text-start">
+                <a href="/book" class="btn-back-text-pc">
+                    <i class="bi bi-arrow-return-left u-me16 u-fs-1"></i>戻る
+                </a>
+            </div>
+            <main class="book-detail-page">
                 <div class="book-detail-tabs">
                     <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
                         <li class="nav-item" role="presentation">

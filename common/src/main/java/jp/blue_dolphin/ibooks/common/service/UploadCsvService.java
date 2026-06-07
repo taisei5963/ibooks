@@ -476,7 +476,7 @@ public class UploadCsvService {
      * @return フォーマット後メッセージ
      */
     private String formatCsvErrorMessage(String message) {
-        Pattern pattern = Pattern.compile(SystemRegex.SUPER_CSV_ERROR_EXTENSION);
+        Pattern pattern = Pattern.compile(SystemRegex.SUPER_CSV_ERROR_REGEX);
         Matcher matcher = pattern.matcher(message);
 
         if (matcher.find()) {
