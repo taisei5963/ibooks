@@ -815,8 +815,10 @@ body * {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
+  grid-auto-rows: 1fr;
 }
 .book-guide-item {
+  width: 100%;
   background-color: var(--color-white);
   border-radius: 12px;
   padding: 20px;
@@ -864,6 +866,12 @@ body * {
 }
 .guide-item-4 {
   background-color: #ffebee;
+}
+.next-recommended-content {
+  white-space: normal;
+}
+.next-recommended-header {
+  font-weight: 600;
 }
 
 /* ========================================================

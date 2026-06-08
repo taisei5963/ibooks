@@ -172,7 +172,22 @@
                                     </div>
                                     <div class="book-guide-item guide-item-4">
                                         <h4 class="book-guide-item-title">次に読むべき書籍</h4>
-                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().nextRecommended}"></div>
+                                        <div class="book-guide-item-content next-recommended-content">
+                                            <div th:each="book, status : ${nextRecommendedBooks}" class="u-mb16">
+                                                <div th:text="'おすすめその' + ${status.count}" class="next-recommended-header">おすすめその１</div>
+                                                <div th:if="${book.hasImg}">
+                                                    <img th:src="${book.imgUrl}" th:alt="${book.title}" class="book-cover-img">
+                                                    <div class="book-info">
+                                                        <p>　タイトル：<span th:text="${book.title}">書籍名</span></p>
+                                                        <p>　出版社名：<span th:text="${book.publisher}">出版社名</span></p>
+                                                    </div>
+                                                </div>
+                                                <div th:unless="${book.hasImg}" class="book-card-text">
+                                                    <p class="book-detail" th:text="'　タイトル：' + ${book.title}">　タイトル：書籍名</p>
+                                                    <p class="book-detail" th:text="'　出版社名：' + ${book.publisher}">　出版社名：出版社名</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div th:unless="${bookGuide.isPresent()}" class="alert alert-info">

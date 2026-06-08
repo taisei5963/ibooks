@@ -3,6 +3,7 @@ package jp.blue_dolphin.ibooks.general.service;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.database.repository.BookGuideRepository;
 import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
+import jp.blue_dolphin.ibooks.common.dto.NextRecommendedBookDto;
 import jp.blue_dolphin.ibooks.common.model.BookGuideModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.util.Strings;
@@ -38,15 +39,15 @@ public class BookGuideService {
     }
 
     /**
-     * 引数のブックIDに紐づく次に読むべき書籍のタイトルと出版社のリストを返却する
+     * 次に読むべき書籍情報のリストを返却する
      *
      * @param bookId ブックID
-     * @return 次に読むべき書籍のタイトルと出版社のリスト
+     * @return 次に読むべき書籍情報のリスト
      */
-    public List<String> getNextRecommendedTitleAndPublisher(Long bookId) {
-        List<String> titleAndPublishers = new ArrayList<>();
+    public List<NextRecommendedBookDto> getNextRecommendedBooks(Long bookId) {
+        List<NextRecommendedBookDto> resultList = new ArrayList<>();
 
-        Optional<BookGuideModel> bookGuideOpt = selectByBookId(bookId);
+        Optional<BookGuideModel> bookGuideOpt = bookGuideRepository.selectByBookId(bookId);
         if (bookGuideOpt.isEmpty()) {
             return Collections.emptyList();
         }
@@ -54,27 +55,36 @@ public class BookGuideService {
         String nextRecommended = bookGuideOpt.get().getNextRecommended();
         String[] nextRecommends = nextRecommended.split("[\\n,・]+");
 
-        for (String recommend : nextRecommends) {
-            String target = recommend.trim();
+        Pattern pattern = Pattern.compile(SystemRegex.NEXT_RECOMMENDED_REGEX);
 
+        for (String recommended : nextRecommends) {
+            String target = recommended.trim();
             if (Strings.isEmpty(target)) {
                 continue;
             }
-            Pattern pattern = Pattern.compile(SystemRegex.NEXT_RECOMMENDED_REGEX);
+
+            NextRecommendedBookDto dto = new NextRecommendedBookDto();
             Matcher matcher = pattern.matcher(target);
             if (matcher.find()) {
                 String title = matcher.group(1).trim();
                 String publisher = matcher.group(2).trim();
 
-                Optional<BookModel> bookOpt = bookRepository.selectByTitleAndPublisher(title, publisher);
-                if (bookOpt.isEmpty()) {
-                    return Collections.emptyList();
+                dto.setTitle(title);
+                dto.setPublisher(publisher);
+
+                Optional<BookModel> bookOpt =
+                        bookRepository.selectByTitleAndPublisher(title, publisher);
+                if (bookOpt.isPresent()) {
+                    dto.setHasImg(true);
+                    dto.setImgUrl(bookOpt.get().getPicFileUrl());
                 } else {
-                    titleAndPublishers.add(title);
-                    titleAndPublishers.add(publisher);
+                    dto.setHasImg(false);
                 }
+                resultList.add(dto);
+            } else {
+                // INFO: 本来は到達しない
             }
         }
-        return titleAndPublishers;
+        return resultList;
     }
 }
