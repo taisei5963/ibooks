@@ -550,54 +550,6 @@ body * {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.system-error-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100dvh;
-  width: 100%;
-}
-.system-error-wrapper img {
-  max-width: 200px;
-  height: auto;
-  margin-bottom: 20px;
-}
-.system-error-wrapper ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font-weight: bold;
-  color: var(--color-secondary-text);
-}
-.error-ds {
-  background-color: var(--color-base);
-  text-align: center;
-}
-.error-ds h1 {
-  font-size: 4rem;
-  margin-bottom: 20px;
-}
-.error-ds h1 span {
-  display: block;
-  font-size: 1.6rem;
-}
-.error-ds a {
-  display: inline-block;
-  margin-top: 24px;
-  background: #374246;
-  color: #fff;
-  text-decoration: none;
-  padding: 6px 20px 4px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.error-ds a:hover {
-  background: #fff;
-  color: #374246;
-}
-
 /* ========================================================
   ローディング (Redesigned)
 ======================================================== */
@@ -1243,14 +1195,19 @@ body * {
   }
 }
 
+/* ========================================================
+  エラーメッセージ表示
+======================================================== */
 .error-message-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 80vh;
+  height: 80dvh;
   width: 100%;
+  padding-right: 280px;
+  box-sizing: border-box;
 }
 .error-message-wrapper img {
   max-width: 200px;
@@ -1263,4 +1220,60 @@ body * {
   margin: 0;
   font-weight: bold;
   color: var(--color-secondary-text);
+}
+@media screen and (min-width: 1280px) {
+  .error-message-wrapper {
+    padding-left: 280px;
+  }
+}
+
+/* ========================================================
+  システムエラー
+======================================================== */
+.system-error-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100dvh;
+  width: 100%;
+}
+.system-error-wrapper img {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+.system-error-wrapper ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-secondary-text);
+}
+.error-ds {
+  background-color: var(--color-base);
+  text-align: center;
+}
+.error-ds h1 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+.error-ds h1 span {
+  display: block;
+  font-size: 1.6rem;
+}
+.error-ds a {
+  display: inline-block;
+  margin-top: 24px;
+  background: #374246;
+  color: #fff;
+  text-decoration: none;
+  padding: 6px 20px 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.error-ds a:hover {
+  background: #fff;
+  color: #374246;
 }

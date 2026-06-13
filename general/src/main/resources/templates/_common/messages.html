@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <!-- 成功メッセージ用フラグメント削除 -->
-
     <div th:fragment="errors" th:if="!${#lists.isEmpty(errors)}" class="error-message-wrapper" id="m_message_origin_error">
         <img th:src="@{/public/img/not_result.png}" alt="エラー画像">
         <ul th:each="error : ${errors}">
