@@ -29,9 +29,7 @@
 
         <div class="main-content">
             <main class="container">
-                <div class="message-area">
-                    <div th:replace="~{_common/messages::errors}"></div>
-                </div>
+                <div th:replace="~{_common/messages::errors}"></div>
 
                 <div th:unless="${#lists.isEmpty(booksGroupedByLevel)}" class="book-list-section">
                     <th:block th:each="level : ${booksGroupedByLevel}">
