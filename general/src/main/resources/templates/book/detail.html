@@ -12,10 +12,18 @@
             <div class="sidebar-header" id="sidebarBrand">
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
+            <nav class="sidebar-nav">
+                <a th:href="@{/book}" class="home-header">ホーム</a>
+            </nav>
         </aside>
 
         <div class="main-content">
-            <main class="container book-detail-page">
+            <div class="u-text-start">
+                <a href="/book" class="btn-back-text-pc">
+                    <i class="bi bi-arrow-return-left u-me16 u-fs-1"></i>戻る
+                </a>
+            </div>
+            <main class="book-detail-page">
                 <div class="book-detail-tabs">
                     <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -105,7 +113,8 @@
 
                             <div class="tab-card book-chapter-wrapper">
                                 <div th:unless="${#lists.isEmpty(bookChapters)}">
-                                    <div class="chapter-columns-container">
+                                    <!-- PC用: 10章ごとの分割表示 -->
+                                    <div class="chapter-columns-container u-d-none-sp">
                                         <th:block th:with="chaptersPerColumn=10, 
                                                             numOfColumns=${(bookChapters.size() + 9) / 10}">
                                             <div th:each="i : ${#numbers.sequence(0, numOfColumns - 1)}" class="chapter-column">
@@ -124,6 +133,17 @@
                                                 </table>
                                             </div>
                                         </th:block>
+                                    </div>
+                                    <!-- SP用: 分割なしの全件表示 -->
+                                    <div class="u-d-none-pc">
+                                        <table class="table-book-chapter">
+                                            <tbody>
+                                                <tr th:each="chapter : ${bookChapters}">
+                                                    <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                    <td class="u-text-start chapter-title">[[${chapter.title}]]</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
@@ -152,7 +172,22 @@
                                     </div>
                                     <div class="book-guide-item guide-item-4">
                                         <h4 class="book-guide-item-title">次に読むべき書籍</h4>
-                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().nextRecommended}"></div>
+                                        <div class="book-guide-item-content next-recommended-content">
+                                            <div th:each="book, status : ${nextRecommendedBooks}" class="u-mb16">
+                                                <div th:text="'おすすめその' + ${status.count}" class="next-recommended-header">おすすめその１</div>
+                                                <div th:if="${book.hasImg}">
+                                                    <img th:src="${book.imgUrl}" th:alt="${book.title}" class="book-cover-img">
+                                                    <div class="book-info">
+                                                        <p>　タイトル：<span th:text="${book.title}">書籍名</span></p>
+                                                        <p>　出版社名：<span th:text="${book.publisher}">出版社名</span></p>
+                                                    </div>
+                                                </div>
+                                                <div th:unless="${book.hasImg}" class="book-card-text">
+                                                    <p class="book-detail" th:text="'　タイトル：' + ${book.title}">　タイトル：書籍名</p>
+                                                    <p class="book-detail" th:text="'　出版社名：' + ${book.publisher}">　出版社名：出版社名</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div th:unless="${bookGuide.isPresent()}" class="alert alert-info">

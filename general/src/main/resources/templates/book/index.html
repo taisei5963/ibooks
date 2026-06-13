@@ -9,6 +9,7 @@
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
             <nav class="sidebar-nav">
+                <a th:href="@{/book}" class="home-header">ホーム</a>
                 <div class="accordion">
                     <button class="category-accordion-header" id="categoryAccordionHeaderBtn">
                         カテゴリ
@@ -29,7 +30,6 @@
         <div class="main-content">
             <main class="container">
                 <div class="message-area">
-                    <div th:replace="~{_common/messages::messages}"></div>
                     <div th:replace="~{_common/messages::errors}"></div>
                 </div>
 
