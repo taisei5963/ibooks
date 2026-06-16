@@ -1459,7 +1459,12 @@ a:hover {
   align-items: center;
   text-decoration: none !important;
 }
-.home-header:hover {
+.home-header:hover,
+.home-header .mdi:hover,
+.book-accordion-header:hover,
+.book-accordion-header .mdi:hover,
+.category-accordion-header:hover,
+.category-accordion-header .mdi:hover {
   color: var(--color-white);
   font-weight: bold;
 }

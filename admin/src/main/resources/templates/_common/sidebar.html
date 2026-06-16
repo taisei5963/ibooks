@@ -63,7 +63,7 @@
           const currentPath = window.location.pathname;
           
           // 全項目から一旦クラスを削除
-          $('.sidebar-nav a').removeClass('is-active');
+          $('.sidebar-nav a, .book-accordion-header, .category-accordion-header').removeClass('is-active');
           
           $('.sidebar-nav a').each(function() {
             if ($(this).attr('href') === currentPath) {
@@ -71,11 +71,11 @@
               // 親のアコーディオンを開く処理
               $(this).closest('.book-accordion-content').each(function() {
                 $(this).css('max-height', this.scrollHeight + 'px');
-                $(this).prev('.book-accordion-header').addClass('is-open');
+                $(this).prev('.book-accordion-header').addClass('is-open').addClass('is-active');
               });
               $(this).closest('.category-accordion-content').each(function() {
                 $(this).css('max-height', this.scrollHeight + 'px');
-                $(this).prev('.category-accordion-header').addClass('is-open');
+                $(this).prev('.category-accordion-header').addClass('is-open').addClass('is-active');
               });
             }
           });
