@@ -44,14 +44,13 @@ public class LoginController {
     /**
      * ログイン画面
      *
-     * @param model テンプレートモデル
      * @return テンプレートパス
      */
     @UnLogin
     @GetMapping(value = {"", "/"})
-    public String index(Model model) {
+    public String index() {
         if (adminDto.isLogin()) {
-            return "redirect:/book";
+            return "redirect:/home";
         }
         return "login/login";
     }
@@ -68,10 +67,9 @@ public class LoginController {
     @UnLogin
     @PostMapping("login")
     public String login(LoginForm loginForm, Model model, HttpSession session,
-                        HttpServletRequest req)
-            throws InterruptedException {
+                        HttpServletRequest req) throws InterruptedException {
         if (adminDto.isLogin()) {
-            return "redirect:/book";
+            return "redirect:/home";
         }
         Optional<AdminModel> opt;
         try {
@@ -95,7 +93,7 @@ public class LoginController {
             adminDto.setInaccessibleActionPaths(
                     actionRoleService.getInaccessibleActionPaths(adminDto.getPrivilegeId()));
         }
-        return "redirect:/book";
+        return "redirect:/home";
     }
 
     /**

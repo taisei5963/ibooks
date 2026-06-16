@@ -6,36 +6,13 @@
   <body>
     <div th:fragment="menu" th:remove="tag">
       <header class="app-bar">
-        <div class="app-bar-title" id="app-bar-brand">
-          <img th:src="@{/public/img/app_title_dark.png}" alt="ibooks">
-        </div>
-
-        <nav class="header-menu">
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle">ブック管理</a>
-            <div class="dropdown-menu">
-              <a th:href="@{/book}" class="dropdown-item">ブック一覧</a>
-              <a th:href="@{/bookUpload}" class="dropdown-item">ブックCSVアップロード</a>
-              <a th:href="@{/bookChapterUpload}" class="dropdown-item">ブックチャプターCSVアップロード</a>
-              <a th:href="@{/bookGuideUpload}" class="dropdown-item">ブックガイドCSVアップロード</a>
-            </div>
-          </div>
-          <div class="dropdown">
-            <a href="#" class="dropdown-toggle">カテゴリ管理</a>
-            <div class="dropdown-menu">
-              <!-- <a th:href="@{/category}" class="dropdown-item">カテゴリ一覧</a> -->
-              <a th:href="@{/categoryUpload}" class="dropdown-item">カテゴリCSVアップロード</a>
-            </div>
-          </div>
-        </nav>
-
         <div class="header-right">
           <div class="dropdown user-dropdown">
             <a href="#" class="dropdown-toggle" id="userDropdownToggle">
               <i class="fas fa-user-circle fa-2x"></i>
             </a>
             <div class="dropdown-menu user-dropdown-menu">
-              <p class="dropdown-item loginUserName">[[${adminDto?.name}]] 様</p>
+              <p class="dropdown-item loginUserName">[[${adminDto?.name}]]</p>
               <a th:href="@{/changePassword}" class="dropdown-item">パスワード変更</a>
               <form th:action="@{/login/logout}" method="post" class="dropdown-item-form">
                 <button type="submit" class="dropdown-item mobile-logout-btn">ログアウト</button>

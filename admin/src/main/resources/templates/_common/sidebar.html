@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div th:fragment="sidebar" th:remove="tag">
+      <aside class="sidebar">
+        <div class="sidebar-header" id="sidebarBrand">
+          <img
+            th:src="@{/public/img/app_title_dark.png}"
+            alt="ITive"
+            class="sidebar-logo"
+          />
+        </div>
+        <nav class="sidebar-nav">
+          <a th:href="@{/home}" class="home-header">
+            <span class="mdi mdi-view-dashboard-outline"></span>ホーム
+          </a>
+          <div class="accordion">
+            <button
+              class="book-accordion-header"
+              id="bookAccordionHeaderBtn"
+            >
+              <span class="mdi mdi-book-multiple-outline"></span>ブック管理
+            </button>
+            <div class="book-accordion-content">
+              <ul class="book-list">
+                <li>
+                  <a th:href="@{/book}" class="book-item">ブック一覧</a>
+                </li>
+                <li>
+                  <a th:href="@{/bookUpload}" class="book-item">ブックCSVアップロード</a>
+                </li>
+                <li>
+                  <a th:href="@{/bookChapterUpload}" class="book-item">ブックチャプターCSVアップロード</a>
+                </li>
+                <li>
+                  <a th:href="@{/bookGuideUpload}" class="book-item">ブックガイドCSVアップロード</a>
+                </li>
+              </ul>
+            </div>
+            <button
+              class="category-accordion-header"
+              id="categoryAccordionHeaderBtn"
+            >
+              <span class="mdi mdi-shape-plus-outline"></span>カテゴリ管理
+            </button>
+            <div class="category-accordion-content">
+              <ul class="category-list">
+                <li>
+                  <a th:href="@{/categoryUpload}" class="category-item">カテゴリCSVアップロード</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </aside>
+
+      <script th:inline="javascript">
+        $(function () {
+          // 現在のパスに基づいてアクティブ状態を判定・付与
+          const currentPath = window.location.pathname;
+          
+          // 全項目から一旦クラスを削除
+          $('.sidebar-nav a').removeClass('is-active');
+          
+          $('.sidebar-nav a').each(function() {
+            if ($(this).attr('href') === currentPath) {
+              $(this).addClass('is-active');
+              // 親のアコーディオンを開く処理
+              $(this).closest('.book-accordion-content').each(function() {
+                $(this).css('max-height', this.scrollHeight + 'px');
+                $(this).prev('.book-accordion-header').addClass('is-open');
+              });
+              $(this).closest('.category-accordion-content').each(function() {
+                $(this).css('max-height', this.scrollHeight + 'px');
+                $(this).prev('.category-accordion-header').addClass('is-open');
+              });
+            }
+          });
+
+          const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
+          const categoryAccordionContent = document.querySelector('.category-accordion-content');
+
+          categoryAccordionHeader.addEventListener('click', () => {
+            if (categoryAccordionContent.style.maxHeight === '0px' || categoryAccordionContent.style.maxHeight === '') {
+              categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
+              categoryAccordionHeader.classList.add('is-open');
+            } else {
+              categoryAccordionContent.style.maxHeight = '0px';
+              categoryAccordionHeader.classList.remove('is-open');
+            }
+          });
+
+          const bookAccordionHeader = document.getElementById('bookAccordionHeaderBtn');
+          const bookAccordionContent = document.querySelector('.book-accordion-content');
+
+          bookAccordionHeader.addEventListener('click', () => {
+            if (bookAccordionContent.style.maxHeight === '0px' || bookAccordionContent.style.maxHeight === '') {
+              bookAccordionContent.style.maxHeight = bookAccordionContent.scrollHeight + 'px';
+              bookAccordionHeader.classList.add('is-open');
+            } else {
+              bookAccordionContent.style.maxHeight = '0px';
+              bookAccordionHeader.classList.remove('is-open');
+            }
+          });
+        });
+      </script>
+    </div>
+  </body>
+</html>

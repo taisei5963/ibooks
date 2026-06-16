@@ -2,8 +2,10 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブック一覧'">
 <head th:replace="~{_common/head::head}"></head>
 <body class="content-body">
+    <div th:replace="~{_common/sidebar::sidebar}"></div>
     <div th:replace="~{_common/header::menu}"></div>
 
+    <!--/*
     <main class="container u-py24">
         <h1 class="u-mb24 u-ms24 u-fs-2">ブック一覧</h1>
 
@@ -69,6 +71,7 @@
             </div>
         </div>
     </main>
+    */-->
 
 <div th:replace="~{_common/script::csrfHeader}"></div>
 <!-- <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div> -->
