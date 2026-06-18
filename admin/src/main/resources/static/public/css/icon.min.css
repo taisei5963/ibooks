@@ -6,3 +6,6 @@
 
 /* Material Design Icon */
 @import url("https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/7.4.47/css/materialdesignicons.min.css");
+
+/** Remix Icon */
+@import url("https://cdn.jsdelivr.net/npm/remixicon@4.9.1/fonts/remixicon.min.css");

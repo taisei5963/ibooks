@@ -55,16 +55,30 @@
             </div>
           </div>
         </nav>
+        <div class="sidebar-footer">
+          <div class="dropdown user-dropdown">
+            <a href="#" class="dropdown-toggle" id="userDropdownToggle">
+              <i class="fas fa-user-circle fa-2x"></i>
+              <span class="loginUserName">[[${adminDto?.name}]]</span>
+            </a>
+            <div class="dropdown-menu user-dropdown-menu">
+              <a th:href="@{/changePassword}" class="dropdown-item">パスワード変更</a>
+              <form th:action="@{/login/logout}" method="post" class="dropdown-item-form">
+                <a href="#" class="dropdown-item" 
+                onclick="this.closest('form').submit(); return false;">
+                ログアウト
+              </a>
+              </form>
+            </div>
+          </div>
+          
+        </div>
       </aside>
 
       <script th:inline="javascript">
         $(function () {
-          // 現在のパスに基づいてアクティブ状態を判定・付与
           const currentPath = window.location.pathname;
-          
-          // 全項目から一旦クラスを削除
           $('.sidebar-nav a, .book-accordion-header, .category-accordion-header').removeClass('is-active');
-          
           $('.sidebar-nav a').each(function() {
             if ($(this).attr('href') === currentPath) {
               $(this).addClass('is-active');
@@ -82,7 +96,6 @@
 
           const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
           const categoryAccordionContent = document.querySelector('.category-accordion-content');
-
           categoryAccordionHeader.addEventListener('click', () => {
             if (categoryAccordionContent.style.maxHeight === '0px' || categoryAccordionContent.style.maxHeight === '') {
               categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
@@ -95,7 +108,6 @@
 
           const bookAccordionHeader = document.getElementById('bookAccordionHeaderBtn');
           const bookAccordionContent = document.querySelector('.book-accordion-content');
-
           bookAccordionHeader.addEventListener('click', () => {
             if (bookAccordionContent.style.maxHeight === '0px' || bookAccordionContent.style.maxHeight === '') {
               bookAccordionContent.style.maxHeight = bookAccordionContent.scrollHeight + 'px';

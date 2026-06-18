@@ -28,9 +28,9 @@ body * {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-.content-body {
+/* .content-body {
   padding-top: 64px;
-}
+} */
 
 /* ========================================
   ドロップダウンメニュー
@@ -58,13 +58,17 @@ body * {
   border-radius: 4px;
 }
 .dropdown-menu {
-  display: none;
+  display: block; /* display: none; の代わりにblockで確保 */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
   position: absolute;
   background-color: #f9f9f9;
   min-width: 150px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   border-radius: 4px;
+  transform: translateY(10px); /* 浮遊感のための初期位置 */
 }
 .dropdown-menu a {
   color: var(--color-primary) !important;
@@ -75,9 +79,12 @@ body * {
 }
 .dropdown-menu a:hover {
   background-color: #f1f1f1;
+  text-decoration: none;
 }
 .dropdown:hover .dropdown-menu {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 /* ========================================
@@ -584,7 +591,7 @@ input[type="submit"]:disabled:hover {
   height: 10px;
   width: 0px;
   background-color: #28b0ff;
-  transition: width 1s ease-in-out; /* Add transition for smooth animation */
+  transition: width 1s ease-in-out;
 }
 
 /* ========================================================
@@ -713,49 +720,6 @@ input[type="submit"]:disabled:hover {
 .upload-error-area {
   margin-top: 24px;
 }
-
-/* ========================================================
-*  メニューバー
-======================================================== */
-.app-bar {
-  display: flex;
-  align-items: center;
-  background-color: var(--color-white);
-  padding: 0 10px;
-  height: 60px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  top: 0;
-  left: 280px;
-  width: calc(100% - 280px);
-  z-index: 1000;
-}
-.app-bar-title {
-  font-weight: 700;
-  font-size: 2.2rem;
-  margin-left: 20px;
-  cursor: pointer;
-}
-.header-menu {
-  display: flex;
-  margin-left: 40px;
-}
-.header-menu a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.4rem;
-  transition: opacity 0.2s;
-}
-.header-menu a:hover {
-  opacity: 0.7;
-  text-decoration: none;
-}
-.header-right {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
 .loginUserName {
   margin: 0;
   font-size: 1.5rem;
@@ -791,13 +755,12 @@ input[type="submit"]:disabled:hover {
 .header-right .dropdown-toggle {
   padding: 0 5px;
 }
-
 .user-dropdown-menu {
   right: 0;
   left: auto;
   min-width: 180px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
 }
-
 .user-dropdown-menu .loginUserName {
   color: #333;
   padding: 12px 16px;
@@ -808,24 +771,70 @@ input[type="submit"]:disabled:hover {
   font-size: 1.4rem;
   font-weight: bold;
 }
-
 .user-dropdown-menu .dropdown-item-form {
   padding: 0;
 }
 
-.user-dropdown-menu .mobile-logout-btn {
-  width: 100%;
-  border-radius: 0;
-  background-color: #f1f1f1;
-  border: none;
-  color: black;
-  text-align: left;
-  padding: 12px 16px;
-  font-size: 1.4rem;
+/* ========================================
+  サイドバーフッターのユーザーメニュー ドロップダウン
+======================================== */
+.sidebar-footer {
+  text-align: center;
+  border-top: 1px solid var(--color-accordion-border);
+  margin-top: auto;
+  padding: 10px 0;
 }
-.user-dropdown-menu .mobile-logout-btn:hover {
-  background-color: #e0e0e0;
-  color: black;
+.sidebar-footer .user-dropdown {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.sidebar-footer .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: var(--color-sidebar-text);
+  padding: 10px 0;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.sidebar-footer .dropdown-toggle:hover {
+  text-decoration: none;
+}
+.sidebar-footer .dropdown-toggle i {
+  margin-right: 8px;
+  color: var(--color-sidebar-text);
+}
+.sidebar-footer .user-dropdown-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  background-color: var(--color-white);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  min-width: 200px;
+}
+.sidebar-footer .user-dropdown-menu .loginUserName {
+  color: var(--color-text);
+  font-weight: bold;
+}
+.sidebar-footer .user-dropdown-menu a.dropdown-item {
+  color: var(--color-primary) !important;
+  text-align: center;
+}
+.sidebar-footer .user-dropdown-menu a.dropdown-item:hover {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+.sidebar-footer .dropdown-toggle i {
+  margin-right: 1rem;
+}
+.sidebar-footer .dropdown:hover .user-dropdown-menu {
+  transform: translateX(-50%) translateY(0);
 }
 
 /* ========================================================
@@ -1330,6 +1339,8 @@ a:hover {
   height: 100%;
   overflow-y: auto;
   z-index: 999;
+  display: flex;
+  flex-direction: column;
 }
 .sidebar-header {
   text-align: center;
