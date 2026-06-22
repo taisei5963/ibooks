@@ -5,18 +5,6 @@
   </head>
   <body>
     <div th:fragment="menu" th:remove="tag">
-      <header class="app-bar">
-        <div class="header-left">
-          <h1 id="app-title"></h1>
-        </div>
-      </header>
-
-      <script th:inline="javascript">
-        $(function() {
-          var title = $(document).attr('title');
-          $('#app-title').text(title);
-        });
-      </script>
     </div>
   </body>
 </html>

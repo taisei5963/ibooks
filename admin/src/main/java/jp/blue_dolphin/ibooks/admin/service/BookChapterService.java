@@ -4,6 +4,7 @@ import jp.blue_dolphin.ibooks.common.csv.BookChapterCsv;
 import jp.blue_dolphin.ibooks.common.database.repository.BookChapterRepository;
 import jp.blue_dolphin.ibooks.common.dto.CsvDto;
 import jp.blue_dolphin.ibooks.common.exception.UploadException;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
 import lombok.AllArgsConstructor;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.nio.file.Path;
-import java.util.Map;
+import java.util.List;
 
 /**
  * ブックチャプターサービス
@@ -48,5 +48,15 @@ public class BookChapterService {
             UploadCsvService.sendEmitterProgressResponse(emitter, csvDto.getRowCount(),
                     csvDto.getImportCount());
         }
+    }
+
+    /**
+     * 引数のブックIDに紐づくブックチャプターモデルリストを返却する
+     *
+     * @param bookId ブックID
+     * @return ブックチャプターモデルリスト
+     */
+    public List<BookChapterModel> selectByBookId(long bookId) {
+        return bookChapterRepository.selectByBookId(bookId);
     }
 }

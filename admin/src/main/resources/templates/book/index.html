@@ -3,75 +3,123 @@
 <head th:replace="~{_common/head::head}"></head>
 <body class="content-body">
     <div th:replace="~{_common/sidebar::sidebar}"></div>
-    <div th:replace="~{_common/header::menu}"></div>
 
-    <!--/*
-    <main class="container u-py24">
-        <h1 class="u-mb24 u-ms24 u-fs-2">ブック一覧</h1>
-
-        <div class="search-cond u-mb16">
-            <div th:replace="~{_common/messages::messages}"></div>
-            <div th:replace="~{_common/messages::errors}"></div>
-        </div>
-
-        <section class="u-mb32">
-            <form th:action="@{/book/search}" method="post" class="search-card">
-                <div class="search-grid">
-                    <div class="search-field">
-                        <label for="schTitle" class="u-mb8 u-d-block">タイトル（部分一致）</label>
-                        <input type="text" id="schTitle" name="schTitle" th:value="${searchForm?.schTitle}" maxlength="100">
-                    </div>
-
-                    <div class="search-field">
-                        <label for="schAuthor" class="u-mb8 u-d-block">著者（部分一致）</label>
-                        <input type="text" id="schAuthor" name="schAuthor" th:value="${searchForm?.schAuthor}" maxlength="60">
-                    </div>
-
-                    <div class="search-field">
-                        <label for="schPublisher" class="u-mb8 u-d-block">出版社（部分一致）</label>
-                        <input type="text" id="schPublisher" name="schPublisher" th:value="${searchForm?.schPublisher}" maxlength="60">
-                    </div>
-
-                    <div class="search-field">
-                        <label for="schCategory" class="u-mb8 u-d-block">カテゴリ（完全一致）</label>
-                        <select id="schCategory" name="schCategory">
-                            <option value="">すべて</option>
-                            <th:block th:each="category : ${categories}">
-                                <option th:value="${category.id}"
-                                    th:selected="${searchForm?.schCategory == category.id}"
-                                >[[${category.name}]]</option>
-                            </th:block>
-                        </select>
-                    </div>
-                </div>
-                <div class="search-action u-text-center u-mt24">
-                    <button type="button" id="search-btn" class="btn-primary">
-                        検索
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <div th:unless="${#lists.isEmpty(books)}" class="container">
-            <div class="u-py24" th:replace="~{_common/pager::pager}"></div>
-
-            <div class="book-grid">
-                <div th:each="book : ${books}">
-                    <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="book-gallery-card js-loading-link">
-                        <div class="book-image-wrapper">
-                            <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
-                                alt="書籍画像" />
-                        </div>
-                        <div class="book-overlay">
-                            <h2 class="book-overlay-title" th:text="${book.title}"></h2>
-                            <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
-                        </div>
-                    </a>
-                </div>
+    <div class="main-content">
+        <main class="container">
+            <div class="search-cond u-mb16">
+                <div th:replace="~{_common/messages::messages}"></div>
+                <div th:replace="~{_common/messages::errors}"></div>
             </div>
-        </div>
-    </main>
-    */-->
+
+            <div class="u-mb32">
+                <form th:action="@{/book/search}" method="post">
+                    <div class="search-grid">
+                        <div class="search-field">
+                            <label for="schTitle" class="u-mb8 u-d-block u-fw-700">
+                                <span class="mdi mdi-book-open-variant" style="margin-right: 8px; color: #aaa;"></span>タイトル（部分一致）
+                            </label>
+                            <input type="text" id="schTitle" name="schTitle" th:value="${searchForm?.schTitle}" maxlength="100" class="u-w100">
+                        </div>
+
+                        <div class="search-field">
+                            <label for="schAuthor" class="u-mb8 u-d-block u-fw-700">
+                                <span class="mdi mdi-account" style="margin-right: 12px; color: #aaa;"></span>著者（部分一致）
+                            </label>
+                            <input type="text" id="schAuthor" name="schAuthor" th:value="${searchForm?.schAuthor}" maxlength="60" class="u-w100">
+                        </div>
+
+                        <div class="search-field">
+                            <label for="schPublisher" class="u-mb8 u-d-block u-fw-700">
+                                <span class="mdi mdi-domain" style="margin-right: 12px; color: #aaa;"></span>出版社（部分一致）
+                            </label>
+                            <input type="text" id="schPublisher" name="schPublisher" th:value="${searchForm?.schPublisher}" maxlength="60" class="u-w100">
+                        </div>
+
+                        <div class="search-field">
+                            <label for="schCategory" class="u-mb8 u-d-block u-fw-700">
+                                <span class="mdi mdi-tag-outline" style="margin-right: 12px; color: #aaa; pointer-events: none;"></span>カテゴリ
+                            </label>
+                            <select id="schCategory" name="schCategory" class="u-w100">
+                                <option value="">すべて</option>
+                                <th:block th:each="category : ${categories}">
+                                    <option th:value="${category.id}"
+                                        th:selected="${searchForm?.schCategory == category.id}"
+                                    >[[${category.name}]]</option>
+                                </th:block>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="search-action u-text-center u-mt24">
+                        <button type="button" id="search-btn" class="btn-primary">検索</button>
+                    </div>
+                </form>
+            </div>
+            <th:unless="${#lists.isEmpty(books)}">
+                <div th:replace="~{_common/pager::pager}"></div>
+
+                <table class="search-result-table">
+                    <thead>
+                        <tr>
+                            <th style="font-weight: bold;">詳細</th>
+                            <th style="font-weight: bold;">画像</th>
+                            <th style="font-weight: bold;">タイトル<br>カテゴリ</th>
+                            <th style="font-weight: bold;">著者</th>
+                            <th style="font-weight: bold;">出版社</th>
+                            <th style="font-weight: bold;">削除</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <th:block th:each="book : ${books}">
+                            <tr class="search-result-card">
+                                <td>
+                                    <button type="button" th:onclick="|location.href='@{/book/detail/{id}(id=${book.bookId})}'|">
+                                        <span class="mdi mdi-information-variant"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <div class="book-image-wrapper">
+                                        <img th:src="${book.picFileName != null and book.picFileName != '' ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                            alt="書籍画像" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="book-title-category">
+                                        <h2 class="book-title" th:text="${book.title}"></h2>
+                                        <div class="book-category">
+                                            <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
+                                                <span th:if="${id != null}" th:class="|category-color-${id % 10}|">
+                                                    [[${categoryMap.get(id)}]]
+                                                </span>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="book-author" th:if="${book.author2 != null}">
+                                        <h2>[[${book.author1}]]</h2>
+                                        <h2>[[${book.author2}]]</h2>
+                                    </div>
+                                    <div class="book-author" th:unless="${book.author2 != null}">
+                                        <h2>[[${book.author1}]]</h2>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="book-publisher">
+                                        <h2>[[${book.publisher}]]</h2>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button type="button">
+                                        <span class="mdi mdi-delete"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
 
 <div th:replace="~{_common/script::csrfHeader}"></div>
 <!-- <div th:replace="~{_common/script::asyncDownloadCsvFile}"></div> -->

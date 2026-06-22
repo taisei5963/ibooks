@@ -178,13 +178,13 @@
                                                 <div th:if="${book.hasImg}">
                                                     <img th:src="${book.imgUrl}" th:alt="${book.title}" class="book-cover-img">
                                                     <div class="book-info">
-                                                        <p>　タイトル：<span th:text="${book.title}">書籍名</span></p>
-                                                        <p>　出版社名：<span th:text="${book.publisher}">出版社名</span></p>
+                                                        <p><span th:text="'『' + ${book.title} + '』'">書籍名</span></p>
+                                                        <p><span th:text="${book.publisher} + ' 出版">出版社名</span></p>
                                                     </div>
                                                 </div>
                                                 <div th:unless="${book.hasImg}" class="book-card-text">
-                                                    <p class="book-detail" th:text="'　タイトル：' + ${book.title}">　タイトル：書籍名</p>
-                                                    <p class="book-detail" th:text="'　出版社名：' + ${book.publisher}">　出版社名：出版社名</p>
+                                                    <p class="book-detail" th:text="'『' + ${book.title} + '』'">『書籍名』</p>
+                                                    <p class="book-detail" th:text="${book.publisher} + ' 出版'">出版社名 出版</p>
                                                 </div>
                                             </div>
                                         </div>
