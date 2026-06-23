@@ -87,9 +87,14 @@ body * {
 /* ========================================
   コンテナ
 ======================================== */
-.container {
+.home-container {
   width: 100%;
   margin: 25px auto;
+  padding: 0 15px 80px 15px;
+}
+.container {
+  width: 100%;
+  margin: 15px auto;
   padding: 0 15px 80px 15px;
 }
 
@@ -287,17 +292,17 @@ input[type="submit"]:disabled:hover {
   padding: 0.5rem 1rem;
   font-size: 1.5rem;
   height: 48px;
-  color: #2c2c2c;
+  color: #5F7896;
   background-color: #fff;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #5F7896;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .btn-dark:hover {
-  background-color: #2f2f2f;
+  background-color: #5F7896;
   color: #fff;
-  border-color: #2c2c2c;
+  border-color: #5F7896;
 }
 
 /* ========================================
@@ -639,6 +644,9 @@ input[type="submit"]:disabled:hover {
 .upload-area .txt {
   font-size: 1.5rem;
   width: 100%;
+}
+.upload-area .upload-icon {
+  font-size: calc(1.475rem + 2.7vw);
 }
 .upload-textarea textarea {
   width: 100%;
@@ -1117,7 +1125,6 @@ a:hover {
   ブック詳細 Tabs
 ======================================== */
 .book-detail-tabs {
-  margin-top: 32px;
   border: 1px solid var(--color-base);
 }
 .book-tabs {
@@ -1289,7 +1296,6 @@ a:hover {
   background-color: #d4d4d4;
 }
 
-
 .book-detail-page .book-category {
   font-size: 1.5rem;
   padding: 2px 8px;
@@ -1359,7 +1365,7 @@ a:hover {
   color: #212529;
   border: 1px solid #212529;
 }
-.book-detail-page .book-difficulty-badge {
+.book-detail-page .book-level-badge {
   font-size: 1.5rem;
   padding: 4px 12px;
   border-radius: 16px;
@@ -1368,17 +1374,17 @@ a:hover {
   margin-top: 1rem;
   border: 1px solid;
 }
-.book-detail-page .difficulty-BEGINNER {
+.book-detail-page .level-BEGINNER {
   background-color: #e6ffe6;
   border-color: #66cc66;
   color: #006600;
 }
-.book-detail-page .difficulty-INTERMEDIATE {
+.book-detail-page .level-INTERMEDIATE {
   background-color: #e6f7ff;
   border-color: #66b3ff;
   color: #0066cc;
 }
-.book-detail-page .difficulty-ADVANCED {
+.book-detail-page .level-ADVANCED {
   background-color: #fff8e6;
   border-color: #ffcc66;
   color: #cc9900;
