@@ -17,9 +17,11 @@
     <th:block th:fragment="upload">
         <input type="reset" name="reset" class="u-d-none">
         <div class="upload-area u-mb32">
-            <p class="txt u-mb24">ファイルを選択するか、ここにドラック＆ドロップする</p>
+            <p class="upload-icon">
+                <span class="mdi mdi-cloud-upload"></span>
+            </p>
             <label class="is-max260">
-                ファイルを選択
+                ファイルを選択するか、ここにドラック＆ドロップする
                 <input type="file" name="csvFile" id="csvFile" class="u-d-none" th:accept="${accept}">
             </label>
             <p class="txt u-mt4 u-font12 u-color-green"></p>

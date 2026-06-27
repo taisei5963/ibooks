@@ -4,15 +4,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import jp.blue_dolphin.ibooks.admin.dto.AdminDto;
 import jp.blue_dolphin.ibooks.admin.job.DownloadBookCsvJob;
 import jp.blue_dolphin.ibooks.admin.request.BookSearchForm;
+import jp.blue_dolphin.ibooks.admin.service.BookChapterService;
+import jp.blue_dolphin.ibooks.admin.service.BookGuideService;
 import jp.blue_dolphin.ibooks.admin.service.BookService;
 import jp.blue_dolphin.ibooks.admin.service.CategoryService;
-import jp.blue_dolphin.ibooks.admin.service.ReviewService;
 import jp.blue_dolphin.ibooks.common.dto.Account;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
+import jp.blue_dolphin.ibooks.common.dto.NextRecommendedBookDto;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
 import jp.blue_dolphin.ibooks.common.dto.SearchResult;
+import jp.blue_dolphin.ibooks.common.model.BookChapterModel;
+import jp.blue_dolphin.ibooks.common.model.BookGuideModel;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
-import jp.blue_dolphin.ibooks.common.model.ReviewModel;
 import jp.blue_dolphin.ibooks.common.service.DownloadCsvService;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import lombok.AllArgsConstructor;
@@ -50,8 +53,10 @@ public class BookController {
     private DownloadBookCsvJob downloadBookCsvJob;
     /** メッセージサービス */
     private MessageService messageService;
-    /** レビューサービス */
-    private ReviewService reviewService;
+    /** ブックチャプターサービス */
+    private BookChapterService bookChapterService;
+    /** ブックガイドサービス */
+    private BookGuideService bookGuideService;
     /** 管理者DTO */
     private AdminDto adminDto;
 
@@ -105,10 +110,21 @@ public class BookController {
             return "redirect:/book/search";
         }
 
+        // INFO: ブックチャプター情報取得
+        List<BookChapterModel> bookChapters = bookChapterService.selectByBookId(bookId);
+
+        // INFO: ブックガイド情報取得
+        Optional<BookGuideModel> bookGuideOpt = bookGuideService.selectByBookId(bookId);
+        List<NextRecommendedBookDto> nextRecommendedBooks =
+                bookGuideService.getNextRecommendedBooks(bookId);
+
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
         model.addAttribute("categoryMap", categoryMap);
+        model.addAttribute("bookChapters", bookChapters);
+        model.addAttribute("bookGuide", bookGuideOpt);
+        model.addAttribute("nextRecommendedBooks", nextRecommendedBooks);
         return "book/detail";
     }
 

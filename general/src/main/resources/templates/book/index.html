@@ -9,10 +9,13 @@
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
             <nav class="sidebar-nav">
-                <a th:href="@{/book}" class="home-header">ホーム</a>
+                <a th:href="@{/book}" class="home-header">
+                    <span class="mdi mdi-home-outline"></span>ホーム
+                </a>
                 <div class="accordion">
                     <button class="category-accordion-header" id="categoryAccordionHeaderBtn">
-                        カテゴリ
+                        <span class="mdi mdi-shape-plus-outline"></span>
+                        <span class="category-accordion-header-name">カテゴリ</span>
                     </button>
                     <div class="category-accordion-content">
                         <ul class="category-list">
@@ -31,27 +34,33 @@
             <main class="container">
                 <div th:replace="~{_common/messages::errors}"></div>
 
-                <div th:unless="${#lists.isEmpty(booksGroupedByLevel)}" class="book-list-section">
-                    <th:block th:each="level : ${booksGroupedByLevel}">
-                        <h3 th:text="|${level.key} / ${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(level.key)}|" 
-                            th:classappend="|level-section-header level-${level.key}|"></h3>
-                        <div class="book-grid">
-                            <a th:each="book : ${level.value}" th:href="@{/book/detail/{id}(id=${book.bookId})}"
-                            class="book-gallery-card js-loading-link">
-                                <div class="book-image-wrapper">
-                                    <img th:src="${book.picFileName != null and book.picFileName != '' ?
-                                    @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
-                                    @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
-                                    alt="書籍画像" />
-                                </div>
-                                <div class="book-overlay">
-                                    <h2 class="book-overlay-title" th:text="${book.title}"></h2>
-                                    <p class="book-overlay-subtitle" th:if="${book.subTitle}" th:text="${book.subTitle}"></p>
-                                </div>
-                            </a>
+                <th:block th:unless="${#lists.isEmpty(books)}">
+                    <div th:each="book : ${books}" class="book-list-wrapper">
+                        <div class="book-image">
+                            <img th:src="${book.picFileName != null and book.picFileName != '' ?
+                                @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
+                                @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                alt="書籍画像" />
                         </div>
-                    </th:block>
-                </div>
+                        <div class="book-content">
+                            <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="js-loading-link">
+                                <h1 class="book-title">[[${book.title}]]</h1>
+                            </a>
+                            <div class="book-level-category">
+                                <span th:class="|book-level-badge level-${book.level}|">
+                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]者向け
+                                </span>
+                                <div class="book-categories">
+                                    <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
+                                        <p th:if="${id != null}" th:class="|book-category category-color-${id % 10}|">
+                                            [[${categoryMap.get(id)}]]
+                                        </p>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
             </main>
             <div th:replace="~{_common/footer::footer}"></div>
         </div>
@@ -107,6 +116,33 @@
                 window.location.href = $(this).attr('href');
             }, 50);
             e.preventDefault();
+        });
+
+        const categoryIcons = {
+            1: 'mdi-school-outline',
+            2: 'mdi-database-outline',
+            3: 'mdi-cloud-outline',
+            4: 'mdi-web',
+            5: 'mdi-briefcase-outline',
+            6: 'mdi-book-open-page-variant-outline',
+            7: 'mdi-cellphone',
+            8: 'mdi-robot-outline',
+            9: 'mdi-tools',
+            10: 'mdi-code-tags',
+            11: 'mdi-account-tie-outline',
+            12: 'mdi-shield-check-outline'
+        };
+        $('.category-item').each(function () {
+            const categoryId = $(this).data('category-id');
+            const iconClass = categoryIcons[categoryId];
+
+            if (iconClass) {
+                $(this).prepend(
+                    $('<i>')
+                        .addClass('mdi')
+                        .addClass(iconClass)
+                );
+            }
         });
     });
 </script>

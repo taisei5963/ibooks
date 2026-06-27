@@ -1,6 +1,5 @@
 package jp.blue_dolphin.ibooks.general.controller;
 
-import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.dto.IdAndName;
 import jp.blue_dolphin.ibooks.common.dto.NextRecommendedBookDto;
 import jp.blue_dolphin.ibooks.common.dto.PageDto;
@@ -22,15 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * ブックコントローラクラス
@@ -74,37 +68,11 @@ public class BookController {
 
         List<IdAndName> categories = categoryService.selectIdAndNames();
 
-        List<Level> orderedLevels =
-                Arrays.asList(Level.BEGINNER, Level.INTERMEDIATE, Level.ADVANCED, Level.NONE);
-        Map<String, Integer> levelOrderMap = IntStream.range(0, orderedLevels.size())
-                .boxed()
-                .collect(Collectors.toMap(
-                        i -> orderedLevels.get(i).name(),
-                        i -> i,
-                        (oldValue, newValue) -> oldValue,
-                        LinkedHashMap::new
-                ));
-
-        Map<String, List<BookModel>> booksGroupedByLevel = result.getList().stream()
-                .collect(Collectors.groupingBy(
-                        book -> book.getLevel() != null ? book.getLevel() : Level.NONE.name()
-                ));
-
-        Map<String, List<BookModel>> orderedBooksGroupedByLevel =
-                booksGroupedByLevel.entrySet().stream()
-                        .sorted(Comparator.comparing(
-                                entry -> levelOrderMap.getOrDefault(entry.getKey(),
-                                        Integer.MAX_VALUE)))
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey,
-                                Map.Entry::getValue,
-                                (oldValue, newValue) -> oldValue,
-                                LinkedHashMap::new
-                        ));
-
+        Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("searchForm", searchForm);
-        model.addAttribute("booksGroupedByLevel", orderedBooksGroupedByLevel);
+        model.addAttribute("books", result.getList());
         model.addAttribute("categories", categories);
+        model.addAttribute("categoryMap", categoryMap);
         return "book/index";
     }
 
@@ -138,6 +106,7 @@ public class BookController {
         List<IdAndName> categories = categoryService.selectIdAndNames();
         Map<Long, String> categoryMap = categoryService.getCategoryNameMap(categories);
         model.addAttribute("book", bookOpt.get());
+        model.addAttribute("categories", categories);
         model.addAttribute("categoryMap", categoryMap);
         model.addAttribute("bookChapters", bookChapters);
         model.addAttribute("bookGuide", bookGuideOpt);

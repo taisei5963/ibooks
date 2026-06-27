@@ -147,6 +147,14 @@ public class BookRepositoryImpl implements BookRepository {
      * {@inheritDoc}
      */
     @Override
+    public int countAll() {
+        return bookDao.countAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public BookModel store(BookModel model, String createdId) {
         LocalDateTime now = LocalDateTime.now();
         Result<Book> result;

@@ -284,5 +284,14 @@
 				});
 			</script>
 		</div>
+
+    <script th:fragment="setPageTitle">
+      $(function() {
+        const pageName = document.getElementById('pageName');
+        var pageTitle = $('title').text();
+          
+        pageName.innerText = pageTitle;
+      });
+    </script>
   </body>
 </html>

@@ -82,6 +82,14 @@ public interface BookDao {
     Book selectByTitleAndPublisher(String title, String publisher);
 
     /**
+     * 全件数を取得する
+     *
+     * @return ブックテーブルの全件数
+     */
+    @Select
+    int countAll();
+
+    /**
      * ブックを登録する
      *
      * @param entity ブックエンティティ

@@ -1,5 +1,6 @@
 package jp.blue_dolphin.ibooks.admin.service;
 
+import jp.blue_dolphin.ibooks.admin.request.BookSearchForm;
 import jp.blue_dolphin.ibooks.common.config.BooksImageConfig;
 import jp.blue_dolphin.ibooks.common.csv.BookCsv;
 import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
@@ -12,7 +13,6 @@ import jp.blue_dolphin.ibooks.common.service.BookCommonService;
 import jp.blue_dolphin.ibooks.common.service.MessageService;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
 import jp.blue_dolphin.ibooks.common.util.Strings;
-import jp.blue_dolphin.ibooks.admin.request.BookSearchForm;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -99,6 +99,15 @@ public class BookService {
                 searchForm.getLikeParam("schPublisher"),
                 searchForm.getLongParam("schCategory"),
                 searchForm.getOrderBy(), searchForm.getSelectOptions(pageable));
+    }
+
+    /**
+     * ブックテーブルの全件数を取得する
+     *
+     * @return ブックテーブルの全件数
+     */
+    public int countAll() {
+        return bookRepository.countAll();
     }
 
     /**

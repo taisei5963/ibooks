@@ -90,6 +90,13 @@ public interface BookRepository {
     Optional<BookModel> selectByTitleAndPublisher(String title, String publisher);
 
     /**
+     * ブックテーブルの全件数を取得する
+     *
+     * @return ブックテーブルの全件数
+     */
+    int countAll();
+
+    /**
      * 引数のブック情報を更新する
      *
      * @param model     ブックモデル
