@@ -47,7 +47,7 @@ public class UploadHistDetailCommonService {
         List<UploadHistDetailModel> models = new ArrayList<>();
         for (String errorMsg : errorMessages) {
             UploadHistDetailModel detail = UploadHistDetailModel.builder()
-                    .uploadHistDetailId(uploadHist.getUploadHistId())
+                    .uploadHistId(uploadHist.getUploadHistId())
                     .logLevel("WARN")
                     .content(errorMsg)
                     .createdAt(now)

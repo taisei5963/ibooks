@@ -7,6 +7,7 @@ import com.github.mygreen.supercsv.annotation.constraint.CsvPattern;
 import com.github.mygreen.supercsv.annotation.constraint.CsvRequire;
 import com.github.mygreen.supercsv.builder.BuildCase;
 import jp.blue_dolphin.ibooks.common.constant.CsvDataType;
+import jp.blue_dolphin.ibooks.common.constant.Level;
 import jp.blue_dolphin.ibooks.common.constant.SystemRegex;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.util.Strings;
@@ -33,7 +34,7 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
     private String csvDataType;
 
     @CsvColumn(label = "JANコード", number = 2)
-    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.patter}", cases = BuildCase.Read)
+    @CsvPattern(regex = SystemRegex.JAN_CODE_REGEX, message = "{csv.janCode.pattern}", cases = BuildCase.Read)
     private String janCode;
 
     @CsvColumn(label = "タイトル", number = 3)
@@ -80,13 +81,18 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
     @CsvPattern(regex = SystemRegex.CATEGORY_CODE_REGEX, message = "{csv.categoryCode.pattern}", cases = BuildCase.Read)
     private String categoryCode3;
 
-    @CsvColumn(label = "登録日時", number = 13)
+    @CsvColumn(label = "レベル", number = 13)
+    @CsvRequire(considerBlank = true, cases = BuildCase.Read)
+    @CsvPattern(regex = SystemRegex.LEVEL_REGEX, message = "{csv.error.book.level.regex}", cases = BuildCase.Read)
+    private String level;
+
+    @CsvColumn(label = "登録日時", number = 14)
     private String createdAt;
 
-    @CsvColumn(label = "更新日時", number = 14)
+    @CsvColumn(label = "更新日時", number = 15)
     private String updatedAt;
 
-    @CsvColumn(label = "登録者ID", number = 15)
+    @CsvColumn(label = "登録者ID", number = 16)
     private String createdId;
 
     /** 行数 */
@@ -139,9 +145,10 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .author2(getAuthor2())
                     .translator(getTranslator())
                     .publisher(getPublisher())
-                    .categoryCode1(getCategoryCode1())
-                    .categoryCode2(getCategoryCode2())
-                    .categoryCode3(getCategoryCode3())
+                    .categoryId1(getCategoryId1())
+                    .categoryId2(getCategoryId2())
+                    .categoryId3(getCategoryId3())
+                    .level(Level.getEnum(level).toString())
                     .build();
         } else if (dataType == CsvDataType.UPDATE && bookModel != null) {
             return bookModel.toBuilder()
@@ -151,9 +158,10 @@ public class BookCsv implements CsvRow, BookForeignKeyCsv {
                     .author2(getAuthor2())
                     .translator(getTranslator())
                     .publisher(getPublisher())
-                    .categoryCode1(getCategoryCode1())
-                    .categoryCode2(getCategoryCode2())
-                    .categoryCode3(getCategoryCode3())
+                    .categoryId1(getCategoryId1())
+                    .categoryId2(getCategoryId2())
+                    .categoryId3(getCategoryId3())
+                    .level(Level.getEnum(level).toString())
                     .build();
         }
         return null;

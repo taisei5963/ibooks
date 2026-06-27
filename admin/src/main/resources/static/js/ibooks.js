@@ -35,5 +35,5 @@ ibooks.updateProgress = function(allcount, count) {
     } else {
         width = count / allcount * 100;
     }
-    $('#loading .progress-area').css('width', width + '%');
+    $('#loading .progress-area .progress-bar').css('width', width + '%');
 };

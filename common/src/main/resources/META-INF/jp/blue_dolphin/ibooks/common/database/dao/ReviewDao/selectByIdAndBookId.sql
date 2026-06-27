@@ -1,11 +1,11 @@
 SELECT
   r.review_id,
   r.book_id,
-  r.user_id,
+  r.reviewer_id,
   r.rating,
   r.comment,
   r.review_date,
-  rr.user_name
+  rr.name
 FROM
   review AS r
 LEFT JOIN
@@ -19,11 +19,11 @@ WHERE
     AND
     r.review_view_flag = 'ON'
     /*%if reviewId != null */
-    r.review_id = /* reviewId */10
     AND
+    r.review_id = /* reviewId */10
     /*%end*/
     /*%if bookId != null */
-    r.book_id = /* bookId */20
     AND
+    r.book_id = /* bookId */20
     /*%end*/
     AND r.deleted_at IS NULL

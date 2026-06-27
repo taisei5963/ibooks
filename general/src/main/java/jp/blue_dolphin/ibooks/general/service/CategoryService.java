@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * カテゴリサービス
@@ -23,5 +25,15 @@ public class CategoryService {
      */
     public List<IdAndName> selectIdAndNames() {
         return categoryRepository.selectIdAndNames();
+    }
+
+    /**
+     * カテゴリIDとカテゴリ名のMapを取得する
+     *
+     * @return カテゴリIDをキー、カテゴリ名を値とするMap
+     */
+    public Map<Long, String> getCategoryNameMap(List<IdAndName> categories) {
+        return categories.stream()
+                .collect(Collectors.toMap(IdAndName::getId, IdAndName::getName));
     }
 }

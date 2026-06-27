@@ -1,0 +1,272 @@
+<!doctype html>
+<html
+    lang="ja"
+    xmlns:th="http://www.thymeleaf.org"
+    th:with="title='ブック詳細'"
+>
+<head th:replace="~{_common/head::head}"></head>
+<body>
+    <div th:replace="~{_common/topHeader::topHeader('detail', null)}"></div> 
+    <div class="wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header" id="sidebarBrand">
+                <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
+            </div>
+            <nav class="sidebar-nav">
+                <a th:href="@{/book}" class="home-header">ホーム</a>
+                <div class="accordion">
+                    <button class="category-accordion-header" id="categoryAccordionHeaderBtn">
+                        カテゴリ
+                    </button>
+                    <div class="category-accordion-content">
+                        <ul class="category-list">
+                            <th:block th:each="category : ${categories}">
+                                <li>
+                                    <a href="#" class="category-item" th:data-category-id="${category.id}" th:text="${category.name}"></a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="main-content">
+            <div class="u-text-start">
+                <a href="/book" class="btn-back-text-pc">
+                    <i class="bi bi-arrow-return-left u-me16 u-fs-1"></i>戻る
+                </a>
+            </div>
+            <main class="book-detail-page">
+                <div class="book-detail-tabs">
+                    <ul class="nav nav-tabs book-tabs" id="bookTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link active"
+                                id="detail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#detail-pane"
+                                type="button"
+                                role="tab">
+                                詳細
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link"
+                                id="detail-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#chapter-pane"
+                                type="button"
+                                role="tab">
+                                チャプター
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button
+                                class="nav-link"
+                                id="roadmap-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#guide-pane"
+                                type="button"
+                                role="tab">
+                                ガイド
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content book-tab-content">
+                        <div
+                            class="tab-pane fade show active"
+                            id="detail-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card book-detail-wrapper">
+                                <div class="book-detail-image">
+                                    <img
+                                        th:src="${book.picFileName != null and book.picFileName != '' 
+                                        ? @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) 
+                                        : @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                        alt="書籍画像"
+                                    />
+                                </div>
+                                <div class="book-content">
+                                    <h1 class="book-title">[[${book.title}]]</h1>
+                                    <h3 class="book-subtitle" th:if="${book.subTitle}">[[${book.subTitle}]]</h3>
+                                    <br>
+                                    <h4 class="book-author">
+                                        <th:block th:if="${book.author2}">
+                                            [[${book.author1}]] / [[${book.author2}]] 共著
+                                        </th:block>
+                                        <th:block th:unless="${book.author2}">
+                                            [[${book.author1}]] 著
+                                        </th:block>
+                                    </h4>
+                                    <h4 class="book-translator" th:if="${book.translator}">[[${book.translator}]] 訳</h4>
+                                    <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
+                                    <h5 class="book-level">
+                                        <span th:class="|book-level-badge level-${book.level}|">
+                                            [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]者向け
+                                        </span>
+                                    </h5>
+                                    <h5 class="book-categories">
+                                        <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
+                                            <span th:if="${id != null}" th:class="|book-category badge-it category-color-${id % 10}|">
+                                                [[${categoryMap.get(id)}]]
+                                            </span>
+                                        </th:block>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="tab-pane fade"
+                            id="chapter-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card book-chapter-wrapper">
+                                <div th:unless="${#lists.isEmpty(bookChapters)}">
+                                    <!-- PC用: 10章ごとの分割表示 -->
+                                    <div class="chapter-columns-container u-d-none-sp">
+                                        <th:block th:with="chaptersPerColumn=10, 
+                                                            numOfColumns=${(bookChapters.size() + 9) / 10}">
+                                            <div th:each="i : ${#numbers.sequence(0, numOfColumns - 1)}" class="chapter-column">
+                                                <table class="table-book-chapter">
+                                                    <tbody>
+                                                        <th:block th:with="startIndex=${i * chaptersPerColumn}, 
+                                                                            endIndex=${((i + 1) * chaptersPerColumn) > bookChapters.size()
+                                                                                ? bookChapters.size()
+                                                                                : ((i + 1) * chaptersPerColumn)}">
+                                                            <tr th:each="chapter : ${bookChapters.subList(startIndex, endIndex)}">
+                                                                <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                                <td class="u-text-start chapter-title">[[${chapter.title}]]</td>
+                                                            </tr>
+                                                        </th:block>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                    <!-- SP用: 分割なしの全件表示 -->
+                                    <div class="u-d-none-pc">
+                                        <table class="table-book-chapter">
+                                            <tbody>
+                                                <tr th:each="chapter : ${bookChapters}">
+                                                    <td class="u-text-end chapter-no">[[${chapter.chapter}]]</td>
+                                                    <td class="u-text-start chapter-title">[[${chapter.title}]]</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div th:if="${#lists.isEmpty(bookChapters)}" class="alert alert-info">
+                                    チャプターがありません。
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="tab-pane fade"
+                            id="guide-pane"
+                            role="tabpanel">
+
+                            <div class="tab-card book-guide-wrapper">
+                                <div th:if="${bookGuide.isPresent()}" class="book-guide-grid">
+                                    <div class="book-guide-item guide-item-1">
+                                        <h4 class="book-guide-item-title">こんな方におすすめ</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendFor}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-2">
+                                        <h4 class="book-guide-item-title">本書を読むタイミング</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendedTiming}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-3">
+                                        <h4 class="book-guide-item-title">おすすめポイント</h4>
+                                        <div class="book-guide-item-content" th:utext="${bookGuide.get().recommendedPoints}"></div>
+                                    </div>
+                                    <div class="book-guide-item guide-item-4">
+                                        <h4 class="book-guide-item-title">次に読むべき書籍</h4>
+                                        <div class="book-guide-item-content next-recommended-content">
+                                            <div th:each="book, status : ${nextRecommendedBooks}" class="u-mb16">
+                                                <div th:text="'おすすめその' + ${status.count}" class="next-recommended-header">おすすめその１</div>
+                                                <div th:if="${book.hasImg}">
+                                                    <img th:src="${book.imgUrl}" th:alt="${book.title}" class="book-cover-img">
+                                                    <div class="book-info">
+                                                        <p><span th:text="'『' + ${book.title} + '』'">書籍名</span></p>
+                                                        <p><span th:text="${book.publisher} + ' 出版">出版社名</span></p>
+                                                    </div>
+                                                </div>
+                                                <div th:unless="${book.hasImg}" class="book-card-text">
+                                                    <p class="book-detail" th:text="'『' + ${book.title} + '』'">『書籍名』</p>
+                                                    <p class="book-detail" th:text="${book.publisher} + ' 出版'">出版社名 出版</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:unless="${bookGuide.isPresent()}" class="alert alert-info">
+                                    ガイドがありません。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div th:replace="~{_common/footer::footer}"></div>
+        </div>
+    </div>
+
+    <form id="categorySearchForm" th:action="@{/book/search}" method="post" style="display:none;">
+        <input type="hidden" name="schCategory" id="schCategoryInput" value="" />
+    </form>
+    
+    <div th:replace="~{_common/script::csrfHeader}"></div>
+    <script>
+        $(function() {
+            $('#sidebarBrand').on('click', function() {
+                ibooks.showLoading();
+                window.location.href = '/book';
+            });
+
+            const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
+            const categoryAccordionContent = document.querySelector('.category-accordion-content');
+
+            // ページロード時にアコーディオンを自動で開く
+            if (categoryAccordionContent && categoryAccordionHeader) {
+                categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
+                categoryAccordionHeader.classList.add('is-open');
+            }
+
+            categoryAccordionHeader.addEventListener('click', () => {
+                if (categoryAccordionContent.style.maxHeight === '0px' || categoryAccordionContent.style.maxHeight === '') {
+                    categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
+                    categoryAccordionHeader.classList.add('is-open');
+                } else {
+                    categoryAccordionContent.style.maxHeight = '0px';
+                    categoryAccordionHeader.classList.remove('is-open');
+                }
+            });
+
+            $('.category-item').on('click', function(e) {
+                e.preventDefault();
+                const categoryId = $(this).data('categoryId');
+
+                if (categoryId) {
+                    $('#schCategoryInput').val(categoryId);
+                    ibooks.showLoading();
+                    $('#categorySearchForm').submit();
+                } else {
+                    window.location.href = '/book';
+                }
+            });
+
+            $('.js-loading-link').click(function(e) {
+                ibooks.showLoading();
+                setTimeout(() => {
+                    window.location.href = $(this).attr('href');
+                }, 50);
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

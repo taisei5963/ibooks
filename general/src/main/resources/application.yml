@@ -30,7 +30,7 @@ spring:
     resources:
       static-locations:
         classpath: /static/
-        file: /Users/taiseikato/Projects/ibooks/
+        file: /Users/taiseikato/Projects/ITive/
 
 general-config:
   compatible-sjis: true

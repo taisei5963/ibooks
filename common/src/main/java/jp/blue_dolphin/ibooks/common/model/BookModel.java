@@ -6,8 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -46,8 +47,8 @@ public class BookModel {
     /** 画像ファイル名 */
     private String picFileName;
 
-    /** 全体評価 */
-    private BigDecimal totalRating;
+    /** 難易度 */
+    private String level;
 
     /** カテゴリID1 */
     private Long categoryId1;
@@ -126,5 +127,24 @@ public class BookModel {
         int num = rand.nextInt(999999);
         String hash = Strings.crc32(uploadFileName + "-" + num);
         return "IMG" + bookId + "-" + imgNo + "-" + hash + ext;
+    }
+
+    /**
+     * カテゴリIDのリストを返却する
+     *
+     * @return カテゴリIDリスト
+     */
+    public List<String> getCategoryIds() {
+        List<String> list = new ArrayList<>();
+        if (categoryId1 != null) {
+            list.add(categoryId1.toString());
+        }
+        if (categoryId2 != null) {
+            list.add(categoryId2.toString());
+        }
+        if (categoryId3 != null) {
+            list.add(categoryId3.toString());
+        }
+        return list;
     }
 }

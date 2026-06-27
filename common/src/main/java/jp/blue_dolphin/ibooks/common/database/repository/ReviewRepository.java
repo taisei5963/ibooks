@@ -4,7 +4,7 @@ import jp.blue_dolphin.ibooks.common.model.ReviewModel;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * レビューリポジトリ
@@ -16,9 +16,9 @@ public interface ReviewRepository {
      *
      * @param reviewId レビューID
      * @param bookId   ブックID
-     * @return レビューモデル
+     * @return レビューモデルリスト
      */
-    ReviewModel selectByIdAndBookId(Long reviewId, Long bookId);
+    List<ReviewModel> selectByIdAndBookId(Long reviewId, Long bookId);
 
     /**
      * 引数のブックIDを条件にカウント対象の評価値をカウントする

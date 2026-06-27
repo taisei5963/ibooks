@@ -1,5 +1,6 @@
 package jp.blue_dolphin.ibooks.admin.job;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jp.blue_dolphin.ibooks.admin.config.BookUploadConfig;
 import jp.blue_dolphin.ibooks.admin.service.BookService;
 import jp.blue_dolphin.ibooks.admin.service.UploadFileService;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -116,7 +118,6 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                 .collect(Collectors.toMap(p -> p.getFileName().toString(), p -> p));
 
         Set<String> checkCodes = new HashSet<>();
-        Set<String> checkTitleAndPublishers = new HashSet<>();
 
         Iterator<BookCsv> ite = csvList.iterator();
         int count = 0;
@@ -136,6 +137,7 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
 
             if (!hasError && !Strings.isEmpty(csv.getJanCode())) {
                 BookModel book = bookRepository.selectByJanCode(csv.getJanCode()).orElse(null);
+                csv.setBookModel(book);
                 if (csvDataType == CsvDataType.ADD) {
                     if (Objects.nonNull(book)) {
                         errors.add(messageService.getMessage("csv.error.book.exists",
@@ -158,34 +160,14 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                 }
             }
 
-            if (!hasError) {
-                if (!Strings.isEmpty(csv.getTitle()) && !Strings.isEmpty(csv.getPublisher())) {
-                    String duplicateKey = csv.getTitle() + "::" + csv.getPublisher();
-                    if (checkTitleAndPublishers.contains(duplicateKey)) {
-                        errors.add(messageService.getMessage(
-                                "csv.error.duplicateTitleAndPublisher",
-                                csv.getRowNum().toString(), csv.getTitle(), csv.getPublisher()));
-                        hasError = true;
-                    } else {
-                        checkTitleAndPublishers.add(duplicateKey);
-                    }
-                    BookModel model = bookRepository.selectByTitleAndPublisher(csv.getTitle(),
-                            csv.getPublisher()).orElse(null);
-                    if (Objects.nonNull(model)) {
-                        errors.add(messageService.getMessage("csv.error.title.publisher.exists",
-                                csv.getRowNum().toString(), csv.getTitle(),
-                                csv.getPublisher()));
-                        hasError = true;
-                    }
-                }
-            }
-
             {
                 Long categoryId = categoryIdMap.get(csv.getCategoryCode1());
                 if (Objects.isNull(categoryId)) {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode1(), "1"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId1(categoryId);
                 }
             }
 
@@ -195,6 +177,8 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode2(), "2"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId2(categoryId);
                 }
             }
 
@@ -204,6 +188,8 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
                     errors.add(messageService.getMessage("csv.error.book.category.notExists",
                             csv.getRowNum().toString(), csv.getCategoryCode3(), "3"));
                     hasError = true;
+                } else {
+                    csv.setCategoryId3(categoryId);
                 }
             }
 
@@ -237,6 +223,19 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
             if (count % 1000 == 0) {
                 UploadCsvService.sendEmitterProgressResponse(emitter,
                         "extraValidation loop. count: " + count);
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> errorPayload = new HashMap<>();
+                errorPayload.put("result", "ERROR");
+                errorPayload.put("message", "CSV validation errors occurred.");
+                errorPayload.put("errorMessages", errors);
+                UploadCsvService.sendEmitterProgressResponse(emitter, mapper.writeValueAsString(errorPayload));
+            } catch (Exception e) {
+                System.err.println("Error sending validation errors via SSE: " + e.getMessage());
             }
         }
         return errors;
@@ -297,7 +296,7 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
             Files.createDirectories(parent);
             Path zipFile = parent.resolve(tmpFile.getFileName().toString().replace(".csv", ".zip"));
             Path zipDir =
-                    parent.resolve(tmpFile.getFileName().toString().toString().replace(".csv", ""));
+                    parent.resolve(tmpFile.getFileName().toString().replace(".csv", ""));
             Files.createDirectories(zipDir);
             Files.write(zipFile, file.getBytes());
             Pattern pattern =
@@ -305,36 +304,41 @@ public class UploadBookCsvJob implements UploadCsvJob<BookCsv> {
             try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile.toFile()))) {
                 ZipEntry zipEntry;
                 while ((zipEntry = zis.getNextEntry()) != null) {
-                    Path ucFile = zipDir.resolve(zipEntry.getName());
+                    String entryName = zipEntry.getName();
+                    Path ucFile = zipDir.resolve(entryName);
                     if (zipEntry.isDirectory()) {
                         Files.createDirectories(ucFile);
-                    } else {
-                        Matcher matcher = pattern.matcher(zipEntry.getName());
-                        if (!matcher.matches()) {
-                            continue;
+                        continue;
+                    }
+                    Files.createDirectories(ucFile.getParent());
+                    if (entryName.contains("__MACOSX") || entryName.contains("/._")
+                            || entryName.startsWith("._")) {
+                        continue;
+                    }
+                    Matcher matcher = pattern.matcher(entryName);
+                    if (!matcher.matches()) {
+                        continue;
+                    }
+                    try (FileOutputStream fos = new FileOutputStream(ucFile.toFile());
+                         BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+                        byte[] data = new byte[1024];
+                        int count;
+                        while ((count = zis.read(data)) != -1) {
+                            bos.write(data, 0, count);
                         }
-                        try (FileOutputStream fos = new FileOutputStream(ucFile.toFile())) {
-                            BufferedOutputStream bos = new BufferedOutputStream(fos);
-                            byte[] data = new byte[1024];
-                            int count;
-                            while ((count = zis.read(data)) != -1) {
-                                bos.write(data, 0, count);
-                            }
-                        }
-                        if (zipEntry.getName().endsWith(".csv") || zipEntry.getName()
-                                .endsWith(".CSV")) {
-                            if (Files.exists(tmpFile)) {
-                                error = messageService.getMessage("errors.csv.multipleFound");
-                            } else {
-                                Files.move(ucFile, tmpFile);
-                            }
+                    }
+                    if (entryName.endsWith(".csv") || entryName.endsWith(".CSV")) {
+                        if (Files.exists(tmpFile)) {
+                            error = messageService.getMessage("errors.csv.multipleFound");
                         } else {
-                            images.add(ucFile);
+                            Files.move(ucFile, tmpFile);
                         }
+                    } else {
+                        images.add(ucFile);
                     }
                 }
             }
-            if (Files.exists(tmpFile)) {
+            if (!Files.exists(tmpFile)) {
                 error = messageService.getMessage("errors.csv.notFound");
             }
         } catch (IOException e) {

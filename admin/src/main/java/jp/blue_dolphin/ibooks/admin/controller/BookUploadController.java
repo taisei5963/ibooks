@@ -5,6 +5,7 @@ import jp.blue_dolphin.ibooks.admin.job.UploadBookCsvJob;
 import jp.blue_dolphin.ibooks.common.service.UploadCsvService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class BookUploadController {
      *
      * @return テンプレートパス
      */
-    @GetMapping({"", "/", "index"})
+    @RequestMapping({"", "/", "index"})
     public String index() {
         return getTemplatePath();
     }

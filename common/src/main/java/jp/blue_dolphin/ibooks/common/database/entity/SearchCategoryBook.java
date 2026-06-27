@@ -31,6 +31,6 @@ public class SearchCategoryBook {
     public final String categoryCode;
 
     /** カテゴリ名 */
-    @Column(name = "categoryName")
+    @Column(name = "category_name")
     public final String categoryName;
 }

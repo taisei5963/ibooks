@@ -1,8 +1,14 @@
 server:
   port: 8085
+  # HTTP通信時：false
+  # HTTPS通信時：true（デフォルト）
+  servlet:
+    session:
+      cookie:
+        secure: false
 logging:
   file:
-    name: /Users/taiseikato/Projects/ibooks/logs/admin.log
+    name: /Users/taiseikato/Projects/ITive/logs/admin.log
   level:
     root: INFO
     org:
@@ -10,17 +16,22 @@ logging:
         doma: INFO
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/ibooks
-    username: ibooks
-    password: ibooks
+    url: jdbc:mysql://localhost:3306/ITive
+    username: ITive
+    password: ITive
     driverClassName: com.mysql.cj.jdbc.Driver
   web:
     resources:
+      static-locations:
+        - classpath:/META-INF/resources/
+        - classpath:/resources/
+        - classpath:/static/
+        - classpath:/public/
+        - file:/Users/taiseikato/Projects/ITive/
       cache:
         cachecontrol:
           max-age: 0
-  config:
-    import: "optional:file:/home/ibooks/config/local-admin-config.yml"
+
 env: develop
 # 管理サイト設定
 admin-config:
@@ -33,14 +44,14 @@ admin-config:
     # ブック画像
     books:
       # 画像URL
-      base-url: http://ibooks.local/img/book
-      temp-base-url: http://ibooks.local/img/book/tmp
+      base-url: http://ITive.local/admin/img/book
+      temp-base-url: http://ITive.local/admin/img/book/tmp
       # 画像アップロード先ディレクトリ
-      upload-dir: /home/ibooks/img/book
-      temp-upload-dir: /home/ibooks/img/book/tmp
+      upload-dir: /Users/taiseikato/Projects/ITive/img/book
+      temp-upload-dir: /Users/taiseikato/Projects/ITive/img/book/tmp
   # レビュワーサイトURL
   reviewer-site:
-    url: http://ibooks.local/reviewer/
+    url: http://ITive.local/reviewer/
   # 一般サイトURL
   general-site:
-    url: http://ibooks.local/
+    url: http://ITive.local/

@@ -4,7 +4,6 @@ import jp.blue_dolphin.ibooks.common.config.BooksImageConfig;
 import jp.blue_dolphin.ibooks.common.csv.BookForeignKeyCsv;
 import jp.blue_dolphin.ibooks.common.database.repository.BookRepository;
 import jp.blue_dolphin.ibooks.common.database.repository.CategoryBookRepository;
-import jp.blue_dolphin.ibooks.common.database.repository.CategoryRepository;
 import jp.blue_dolphin.ibooks.common.model.BookModel;
 import jp.blue_dolphin.ibooks.common.model.SearchCategoryBookModel;
 import jp.blue_dolphin.ibooks.common.util.Strings;

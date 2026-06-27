@@ -50,6 +50,8 @@ dependencies {
     implementation 'org.apache.commons:commons-exec:1.5.0'
 
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.44'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 apply from: '../doma.gradle'

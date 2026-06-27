@@ -24,7 +24,7 @@ public class BookSearchForm implements SearchForm {
     /** 出版社 */
     private String schPublisher;
     /** カテゴリ */
-    private String schCategory;
+    private Long schCategory;
 
     /** ソートキー */
     private BookSortKey sortKey;
@@ -56,7 +56,7 @@ public class BookSearchForm implements SearchForm {
             case "schTitle" -> getSchTitle();
             case "schAuthor" -> getSchAuthor();
             case "schPublisher" -> getSchPublisher();
-            case "schCategory" -> getSchCategory();
+            case "schCategory" -> Objects.toString(getSchCategory(), null);
             default -> null;
         };
     }

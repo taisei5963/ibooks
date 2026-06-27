@@ -76,11 +76,29 @@ public class BookRepositoryImpl implements BookRepository {
      */
     @Override
     public SearchResult<BookModel> selectBySearchCond(String title, String author,
-                                                            String publisher,
-                                                            Long categoryId, String orderBy,
-                                                            SelectOptions options) {
+                                                      String publisher,
+                                                      Long categoryId, String orderBy,
+                                                      SelectOptions options) {
         List<Book> entities =
                 bookDao.selectBySearchCond(title, author, publisher, categoryId, orderBy, options);
+        long count = options.getCount();
+        if (count == 0) {
+            return new SearchResult<>(Collections.emptyList(), count);
+        }
+        List<BookModel> models = new ArrayList<>();
+        for (Book entity : entities) {
+            models.add(convertModel(entity));
+        }
+        return new SearchResult<>(models, count);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SearchResult<BookModel> selectBySearchCondForGeneral(Long categoryId, String orderBy,
+                                                                SelectOptions options) {
+        List<Book> entities =
+                bookDao.selectBySearchCondForGeneral(categoryId, orderBy, options);
         long count = options.getCount();
         if (count == 0) {
             return new SearchResult<>(Collections.emptyList(), count);
@@ -129,6 +147,14 @@ public class BookRepositoryImpl implements BookRepository {
      * {@inheritDoc}
      */
     @Override
+    public int countAll() {
+        return bookDao.countAll();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public BookModel store(BookModel model, String createdId) {
         LocalDateTime now = LocalDateTime.now();
         Result<Book> result;
@@ -164,7 +190,7 @@ public class BookRepositoryImpl implements BookRepository {
                 .translator(entity.translator)
                 .publisher(entity.publisher)
                 .picFileName(entity.picFileName)
-                .totalRating(entity.totalRating)
+                .level(entity.level)
                 .categoryId1(entity.categoryId1)
                 .categoryId2(entity.categoryId2)
                 .categoryId3(entity.categoryId3)
@@ -195,7 +221,7 @@ public class BookRepositoryImpl implements BookRepository {
                 .translator(model.getTranslator())
                 .publisher(model.getPublisher())
                 .picFileName(model.getPicFileName())
-                .totalRating(model.getTotalRating())
+                .level(model.getLevel())
                 .categoryId1(model.getCategoryId1())
                 .categoryId2(model.getCategoryId2())
                 .categoryId3(model.getCategoryId3())
