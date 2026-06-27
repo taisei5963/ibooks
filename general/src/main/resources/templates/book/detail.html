@@ -14,6 +14,20 @@
             </div>
             <nav class="sidebar-nav">
                 <a th:href="@{/book}" class="home-header">ホーム</a>
+                <div class="accordion">
+                    <button class="category-accordion-header" id="categoryAccordionHeaderBtn">
+                        カテゴリ
+                    </button>
+                    <div class="category-accordion-content">
+                        <ul class="category-list">
+                            <th:block th:each="category : ${categories}">
+                                <li>
+                                    <a href="#" class="category-item" th:data-category-id="${category.id}" th:text="${category.name}"></a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
             </nav>
         </aside>
 
@@ -92,9 +106,8 @@
                                     <h4 class="book-publisher">[[${book.publisher}]] 出版</h4>
                                     <h5 class="book-level">
                                         <span th:class="|book-level-badge level-${book.level}|">
-                                            [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]
+                                            [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]者向け
                                         </span>
-                                        </th:block>
                                     </h5>
                                     <h5 class="book-categories">
                                         <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
@@ -198,10 +211,13 @@
                     </div>
                 </div>
             </main>
-
             <div th:replace="~{_common/footer::footer}"></div>
         </div>
-    </div> 
+    </div>
+
+    <form id="categorySearchForm" th:action="@{/book/search}" method="post" style="display:none;">
+        <input type="hidden" name="schCategory" id="schCategoryInput" value="" />
+    </form>
     
     <div th:replace="~{_common/script::csrfHeader}"></div>
     <script>
@@ -209,6 +225,46 @@
             $('#sidebarBrand').on('click', function() {
                 ibooks.showLoading();
                 window.location.href = '/book';
+            });
+
+            const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
+            const categoryAccordionContent = document.querySelector('.category-accordion-content');
+
+            // ページロード時にアコーディオンを自動で開く
+            if (categoryAccordionContent && categoryAccordionHeader) {
+                categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
+                categoryAccordionHeader.classList.add('is-open');
+            }
+
+            categoryAccordionHeader.addEventListener('click', () => {
+                if (categoryAccordionContent.style.maxHeight === '0px' || categoryAccordionContent.style.maxHeight === '') {
+                    categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
+                    categoryAccordionHeader.classList.add('is-open');
+                } else {
+                    categoryAccordionContent.style.maxHeight = '0px';
+                    categoryAccordionHeader.classList.remove('is-open');
+                }
+            });
+
+            $('.category-item').on('click', function(e) {
+                e.preventDefault();
+                const categoryId = $(this).data('categoryId');
+
+                if (categoryId) {
+                    $('#schCategoryInput').val(categoryId);
+                    ibooks.showLoading();
+                    $('#categorySearchForm').submit();
+                } else {
+                    window.location.href = '/book';
+                }
+            });
+
+            $('.js-loading-link').click(function(e) {
+                ibooks.showLoading();
+                setTimeout(() => {
+                    window.location.href = $(this).attr('href');
+                }, 50);
+                e.preventDefault();
             });
         });
     </script>

@@ -4,22 +4,22 @@
   全体設定
 ======================================================== */
 :root {
-  --color-base: #edf2f5;
-  --color-primary: #5d8d9f;
-  --color-text: #343a40;
+  --color-base: #f8f6f3;
+  --color-primary: #ad7b73;
+  --color-text: #3a3534;
   --color-white: #ffffff;
-  --color-secondary-text: #6c757d;
-  --color-border: #dee2e6;
-  --color-primary-rgb: 93, 141, 159;
-  --color-sidebar-bg: #6a8e9e;
-  --color-sidebar-text: #e0e0e0;
-  --color-sidebar-hover: #5a7d8b;
-  --color-accordion-border: rgba(255, 255, 255, 0.2);
+  --color-secondary-text: #756c6a;
+  --color-border: #e8e2de;
+  --color-primary-rgb: 173, 123, 115;
+  --color-sidebar-bg: #3b3231;
+  --color-sidebar-text: #ebe4e3;
+  --color-sidebar-hover: #4c403f;
+  --color-accordion-border: rgba(255, 255, 255, 0.15);
 }
 
 body {
   font-family: "Rounded Mplus 1c", system-ui, sans-serif;
-  background: linear-gradient(135deg, var(--color-base) 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, var(--color-base) 0%, #e8e2dc 100%);
   color: var(--color-text);
   font-weight: 400;
   font-size: 1.6rem;
@@ -76,7 +76,6 @@ body * {
 }
 .sidebar-header {
   text-align: center;
-  margin-bottom: 30px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--color-accordion-border);
 }
@@ -148,7 +147,7 @@ body * {
   border-bottom: 1px solid var(--color-accordion-border);
 }
 .category-item {
-  display: block;
+  display: flex;
   padding: 10px 15px 10px 25px;
   color: var(--color-sidebar-text);
   text-decoration: none !important;
@@ -162,6 +161,14 @@ body * {
   background-color: var(--color-sidebar-hover);
   color: var(--color-white);
   text-decoration: none;
+}
+.category-item .mdi {
+  font-size: 18px;
+  margin-right: 16px;
+}
+.category-accordion-header-name {
+  flex-grow: 1;
+  margin-left: 16px;
 }
 
 .home-header {
@@ -179,7 +186,6 @@ body * {
   border-radius: 8px;
   position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   text-decoration: none !important;
 }
@@ -187,94 +193,37 @@ body * {
   background-color: var(--color-sidebar-hover);
   color: var(--color-white);
 }
-
-/* ========================================================
-  ブックオーバーレイ
-======================================================== */
-.book-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: var(--color-white);
-  padding: 20px;
-  backdrop-filter: blur(3px);
-}
-.book-gallery-card:hover .book-overlay {
-  opacity: 1;
-}
-.book-overlay-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  line-height: 1.3;
-  margin-bottom: 10px;
-}
-.book-overlay-subtitle {
-  font-size: 1.4rem;
-  opacity: 0.9;
+.home-header .mdi {
+  margin-right: 1rem;
+  font-size: 18px;
 }
 
 /* ========================================================
-  Book List Section (New Semantic Class from HTML)
+  ページャ
 ======================================================== */
-.book-list-section {
-  padding-bottom: 32px;
-}
 .pager-area {
   padding-top: 24px;
   padding-bottom: 24px;
   text-align: center;
 }
-.book-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 15px;
-}
 
-/* ========================================================
-  ブックカード
-======================================================== */
-.book-gallery-card {
-  position: relative;
-  display: block;
-  background-color: var(--color-white);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  height: 400px;
-  margin: 0 auto;
-}
-
-.book-gallery-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
 .book-image-wrapper {
-  width: 300px;
-  height: 100%;
+  width: 160px;
+  height: 230px;
   overflow: hidden;
+  border-radius: 8px;
+  margin: 0 auto 12px auto;
 }
 .book-image-wrapper img {
-  width: 100%;
-  height: 100%;
+  width: 160px;
+  height: 230px;
   object-fit: fill;
   display: block;
   transition: transform 0.5s ease;
 }
-.book-gallery-card:hover .book-image-wrapper img {
-  transform: scale(1.03);
+.book-info {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ========================================================
@@ -331,60 +280,72 @@ body * {
   margin-bottom: 1rem;
   color: var(--color-text);
 }
-.book-detail-page .book-categories {
+.book-categories {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-top: 10px;
 }
-.book-detail-page .book-category {
+.book-category {
   font-size: 1.4rem;
   padding: 4px 10px;
   border-radius: 16px;
   font-weight: 700;
-  margin-top: 0;
-  background-color: #eceff1;
-  color: #455a64;
+  margin-top: 1rem;
+  display: inline-block;
 }
-.book-detail-page .category-color-1 {
-  background-color: #e0f2f7;
-  color: #263238;
+.category-color-1 {
+  background-color: #e2e5ed;
+  color: #405189;
 }
-.book-detail-page .category-color-2 {
-  background-color: #e8f5e9;
-  color: #263238;
+.category-color-2,
+.book-category .category-color-2 {
+  background-color: #fff;
+  color: #405189;
+  border: 1px solid #405189;
 }
-.book-detail-page .category-color-3 {
-  background-color: #fffde7;
-  color: #263238;
+.category-color-3,
+.book-category .category-color-3 {
+  background-color: #e1ebfd;
+  color: #3577f1;
 }
-.book-detail-page .category-color-4 {
-  background-color: #fbe9e7;
-  color: #263238;
+.category-color-4,
+.book-category .category-color-4 {
+  background-color: #fff;
+  color: #3577f1;
+  border: 1px solid #3577f1;
 }
-.book-detail-page .category-color-5 {
-  background-color: #f3e5f5;
-  color: #263238;
+.category-color-5,
+.book-category .category-color-5 {
+  background-color: #daf4f0;
+  color: #0ab39c;
 }
-.book-detail-page .category-color-6 {
-  background-color: #ced1d3;
-  color: #263238;
+.category-color-6,
+.book-category .category-color-6 {
+  background-color: #fff;
+  color: #0ab39c;
+  border: 1px solid #0ab39c;
 }
-.book-detail-page .category-color-7 {
-  background-color: #cfd8dc;
-  color: #263238;
+.category-color-7,
+.book-category .category-color-7 {
+  background-color: #dff0fa;
+  color: #299cdb;
 }
-.book-detail-page .category-color-8 {
-  background-color: #b0bec5;
-  color: #263238;
+.category-color-8,
+.book-category .category-color-8 {
+  background-color: #fff;
+  color: #299cdb;
+  border: 1px solid #299cdb;
 }
-.book-detail-page .category-color-9 {
-  background-color: #90a4ae;
-  color: #ffffff;
+.category-color-9,
+.book-category .category-color-9 {
+  background-color: #e9ebeb;
+  color: #212529;
 }
-.book-detail-page .category-color-0 {
-  background-color: #78909c;
-  color: #ffffff;
+.category-color-0,
+.book-category .category-color-0 {
+  background-color: #fff;
+  color: #212529;
+  border: 1px solid #212529;
 }
 
 .book-detail-page .book-review-card {
@@ -664,7 +625,7 @@ body * {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .back-btn:hover {
-  background-color: #5a6268;
+  background-color: #5e5452;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -747,7 +708,7 @@ body * {
   text-align: center;
 }
 .book-tabs .nav-link:hover {
-  background: #e9ecef;
+  background: #f5f1ed;
 }
 .book-tabs .nav-link.active {
   color: var(--color-primary);
@@ -769,7 +730,7 @@ body * {
 .tab-content > .active {
   display: block;
 }
-.book-detail-page .book-level-badge {
+.book-level-badge {
   font-size: 1.4rem;
   padding: 5px 12px;
   border-radius: 16px;
@@ -778,17 +739,17 @@ body * {
   margin-top: 1rem;
   border: 1px solid;
 }
-.book-detail-page .level-BEGINNER {
+.level-BEGINNER {
   background-color: #e8f5e9;
   border-color: #a5d6a7;
   color: #2e7d32;
 }
-.book-detail-page .level-INTERMEDIATE {
+.level-INTERMEDIATE {
   background-color: #e3f2fd;
   border-color: #90caf9;
   color: #1976d2;
 }
-.book-detail-page .level-ADVANCED {
+.level-ADVANCED {
   background-color: #fff3e0;
   border-color: #ffcc80;
   color: #e65100;
@@ -882,7 +843,7 @@ body * {
   border-bottom: none;
 }
 .table-book-chapter tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: #f5f1ed;
 }
 .table-book-chapter td.chapter-no {
   color: var(--color-sidebar-bg);
@@ -1276,4 +1237,65 @@ body * {
 .error-ds a:hover {
   background: #fff;
   color: #374246;
+}
+
+.book-list-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px dotted #ccc;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.book-list-wrapper .book-image {
+  width: 50%;
+  display: flex;
+  justify-content: end;
+}
+.book-list-wrapper .book-image img {
+  width: 180px;
+  height: 240px;
+  object-fit: fill;
+}
+.book-list-wrapper a {
+  text-decoration: none;
+}
+.book-list-wrapper a:hover {
+  text-decoration: underline;
+  color: var(--color-text);
+}
+.book-list-wrapper a h1 {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--color-text);
+}
+.book-list-wrapper .book-content {
+  width: 50%;
+}
+.book-level-category {
+  gap: 6px;
+}
+@media (max-width: 767px) {
+  .book-list-wrapper {
+    display: block;
+  }
+  .book-list-wrapper .book-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  .book-list-wrapper .book-image img {
+    width: 223px;
+    height: 315px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .book-list-wrapper .book-content {
+    margin-top: 16px;
+    width: 100%;
+    text-align: center;
+  }
 }
