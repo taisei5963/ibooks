@@ -3,8 +3,8 @@ package jp.techcof.ITive.reviewer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"jp.blue_dolphin.ibooks.common",
-		"jp.blue_dolphin.ibooks.reviewer"})
+@SpringBootApplication(scanBasePackages = {"com.techcof.ITive.common",
+		"com.techcof.ITive.reviewer"})
 public class ReviewerApplication {
 
 	public static void main(String[] args) {

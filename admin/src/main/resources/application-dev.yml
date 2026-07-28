@@ -44,14 +44,14 @@ admin-config:
     # ブック画像
     books:
       # 画像URL
-      base-url: http://ITive.local/admin/img/book
-      temp-base-url: http://ITive.local/admin/img/book/tmp
+      base-url: http://localhost/itive/admin/img/book
+      temp-base-url: http://localhost/itive/admin/img/book/tmp
       # 画像アップロード先ディレクトリ
       upload-dir: /Users/taiseikato/Projects/ITive/img/book
       temp-upload-dir: /Users/taiseikato/Projects/ITive/img/book/tmp
   # レビュワーサイトURL
   reviewer-site:
-    url: http://ITive.local/reviewer/
+    url: http://localhost/itive/reviewer/
   # 一般サイトURL
   general-site:
-    url: http://ITive.local/
+    url: http://localhost/itive

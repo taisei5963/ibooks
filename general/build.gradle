@@ -6,7 +6,7 @@ plugins {
     id 'org.jetbrains.kotlinx.kover' version '0.7.5'
 }
 
-group = 'jp.co.blue-dolphin'
+group = 'jp.techcof'
 version = '0.0.1-SNAPSHOT'
 
 java {

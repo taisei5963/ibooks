@@ -40,5 +40,5 @@ general-config:
     # ブック画像
     books:
       # 画像URL
-      base-url: http://ITive.local/img/book
-      temp-base-url: http://ITive.local/img/book/tmp
+      base-url: http://localhost/itive/img/book
+      temp-base-url: http://localhost/itive/img/book/tmp
