@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /admin
+    context-path: /itive/admin
     session:
       cookie:
         same-site: Strict

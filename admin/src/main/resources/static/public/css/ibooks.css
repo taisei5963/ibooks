@@ -99,19 +99,6 @@ body * {
 }
 
 /* ========================================
-  アラート
-======================================== */
-.alert-warning-custom {
-  background-color: rgba(251, 140, 0, 0.15);
-  color: #FB8C00;
-  padding: 16px;
-  border-radius: 8px;
-  font-size: 1.4rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* ========================================
 * ログイン
 ======================================== */
 .login-container {

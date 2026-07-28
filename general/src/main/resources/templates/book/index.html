@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" th:with="title='ブック一覧'">
 <head th:replace="~{_common/head::head}"></head>
 <body>
     <div th:replace="~{_common/topHeader::topHeader('index', ${categories})}"></div>
@@ -31,11 +31,34 @@
         </aside>
 
         <div class="main-content">
+            <!-- レベル別タブ -->
+            <div class="book-list-tabs" style="margin-bottom: 24px; width: 100%;">
+                <ul class="nav nav-tabs book-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-level-tab="BEGINNER" type="button" role="tab">初級者向け</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-level-tab="INTERMEDIATE" type="button" role="tab">中級者向け</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-level-tab="ADVANCED" type="button" role="tab">上級者向け</button>
+                    </li>
+                </ul>
+            </div>
+
             <main class="container">
                 <div th:replace="~{_common/messages::errors}"></div>
 
+                <!-- ブック情報未登録時のアラート警告 -->
+                <div class="error-message-wrapper" id="noBooksAlert" style="display: none;">
+                    <img th:src="@{/public/img/not_result.png}" alt="警告画像">
+                    <ul>
+                        <li>ブック情報がまだ存在していません</li>
+                    </ul>
+                </div>
+
                 <th:block th:unless="${#lists.isEmpty(books)}">
-                    <div th:each="book : ${books}" class="book-list-wrapper">
+                    <div th:each="book : ${books}" class="book-list-wrapper" th:data-level="${book.level}">
                         <div class="book-image">
                             <img th:src="${book.picFileName != null and book.picFileName != '' ?
                                 @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
@@ -48,7 +71,7 @@
                             </a>
                             <div class="book-level-category">
                                 <span th:class="|book-level-badge level-${book.level}|">
-                                    [[${T(jp.blue_dolphin.ibooks.common.constant.Level).getDescription(book.level)}]]者向け
+                                    [[${T(com.techcof.ITive.common.constant.Level).getDescription(book.level)}]]者向け
                                 </span>
                                 <div class="book-categories">
                                     <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
@@ -73,6 +96,48 @@
 <div th:replace="~{_common/script::csrfHeader}"></div>
 <script>
     $(function() {
+        // レベル別フィルタリングの定義
+        function filterBooks(level) {
+            let visibleCount = 0;
+            $('.book-list-wrapper').each(function() {
+                const bookLevel = $(this).data('level');
+                if (bookLevel === level) {
+                    $(this).show();
+                    visibleCount++;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Thymeleaf側でエラー画像が表示されている場合は、本アラート（noBooksAlert）を非表示にする
+            if ($('#m_message_origin_error').length > 0) {
+                $('#noBooksAlert').hide();
+            } else if (visibleCount === 0) {
+                $('#noBooksAlert').show();
+            } else {
+                $('#noBooksAlert').hide();
+            }
+        }
+
+        $('[data-level-tab]').on('click', function() {
+            $('[data-level-tab]').removeClass('active');
+            $(this).addClass('active');
+            const targetLevel = $(this).data('level-tab');
+            filterBooks(targetLevel);
+        });
+
+        // 初期表示制御
+        const initialLevel = $('[data-level-tab].active').data('level-tab');
+        if (initialLevel) {
+            filterBooks(initialLevel);
+        } else {
+            if ($('#m_message_origin_error').length === 0 && $('.book-list-wrapper').length === 0) {
+                $('#noBooksAlert').show();
+            } else {
+                $('#noBooksAlert').hide();
+            }
+        }
+
         $('#sidebarBrand').on('click', function() {
             ibooks.showLoading();
             window.location.href = '/book';

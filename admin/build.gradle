@@ -5,7 +5,7 @@ plugins {
     id 'war'
 }
 
-group = 'jp.co.blue-dolphin'
+group = 'jp.techcof'
 version = '0.0.1-SNAPSHOT'
 
 java {
