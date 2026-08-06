@@ -31,17 +31,27 @@
         </aside>
 
         <div class="main-content">
+            <h1 class=" u-fs-2 u-fw-700" style="margin-top: 16px; margin-left: 16px;">
+                <span class="mdi mdi-book-open-variant-outline me-2"></span>
+                レベル別おすすめブック<span th:if="${searchForm != null and searchForm.schCategory != null}" th:text="'（' + ${categoryMap.get(searchForm.schCategory)} + '）'"></span>
+            </h1>
             <!-- レベル別タブ -->
-            <div class="book-list-tabs" style="margin-bottom: 24px; width: 100%;">
+            <div class="book-list-tabs">
                 <ul class="nav nav-tabs book-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-level-tab="BEGINNER" type="button" role="tab">初級者向け</button>
+                        <button class="nav-link active" data-level-tab="BEGINNER" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-1 u-me8"></span>初心者
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-level-tab="INTERMEDIATE" type="button" role="tab">中級者向け</button>
+                        <button class="nav-link" data-level-tab="INTERMEDIATE" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-2 u-me8"></span>中級者
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-level-tab="ADVANCED" type="button" role="tab">上級者向け</button>
+                        <button class="nav-link" data-level-tab="ADVANCED" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-3 u-me8"></span>上級者
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -58,6 +68,7 @@
                 </div>
 
                 <th:block th:unless="${#lists.isEmpty(books)}">
+                    <!--/*
                     <div th:each="book : ${books}" class="book-list-wrapper" th:data-level="${book.level}">
                         <div class="book-image">
                             <img th:src="${book.picFileName != null and book.picFileName != '' ?
@@ -70,9 +81,6 @@
                                 <h1 class="book-title">[[${book.title}]]</h1>
                             </a>
                             <div class="book-level-category">
-                                <span th:class="|book-level-badge level-${book.level}|">
-                                    [[${T(com.techcof.ITive.common.constant.Level).getDescription(book.level)}]]者向け
-                                </span>
                                 <div class="book-categories">
                                     <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
                                         <p th:if="${id != null}" th:class="|book-category category-color-${id % 10}|">
@@ -83,6 +91,7 @@
                             </div>
                         </div>
                     </div>
+                    */-->
                 </th:block>
             </main>
             <div th:replace="~{_common/footer::footer}"></div>

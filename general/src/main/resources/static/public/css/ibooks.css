@@ -687,9 +687,10 @@ body * {
 }
 .book-tabs {
   display: flex;
-  width: 100%;
-  border-bottom: 1px solid var(--color-border);
+  width: 90%;
+  border-bottom: 1px solid #e4cdcb;
   background-color: inherit;
+  margin: 24px auto;
 }
 .book-tabs .nav-item {
   flex: 1;
@@ -700,7 +701,7 @@ body * {
   background: inherit;
   border: none;
   border-top: 4px solid transparent;
-  border-radius: 0;
+  border-radius: 5px;
   padding-top: 7px;
   padding-bottom: 7px;
   font-weight: 600;
@@ -708,11 +709,12 @@ body * {
   text-align: center;
 }
 .book-tabs .nav-link:hover {
-  background: #f5f1ed;
+  background: #e4cdcb;
+  border-radius: 5px;
 }
 .book-tabs .nav-link.active {
-  color: var(--color-primary);
-  border-bottom: 2px solid var(--color-primary);
+  color: #704841;
+  background-color: #e4cdcb;
   font-weight: 700;
 }
 .tab-content {
