@@ -10,7 +10,7 @@
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
             <nav class="sidebar-nav">
-                <a th:href="@{/book}" class="home-header">ホーム</a>
+                <a th:href="@{/itive/book}" class="home-header">ホーム</a>
                 <div class="accordion">
                     <button class="category-accordion-header" id="categoryAccordionHeaderBtn">
                         カテゴリ
@@ -221,7 +221,7 @@
         $(function() {
             $('#sidebarBrand').on('click', function() {
                 ibooks.showLoading();
-                window.location.href = '/book';
+                window.location.href = '/itive/book';
             });
 
             const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
@@ -252,7 +252,7 @@
                     ibooks.showLoading();
                     $('#categorySearchForm').submit();
                 } else {
-                    window.location.href = '/book';
+                    window.location.href = '/itive/book';
                 }
             });
 
@@ -262,6 +262,44 @@
                     window.location.href = $(this).attr('href');
                 }, 50);
                 e.preventDefault();
+            });
+
+            const categoryIcons = {
+                1: 'mdi-code-tags',
+                2: 'mdi-web',
+                3: 'mdi-cellphone',
+                4: 'mdi-database',
+                5: 'mdi-server',
+                6: 'mdi-lan',
+                7: 'mdi-cloud-outline',
+                8: 'mdi-shield-lock-outline',
+                9: 'mdi-robot-outline',
+                10: 'mdi-chart-line',
+                11: 'mdi-function-variant',
+                12: 'mdi-source-branch',
+                13: 'mdi-cogs',
+                14: 'mdi-test-tube',
+                15: 'mdi-ruler-square-compass',
+                16: 'mdi-account-tie',
+                17: 'mdi-account-group',
+                18: 'mdi-clipboard-check-outline',
+                19: 'mdi-briefcase-outline',
+                20: 'mdi-account-supervisor',
+                21: 'mdi-certificate-outline',
+                22: 'mdi-trending-up',
+                23: 'mdi-domain'
+            };
+            $('.category-item').each(function () {
+                const categoryId = $(this).data('category-id');
+                const iconClass = categoryIcons[categoryId];
+
+                if (iconClass) {
+                    $(this).prepend(
+                        $('<i>')
+                            .addClass('mdi')
+                            .addClass(iconClass)
+                    );
+                }
             });
         });
     </script>
