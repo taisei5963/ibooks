@@ -103,7 +103,8 @@ body * {
 ======================================== */
 .login-container {
   height: 100vh;
-  background: #f0f0f0;
+  position: relative;
+  z-index: 999;
 }
 .login-container img {
   width: 160px;
@@ -178,6 +179,50 @@ body * {
   border-radius: 6px;
   text-align: left;
 }
+.login-page-bg {
+  background-image: url("../img/login_bg.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+.login-page-bg-position {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.login-page-bg .login-page-bg-overray {
+  background: linear-gradient(to right, rgba(42,65,145,.75), rgba(42,65,145,.75));
+  opacity: 0.9;
+}
+.login-page-bg-overray {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  top: 0;
+}
+.login-page-bg-shape {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  pointer-events: none;
+  line-height: 0;
+  overflow: hidden;
+  transform: translateY(1px);
+}
+.login-page-bg-shape > svg {
+  width: 100%;
+  height: auto;
+  fill: #f3f3f9;
+}
 
 /* ========================================
   ボタン無効
@@ -213,7 +258,7 @@ input[type="submit"]:disabled:hover {
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background-color 0.3s, transform 0.2s;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 #search-btn:hover {

@@ -70,7 +70,7 @@ body * {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
+  height: 100vh;
   overflow-y: auto;
   z-index: 999;
 }
@@ -205,21 +205,6 @@ body * {
   padding-top: 24px;
   padding-bottom: 24px;
   text-align: center;
-}
-
-.book-image-wrapper {
-  width: 160px;
-  height: 230px;
-  overflow: hidden;
-  border-radius: 8px;
-  margin: 0 auto 12px auto;
-}
-.book-image-wrapper img {
-  width: 160px;
-  height: 230px;
-  object-fit: fill;
-  display: block;
-  transition: transform 0.5s ease;
 }
 .book-info {
   display: flex;
@@ -687,9 +672,10 @@ body * {
 }
 .book-tabs {
   display: flex;
-  width: 100%;
-  border-bottom: 1px solid var(--color-border);
+  width: 90%;
+  border-bottom: 1px solid #e4cdcb;
   background-color: inherit;
+  margin: 24px auto;
 }
 .book-tabs .nav-item {
   flex: 1;
@@ -700,7 +686,7 @@ body * {
   background: inherit;
   border: none;
   border-top: 4px solid transparent;
-  border-radius: 0;
+  border-radius: 5px 5px 0 0;
   padding-top: 7px;
   padding-bottom: 7px;
   font-weight: 600;
@@ -708,12 +694,17 @@ body * {
   text-align: center;
 }
 .book-tabs .nav-link:hover {
-  background: #f5f1ed;
+  background: #e4cdcb;
+  border-radius: 5px 5px 0 0;
+  border: none;
+  border-top: 4px solid #e4cdcb;
 }
 .book-tabs .nav-link.active {
-  color: var(--color-primary);
-  border-bottom: 2px solid var(--color-primary);
+  color: #704841;
+  background-color: #e4cdcb;
   font-weight: 700;
+  border: none;
+  border-top: 4px solid #e4cdcb;
 }
 .tab-content {
   padding: 24px 12px;
@@ -760,6 +751,8 @@ body * {
 ======================================== */
 .book-guide-wrapper {
   padding: 20px;
+  margin-bottom: 50px;
+  background-color: #fff;
 }
 .book-guide-grid {
   display: grid;
@@ -1047,6 +1040,69 @@ body * {
 }
 
 /* ========================================================
+  ブックカード
+======================================================== */
+.book-card {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--color-white);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fcfbfa;
+  height: 260px;
+}
+.card-img-top {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+  border-radius: 4px;
+}
+.card-img-link {
+  display: block;
+  
+}
+.card-title {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-text);
+  line-height: 1.4;
+  display: -webkit-box; 
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-title-link {
+  text-decoration: none !important;
+}
+.card-title-link .card-title:hover {
+  text-decoration: underline;
+}
+
+.main-content-title {
+  font-size: 2.5rem !important;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-left: 16px;
+}
+.main-content-title .mdi-book-open-variant-outline {
+  font-size: 2.5rem !important;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.mdi-signal-cellular-1,
+.mdi-signal-cellular-2,
+.mdi-signal-cellular-3 {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* ========================================================
   Media Queries for Responsive Layout
 ======================================================== */
 @media (max-width: 767px) {
@@ -1167,7 +1223,6 @@ body * {
   text-align: center;
   height: 80dvh;
   width: 100%;
-  padding-right: 280px;
   box-sizing: border-box;
 }
 .error-message-wrapper img {
@@ -1181,6 +1236,11 @@ body * {
   margin: 0;
   font-weight: bold;
   color: var(--color-secondary-text);
+}
+@media screen and (min-width: 768px) {
+  .error-message-wrapper {
+    padding-right: 280px;
+  }
 }
 @media screen and (min-width: 1280px) {
   .error-message-wrapper {
@@ -1298,4 +1358,158 @@ body * {
     width: 100%;
     text-align: center;
   }
+}
+
+/* ========================================================
+  Bootstrap Grid / Card Equivalents
+======================================================== */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: -24px;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+.row > * {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 100%;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-top: 24px;
+}
+.col {
+  flex: 1 0 0%;
+}
+.row-cols-1 > * {
+  flex: 0 0 auto;
+  width: 100%;
+}
+@media (min-width: 576px) {
+  .row-cols-sm-2 > * {
+    flex: 0 0 auto;
+    width: 50%;
+  }
+}
+@media (min-width: 768px) {
+  .row-cols-md-3 > * {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+  }
+}
+@media (min-width: 992px) {
+  .row-cols-lg-4 > * {
+    flex: 0 0 auto;
+    width: 25%;
+  }
+}
+.g-4 {
+  margin-top: -24px;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+.g-4 > * {
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-top: 24px;
+}
+.mb-5 {
+  margin-bottom: 48px;
+}
+
+/* Card layout matching Bootstrap */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: var(--color-white);
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.175);
+  border-radius: 6px;
+}
+.h-100 {
+  height: 100%;
+}
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
+}
+.border-0 {
+  border: 0;
+}
+.card-body {
+  flex: 1 1 auto;
+  padding: 16px;
+}
+.card-footer {
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.175);
+}
+.bg-transparent {
+  background-color: transparent;
+}
+.border-top-0 {
+  border-top: 0;
+}
+
+/* Utilities */
+.d-flex {
+  display: flex;
+}
+.flex-column {
+  flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.p-3 {
+  padding: 16px;
+}
+.px-3 {
+  padding-right: 16px;
+  padding-left: 16px;
+}
+.pb-3 {
+  padding-bottom: 16px;
+}
+.pt-0 {
+  padding-top: 0;
+}
+.gap-1 {
+  gap: 4px;
+}
+.m-0 {
+  margin: 0;
+}
+.me-2 {
+  margin-right: 8px;
+}
+.card-text {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+.card-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Alert utilities */
+.alert-info {
+  color: #055160;
+  background-color: #cff4fc;
+  border-color: #b6effb;
+}
+
+/* Fade animation for tabs */
+.fade {
+  transition: opacity 0.15s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade {
+    transition: none;
+  }
+}
+.fade:not(.show) {
+  opacity: 0;
 }

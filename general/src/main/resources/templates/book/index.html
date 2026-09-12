@@ -9,7 +9,7 @@
                 <img th:src="@{/public/img/app_title_dark.png}" alt="ITive" class="sidebar-logo">
             </div>
             <nav class="sidebar-nav">
-                <a th:href="@{/book}" class="home-header">
+                <a th:href="@{/itive/book}" class="home-header">
                     <span class="mdi mdi-home-outline"></span>ホーム
                 </a>
                 <div class="accordion">
@@ -31,17 +31,27 @@
         </aside>
 
         <div class="main-content">
+            <h1 class="main-content-title">
+                <span class="mdi mdi-book-open-variant-outline"></span>
+                ブック一覧<span th:if="${searchForm != null and searchForm.schCategory != null}" th:text="'（' + ${categoryMap.get(searchForm.schCategory)} + '）'"></span>
+            </h1>
             <!-- レベル別タブ -->
-            <div class="book-list-tabs" style="margin-bottom: 24px; width: 100%;">
+            <div class="book-list-tabs">
                 <ul class="nav nav-tabs book-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-level-tab="BEGINNER" type="button" role="tab">初級者向け</button>
+                        <button class="nav-link active" data-level-tab="BEGINNER" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-1"></span>初心者
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-level-tab="INTERMEDIATE" type="button" role="tab">中級者向け</button>
+                        <button class="nav-link" data-level-tab="INTERMEDIATE" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-2"></span>中級者
+                        </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-level-tab="ADVANCED" type="button" role="tab">上級者向け</button>
+                        <button class="nav-link" data-level-tab="ADVANCED" type="button" role="tab">
+                            <span class="mdi mdi-signal-cellular-3"></span>上級者
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -58,27 +68,30 @@
                 </div>
 
                 <th:block th:unless="${#lists.isEmpty(books)}">
-                    <div th:each="book : ${books}" class="book-list-wrapper" th:data-level="${book.level}">
-                        <div class="book-image">
-                            <img th:src="${book.picFileName != null and book.picFileName != '' ?
-                                @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
-                                @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
-                                alt="書籍画像" />
-                        </div>
-                        <div class="book-content">
-                            <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="js-loading-link">
-                                <h1 class="book-title">[[${book.title}]]</h1>
-                            </a>
-                            <div class="book-level-category">
-                                <span th:class="|book-level-badge level-${book.level}|">
-                                    [[${T(com.techcof.ITive.common.constant.Level).getDescription(book.level)}]]者向け
-                                </span>
-                                <div class="book-categories">
-                                    <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
-                                        <p th:if="${id != null}" th:class="|book-category category-color-${id % 10}|">
-                                            [[${categoryMap.get(id)}]]
-                                        </p>
-                                    </th:block>
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-5">
+                        <div th:each="book : ${books}" class="col book-card-item" th:data-level="${book.level}">
+                            <div class="card h-100 shadow-sm border-0 book-card">
+                                <div>
+                                    <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="card-img-container">
+                                        <img th:src="${book.picFileName != null and book.picFileName != '' ?
+                                            @booksImageConfigImpl.getBooksImgUrl(book.bookId, book.picFileName) :
+                                            @booksImageConfigImpl.getImgUrl('no_image.jpg')}"
+                                            class="card-img-top"
+                                            alt="書籍画像" />
+                                    </a>
+                                </div>
+                                <div class="card-body d-flex flex-column p-3">
+                                    <a th:href="@{/book/detail/{id}(id=${book.bookId})}" class="js-loading-link card-title-link">
+                                        <h5 class="card-title">[[${book.title}]]</h5>
+                                    </a>
+                                    <p class="card-text">[[${book.subTitle}]]</p>
+                                </div>
+                                <div class="card-footer bg-transparent border-top-0 px-3 pb-3 pt-0">
+                                    <div class="book-categories d-flex flex-wrap gap-1">
+                                        <th:block th:each="id : ${ {book.categoryId1, book.categoryId2, book.categoryId3} }">
+                                            <span th:if="${id != null}" th:class="|book-category category-color-${id % 10} m-0|" th:text="${categoryMap.get(id)}"></span>
+                                        </th:block>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +112,7 @@
         // レベル別フィルタリングの定義
         function filterBooks(level) {
             let visibleCount = 0;
-            $('.book-list-wrapper').each(function() {
+            $('.book-card-item').each(function() {
                 const bookLevel = $(this).data('level');
                 if (bookLevel === level) {
                     $(this).show();
@@ -131,7 +144,7 @@
         if (initialLevel) {
             filterBooks(initialLevel);
         } else {
-            if ($('#m_message_origin_error').length === 0 && $('.book-list-wrapper').length === 0) {
+            if ($('#m_message_origin_error').length === 0 && $('.book-card-item').length === 0) {
                 $('#noBooksAlert').show();
             } else {
                 $('#noBooksAlert').hide();
@@ -140,25 +153,34 @@
 
         $('#sidebarBrand').on('click', function() {
             ibooks.showLoading();
-            window.location.href = '/book';
+            window.location.href = '/itive/book';
         });
 
-        const categoryAccordionHeader = document.getElementById('categoryAccordionHeaderBtn');
-        const categoryAccordionContent = document.querySelector('.category-accordion-content');
-
         // ページロード時にアコーディオンを自動で開く
-        if (categoryAccordionContent && categoryAccordionHeader) {
-            categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
-            categoryAccordionHeader.classList.add('is-open');
+        const $categoryAccordionHeader = $('#categoryAccordionHeaderBtn');
+        const $categoryAccordionContent = $('.category-accordion-content');
+
+        function openCategoryAccordion() {
+            $categoryAccordionContent.css('max-height', 'none');
+
+            const height = $categoryAccordionContent[0].scrollHeight;
+
+            $categoryAccordionContent.css('max-height', height + 'px');
+            $categoryAccordionHeader.addClass('is-open');
         }
 
-        categoryAccordionHeader.addEventListener('click', () => {
-            if (categoryAccordionContent.style.maxHeight === '0px' || categoryAccordionContent.style.maxHeight === '') {
-                categoryAccordionContent.style.maxHeight = categoryAccordionContent.scrollHeight + 'px';
-                categoryAccordionHeader.classList.add('is-open');
+        $(window).on('load', function () {
+            if ($categoryAccordionContent.length && $categoryAccordionHeader.length) {
+                openCategoryAccordion();
+            }
+        });
+
+        $categoryAccordionHeader.on('click', function () {
+            if ($categoryAccordionContent.css('max-height') === '0px') {
+                openCategoryAccordion();
             } else {
-                categoryAccordionContent.style.maxHeight = '0px';
-                categoryAccordionHeader.classList.remove('is-open');
+                $categoryAccordionContent.css('max-height', '0px');
+                $categoryAccordionHeader.removeClass('is-open');
             }
         });
 
@@ -184,18 +206,29 @@
         });
 
         const categoryIcons = {
-            1: 'mdi-school-outline',
-            2: 'mdi-database-outline',
-            3: 'mdi-cloud-outline',
-            4: 'mdi-web',
-            5: 'mdi-briefcase-outline',
-            6: 'mdi-book-open-page-variant-outline',
-            7: 'mdi-cellphone',
-            8: 'mdi-robot-outline',
-            9: 'mdi-tools',
-            10: 'mdi-code-tags',
-            11: 'mdi-account-tie-outline',
-            12: 'mdi-shield-check-outline'
+            1: 'mdi-code-tags',
+            2: 'mdi-web',
+            3: 'mdi-cellphone',
+            4: 'mdi-database',
+            5: 'mdi-server',
+            6: 'mdi-lan',
+            7: 'mdi-cloud-outline',
+            8: 'mdi-shield-lock-outline',
+            9: 'mdi-robot-outline',
+            10: 'mdi-chart-line',
+            11: 'mdi-function-variant',
+            12: 'mdi-source-branch',
+            13: 'mdi-cogs',
+            14: 'mdi-test-tube',
+            15: 'mdi-ruler-square-compass',
+            16: 'mdi-account-tie',
+            17: 'mdi-account-group',
+            18: 'mdi-clipboard-check-outline',
+            19: 'mdi-briefcase-outline',
+            20: 'mdi-account-supervisor',
+            21: 'mdi-certificate-outline',
+            22: 'mdi-trending-up',
+            23: 'mdi-domain'
         };
         $('.category-item').each(function () {
             const categoryId = $(this).data('category-id');
