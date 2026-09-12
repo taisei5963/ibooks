@@ -206,21 +206,6 @@ body * {
   padding-bottom: 24px;
   text-align: center;
 }
-
-.book-image-wrapper {
-  width: 160px;
-  height: 230px;
-  overflow: hidden;
-  border-radius: 8px;
-  margin: 0 auto 12px auto;
-}
-.book-image-wrapper img {
-  width: 160px;
-  height: 230px;
-  object-fit: fill;
-  display: block;
-  transition: transform 0.5s ease;
-}
 .book-info {
   display: flex;
   flex-direction: column;
@@ -766,6 +751,8 @@ body * {
 ======================================== */
 .book-guide-wrapper {
   padding: 20px;
+  margin-bottom: 50px;
+  background-color: #fff;
 }
 .book-guide-grid {
   display: grid;
@@ -1075,6 +1062,10 @@ body * {
   object-fit: contain;
   width: auto;
   border-radius: 4px;
+}
+.card-img-link {
+  display: block;
+  
 }
 .card-title {
   font-weight: bold;
